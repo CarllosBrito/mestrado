@@ -126,7 +126,7 @@ public class Principal {
 		JLabel lblObs = new JLabel("Observa\u00E7\u00F5es");
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.TRAILING)
+			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(48)
 					.addComponent(lblNome)
@@ -157,7 +157,7 @@ public class Principal {
 					.addGap(31)
 					.addComponent(lblObs)
 					.addGap(53))
-				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(table, GroupLayout.DEFAULT_SIZE, 1340, Short.MAX_VALUE)
 					.addContainerGap())
@@ -182,8 +182,8 @@ public class Principal {
 						.addComponent(lblBloco)
 						.addComponent(lblSistGerenciamento))
 					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(table, GroupLayout.PREFERRED_SIZE, 596, GroupLayout.PREFERRED_SIZE)
-					.addGap(91))
+					.addComponent(table, GroupLayout.PREFERRED_SIZE, 457, GroupLayout.PREFERRED_SIZE)
+					.addGap(230))
 		);
 		frame.getContentPane().setLayout(groupLayout);
 		
