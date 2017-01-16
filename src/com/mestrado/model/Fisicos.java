@@ -1,6 +1,6 @@
 package com.mestrado.model;
 
-public class Fisico extends Pessoa {
+public class Fisicos extends Pessoa {
 	
 	private Long codigo;
 	private String ABFM;

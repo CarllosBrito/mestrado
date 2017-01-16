@@ -19,7 +19,7 @@ import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableModel;
 
-public class Principal {
+public class PrincipalView {
 
 	private JFrame frame;
 	private JTable table;
@@ -31,7 +31,7 @@ public class Principal {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Principal window = new Principal();
+					PrincipalView window = new PrincipalView();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,7 +43,7 @@ public class Principal {
 	/**
 	 * Create the application.
 	 */
-	public Principal() {
+	public PrincipalView() {
 		initialize();
 		
 	}
@@ -53,7 +53,7 @@ public class Principal {
 	 */
 	private void initialize() {
 		frame = new JFrame("Sistema de Gerenciamento de Pacientes");
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Principal.class.getResource("/imagens/1482302223_personal.png")));
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(PrincipalView.class.getResource("/imagens/1482302223_personal.png")));
 		frame.setResizable(false);
 		
 		Toolkit thekit =frame.getToolkit();
@@ -197,7 +197,7 @@ public class Principal {
 		mniCadPaciente.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
-				CadPaciente paciente = new CadPaciente();
+				CadPacienteView paciente = new CadPacienteView();
 				paciente.setTitle("Cadastro de Pacientes");
 				paciente.setResizable(false);
 				//paciente.setSize(800, 600);
@@ -218,7 +218,7 @@ public class Principal {
 		JMenuItem mntmFsicos = new JMenuItem("F\u00EDsicos");
 		mntmFsicos.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-					CadFisico fisico = new CadFisico();
+					CadFisicoView fisico = new CadFisicoView();
 					fisico.setTitle("Cadastro de Físicos");
 					fisico.setResizable(false);
 					//paciente.setSize(800, 600);

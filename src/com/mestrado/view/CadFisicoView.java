@@ -22,7 +22,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 import javax.swing.JCheckBox;
 
-public class CadFisico extends JFrame {
+public class CadFisicoView extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textField;
@@ -39,7 +39,7 @@ public class CadFisico extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CadFisico frame = new CadFisico();
+					CadFisicoView frame = new CadFisicoView();
 					frame.setVisible(true);
 					} catch (Exception e) {
 					e.printStackTrace();
@@ -51,8 +51,8 @@ public class CadFisico extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CadFisico() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(CadFisico.class.getResource("/imagens/1483149248_personal.png")));
+	public CadFisicoView() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(CadFisicoView.class.getResource("/imagens/1483149248_personal.png")));
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 502, 251);
@@ -106,19 +106,19 @@ public class CadFisico extends JFrame {
 		
 		JButton btnSalvar = new JButton("");
 		btnSalvar.setToolTipText("Salvar Dados");
-		btnSalvar.setIcon(new ImageIcon(CadFisico.class.getResource("/imagens/1482301942_Save_Icon.png")));
+		btnSalvar.setIcon(new ImageIcon(CadFisicoView.class.getResource("/imagens/1482301942_Save_Icon.png")));
 		
 		JButton btnAlterar = new JButton("");
 		btnAlterar.setToolTipText("Alterar dados");
-		btnAlterar.setIcon(new ImageIcon(CadFisico.class.getResource("/imagens/1482302103_txt2.png")));
+		btnAlterar.setIcon(new ImageIcon(CadFisicoView.class.getResource("/imagens/1482302103_txt2.png")));
 		
 		JButton btnBuscar = new JButton("");
 		btnBuscar.setToolTipText("Busca Fisico por Nome ou ABFM");
-		btnBuscar.setIcon(new ImageIcon(CadFisico.class.getResource("/imagens/1482302067_Magnifier.png")));
+		btnBuscar.setIcon(new ImageIcon(CadFisicoView.class.getResource("/imagens/1482302067_Magnifier.png")));
 		
 		JButton btnSair = new JButton("");
 		btnSair.setToolTipText("Clique para Sair!");
-		btnSair.setIcon(new ImageIcon(CadFisico.class.getResource("/imagens/1482302161_10.png")));
+		btnSair.setIcon(new ImageIcon(CadFisicoView.class.getResource("/imagens/1482302161_10.png")));
 		btnSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				setVisible(false);
