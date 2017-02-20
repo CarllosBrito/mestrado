@@ -1,13 +1,19 @@
 package com.mestrado.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
-public class Medico extends Pessoa {
+@Entity
+public class Medicos extends Pessoa {
 	
 	private Long codigo;
 	private String CRM;
 	private String sigla;
 	
-	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public Long getCodigo() {
 		return codigo;
 	}

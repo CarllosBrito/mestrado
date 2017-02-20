@@ -52,6 +52,7 @@ public class CadFisicoView extends JFrame {
 	 * Create the frame.
 	 */
 	public CadFisicoView() {
+		setTitle("Cadastro de F\u00EDsicos");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(CadFisicoView.class.getResource("/imagens/1483149248_personal.png")));
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
