@@ -1,10 +1,10 @@
 package com.mestrado.model;
 
 
-public class Pacientes extends Pessoa{
+public class Pacientes{
 	
 	private Long codigo;
-	
+	private String Nome;
 	private String registro;
 	private String blocos;
 	private String assinat_1_FMD;

@@ -6,9 +6,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Medicos extends Pessoa {
+public class Medicos {
+	
 	
 	private Long codigo;
+	private String Nome;
+	
 	private String CRM;
 	private String sigla;
 	
@@ -20,6 +23,14 @@ public class Medicos extends Pessoa {
 	public void setCodigo(Long codigo) {
 		this.codigo = codigo;
 	}
+	
+	public String getNome() {
+		return Nome;
+	}
+	public void setNome(String nome) {
+		Nome = nome;
+	}
+	
 	public String getCRM() {
 		return CRM;
 	}
