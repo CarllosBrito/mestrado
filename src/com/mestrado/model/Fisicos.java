@@ -12,6 +12,8 @@ public class Fisicos {
 	private String Nome;
 	private String ABFM;
 	private String sigla;
+	private String senha;
+	
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -40,6 +42,13 @@ public class Fisicos {
 	}
 	public void setSigla(String sigla) {
 		this.sigla = sigla;
+	}
+	
+	public String getSenha() {
+		return senha;
+	}
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	
