@@ -1,11 +1,10 @@
 package com.mestrado.Dao;
 
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-
+import javax.persistence.Query;
 import com.mestrado.model.Regiao_Anatomica;
 
 
@@ -26,19 +25,39 @@ public class Regiao_AnatomicaDao {
 				
 		}
 	
-	public Regiao_Anatomica buscar(String descricao){
+	  @SuppressWarnings("unchecked")
+	public Regiao_Anatomica buscar(String a, String b) {
 	
-		List<Regiao_Anatomica> regioes= em.createQuery("from Regiao_anatomica descricao where descricao = :descricao ", Regiao_Anatomica.class).getResultList();
+		String descricao;
+		Long codigo;
 		
-		for(Regiao_Anatomica regiao : regioes){
-			regioes.add(regiao);
-		}
+		Query query = em.createQuery (" select a from Regiao_Anatomica a where a.descricao = :descr");
 		
-		return (Regiao_Anatomica) regioes;
+		query.setParameter("descr", a);
+		 List <Regiao_Anatomica > regioes = query . getResultList ();
+		 
+		 
 		
+		 for ( Regiao_Anatomica regiao : regioes ) {
+			 
+			 codigo = regiao.getCodigo();
+			 descricao = regiao.getDescricao();
+			 
+			 System .out . println (" Código da Região: " + regiao.getCodigo());
+			 System .out . println (" descrição da Região: " + regiao.getDescricao());
+			
+			 System .out . println ();
+		 }
 		
+		 return !regioes.isEmpty() ? regioes.get(0) : new Regiao_Anatomica();   
+    
 	}
 	
+	
+
+	
+
+
 	public void alterar(String objAlterado){
 		Regiao_Anatomica reg_anat = em.find(Regiao_Anatomica.class, objAlterado);
 		
@@ -49,4 +68,6 @@ public class Regiao_AnatomicaDao {
 		
 	}
 
+	
+	
 }

@@ -1,3 +1,5 @@
+//http://www.mballem.com/post/utilizando-swing-com-jpahibernate/
+
 package com.mestrado.view;
 
 import java.awt.EventQueue;
@@ -197,7 +199,7 @@ public class PrincipalView {
 		mniCadPaciente.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent arg0) {
-				CadPacienteView paciente = new CadPacienteView();
+				CadPlanejamentoView paciente = new CadPlanejamentoView();
 				paciente.setTitle("Cadastro de Pacientes");
 				paciente.setResizable(false);
 				//paciente.setSize(800, 600);

@@ -54,7 +54,7 @@ public class CadOrigemView extends JFrame {
 		setTitle("Cadastro Clinica de Origem");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 432, 300);
+		setBounds(100, 100, 392, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -87,18 +87,18 @@ public class CadOrigemView extends JFrame {
 				String desc = txtDescOrigem.getText().toUpperCase();
 				String sigla = txtSiglaOrigem.getText().toUpperCase();
 				
-				if(desc==null){
+				if(desc==null|| desc.trim().equals("")){
 					JOptionPane.showMessageDialog(null, "Favor digitar Clinica de Origem!!");
 					
 				}else
-					if(sigla==null){
+					if(sigla==null|| sigla.trim().equals("")){
 						JOptionPane.showMessageDialog(null, "Favor digitar a Sigla da Clinica de Origem!!");
 					}
 					else{
 						orDAO.salvar(desc, sigla);
 						JOptionPane.showMessageDialog(null, "Origem cadastrada com sucesso!!");
 						Limpar();
-						txtDescOrigem.requestFocus();
+						
 					}
 				
 			}
@@ -119,27 +119,37 @@ public class CadOrigemView extends JFrame {
 			}
 		});
 		btnSair.setIcon(new ImageIcon(CadOrigemView.class.getResource("/imagens/1482302161_10.png")));
+		
+		JButton btnLimpar = new JButton("");
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Limpar();
+			}
+		});
+		btnLimpar.setIcon(new ImageIcon(CadOrigemView.class.getResource("/imagens/1482302193_edit-clear.png")));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+						.addComponent(lblDescrio, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
 						.addComponent(txtCodOrigem, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblNewLabel)
-						.addComponent(lblDescrio, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblSigla, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
 						.addComponent(txtSiglaOrigem, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(btnSalvar)
+							.addComponent(btnSalvar, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
-							.addComponent(btnAlterar)
+							.addComponent(btnAlterar, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
+							.addGap(14)
+							.addComponent(btnBuscar, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
-							.addComponent(btnBuscar)
+							.addComponent(btnLimpar, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
-							.addComponent(btnSair))
-						.addComponent(txtDescOrigem, GroupLayout.PREFERRED_SIZE, 394, GroupLayout.PREFERRED_SIZE))
-					.addContainerGap(30, Short.MAX_VALUE))
+							.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE))
+						.addComponent(txtDescOrigem))
+					.addContainerGap(16, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -152,17 +162,20 @@ public class CadOrigemView extends JFrame {
 					.addComponent(lblDescrio, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(txtDescOrigem, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addComponent(btnSair)
 						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(18)
 							.addComponent(lblSigla, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.RELATED)
 							.addComponent(txtSiglaOrigem, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 48, Short.MAX_VALUE)
-							.addComponent(btnSalvar))
-						.addComponent(btnAlterar)
-						.addComponent(btnBuscar)
-						.addComponent(btnSair))
+							.addPreferredGap(ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(btnSalvar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnAlterar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnBuscar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnLimpar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
 					.addGap(26))
 		);
 		contentPane.setLayout(gl_contentPane);
@@ -172,6 +185,7 @@ public class CadOrigemView extends JFrame {
 		txtDescOrigem.setText("");
 		txtCodOrigem.setText("");
 		txtSiglaOrigem.setText("");
+		txtDescOrigem.requestFocus();
 		
 	}
 }

@@ -28,7 +28,7 @@ import javax.swing.JTextArea;
 
 
 @SuppressWarnings("serial")
-public class CadPacienteView extends JFrame {
+public class CadPlanejamentoView extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txtRegistro;
@@ -46,7 +46,7 @@ public class CadPacienteView extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CadPacienteView frame = new CadPacienteView();
+					CadPlanejamentoView frame = new CadPlanejamentoView();
 					frame.setVisible(true);
 					
 				} catch (Exception e) {
@@ -59,9 +59,9 @@ public class CadPacienteView extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CadPacienteView() {
-		setIconImage(Toolkit.getDefaultToolkit().getImage(CadPacienteView.class.getResource("/imagens/1483156433_8.png")));
-		setTitle("Cadastro de Pacientes\r\n");
+	public CadPlanejamentoView() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(CadPlanejamentoView.class.getResource("/imagens/1483156433_8.png")));
+		setTitle("Cadastro de Planejamento");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 690, 356);
@@ -82,20 +82,20 @@ public class CadPacienteView extends JFrame {
 		lblOrigem.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		JButton btnSalvar = new JButton("");
-		btnSalvar.setIcon(new ImageIcon(CadPacienteView.class.getResource("/imagens/1482301942_Save_Icon.png")));
+		btnSalvar.setIcon(new ImageIcon(CadPlanejamentoView.class.getResource("/imagens/1482301942_Save_Icon.png")));
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
 		
 		JButton btnAlterar = new JButton("");
-		btnAlterar.setIcon(new ImageIcon(CadPacienteView.class.getResource("/imagens/1482302103_txt2.png")));
+		btnAlterar.setIcon(new ImageIcon(CadPlanejamentoView.class.getResource("/imagens/1482302103_txt2.png")));
 		
 		JButton btnBuscar = new JButton("");
-		btnBuscar.setIcon(new ImageIcon(CadPacienteView.class.getResource("/imagens/1482302067_Magnifier.png")));
+		btnBuscar.setIcon(new ImageIcon(CadPlanejamentoView.class.getResource("/imagens/1482302067_Magnifier.png")));
 		
 		JButton btnSair = new JButton("");
-		btnSair.setIcon(new ImageIcon(CadPacienteView.class.getResource("/imagens/1482302161_10.png")));
+		btnSair.setIcon(new ImageIcon(CadPlanejamentoView.class.getResource("/imagens/1482302161_10.png")));
 		btnSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				setVisible(false);

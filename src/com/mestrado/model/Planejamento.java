@@ -1,7 +1,7 @@
 package com.mestrado.model;
 
 
-public class Pacientes{
+public class Planejamento{
 	
 	private Long codigo;
 	private String Nome;

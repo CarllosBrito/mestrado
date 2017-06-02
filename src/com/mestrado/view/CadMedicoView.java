@@ -95,10 +95,22 @@ public class CadMedicoView extends JFrame {
 				String CRM = txtCRM.getText();
 				String Sigla = txtSigla.getText().toUpperCase();			
 				
-				MDdao.salvar(NomeMD,CRM,Sigla);
-				JOptionPane.showMessageDialog(null, "Médico Salvo com Sucesso!!");
-										
-				limpar();
+				if(NomeMD==null|| NomeMD.trim().equals("")){
+					JOptionPane.showMessageDialog(null, "Nome do Médico é obrigatório!!");
+				
+				}else
+					if(CRM==null|| CRM.trim().equals("")){
+							JOptionPane.showMessageDialog(null, "O CRM é obrigatório!!");
+					}else
+						if(Sigla==null || Sigla.trim().equals("")){
+							JOptionPane.showMessageDialog(null, "A Sigla é obrigatória!!");
+						}else{
+						MDdao.salvar(NomeMD,CRM,Sigla);
+						JOptionPane.showMessageDialog(null, "Médico Salvo com Sucesso!!");					
+						limpar();
+						txtNomeMed.requestFocus();
+						}
+					
 			}
 
 			
@@ -126,9 +138,7 @@ public class CadMedicoView extends JFrame {
 		JButton btnLimpar = new JButton("");
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				txtNomeMed.setText("");
-				txtCRM.setText("");
-				txtSigla.setText("");
+				limpar();
 			}
 		});
 		btnLimpar.setIcon(new ImageIcon(CadMedicoView.class.getResource("/imagens/1482302193_edit-clear.png")));
