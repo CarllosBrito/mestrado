@@ -39,6 +39,7 @@ public class CadRegAnatomicaView extends JFrame {
 					CadRegAnatomicaView frame = new CadRegAnatomicaView();
 					frame.setVisible(true);
 					
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -77,13 +78,16 @@ public class CadRegAnatomicaView extends JFrame {
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Regiao_AnatomicaDao dao = new Regiao_AnatomicaDao();
-				
+				Regiao_Anatomica regiao = new Regiao_Anatomica();
 							
+				
 				String descricao = txtDescricao.getText().toUpperCase();
+				
 				if(descricao==null|| descricao.trim().equals("")){
 					JOptionPane.showMessageDialog(null, "O nome da Região Anatômica é obrigatório!!");
 				}else{
-				dao.salvar(descricao);
+					regiao.setDescricao(descricao);
+				dao.salvar(regiao);
 				JOptionPane.showMessageDialog(null, "Região Anatômica salva com sucesso!!!");
 				Limpar();
 				}
@@ -94,12 +98,24 @@ public class CadRegAnatomicaView extends JFrame {
 		
 		JButton btnAlterar = new JButton("");
 		btnAlterar.addActionListener(new ActionListener() {
-			private String objAlterar;
 
 			public void actionPerformed(ActionEvent arg0) {
 				Regiao_AnatomicaDao dao = new Regiao_AnatomicaDao();
-				objAlterar = txtDescricao.getText();;
-				dao.alterar("objAlterado");
+				Regiao_Anatomica regiao = new Regiao_Anatomica();
+				
+				String descricao = txtDescricao.getText().toUpperCase();
+				Long cod = Long.parseLong(txtCodRegAnatomica.getText());
+						
+				if(descricao==null|| descricao.trim().equals("")){
+					JOptionPane.showMessageDialog(null, "O nome da Região Anatômica é obrigatório!!");
+					Limpar();
+				}else{
+					regiao.setCodigo(cod);
+					regiao.setDescricao(descricao);
+				dao.alterar(regiao);
+				
+				Limpar();
+				}
 				
 			}
 		});
@@ -117,9 +133,6 @@ public class CadRegAnatomicaView extends JFrame {
 				txtCodRegAnatomica.setText(objBusca.getCodigo().toString());
 				txtDescricao.setText(objBusca.getDescricao());
 				
-				//System.out.println("Regiao:" + objBusca.getDescricao());
-				
-			
 			}
 				
 			
