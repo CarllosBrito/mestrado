@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -16,7 +17,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
+
 import com.mestrado.Dao.MedicoDao;
+import com.mestrado.model.Fisicos;
+import com.mestrado.model.Medicos;
 
 public class CadMedicoView extends JFrame {
 
@@ -119,10 +123,66 @@ public class CadMedicoView extends JFrame {
 		btnSalvar.setIcon(new ImageIcon(CadMedicoView.class.getResource("/imagens/1482301942_Save_Icon.png")));
 		
 		JButton btnAlterar = new JButton("");
+		btnAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				MedicoDao mdDao= new MedicoDao();
+				Medicos md = new Medicos();
+				
+				Long cod = Long.parseLong(txtCodigo.getText().toString());
+				String nome = txtNomeMed.getText().toUpperCase();
+				String crm = txtCRM.getText();
+				String sigla = txtSigla.getText().toUpperCase();
+				
+				if(crm==null || crm.trim().equals("")){
+					JOptionPane.showMessageDialog(null, "O núbero ABFM é obrigatório!!");
+					limpar();
+				}else{
+					md.setCodigo(cod);
+					md.setCRM(crm);
+					md.setNome(nome);
+					md.setSigla(sigla);
+					
+					
+					mdDao.alterar(md);
+					
+					limpar();
+					btnSalvar.setVisible(true);
+						
+					}
+				
+			}
+		});
 		btnAlterar.setToolTipText("Alterar Dados!");
 		btnAlterar.setIcon(new ImageIcon(CadMedicoView.class.getResource("/imagens/1482302103_txt2.png")));
 		
 		JButton btnBuscar = new JButton("");
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				MedicoDao mdDao= new MedicoDao();
+								
+				String crm = txtCRM.getText().toUpperCase();
+				
+				if(crm==null|| crm.trim().equals("")){
+					
+					JOptionPane.showMessageDialog(null, "CRM Inválido!!");
+					
+				}else{
+					Medicos objBusca = new Medicos();
+					objBusca = mdDao.buscar(crm, new String());
+					
+					txtCodigo.setText(objBusca.getCodigo().toString());
+					txtCRM.setText(objBusca.getCRM());
+					txtNomeMed.setText(objBusca.getNome());
+					txtSigla.setText(objBusca.getSigla().toUpperCase());
+					
+					btnSalvar.setVisible(false);
+				}
+				
+				
+				
+			}
+		});
 		btnBuscar.setToolTipText("Buscar M\u00E9dico!");
 		btnBuscar.setIcon(new ImageIcon(CadMedicoView.class.getResource("/imagens/1482302067_Magnifier.png")));
 		

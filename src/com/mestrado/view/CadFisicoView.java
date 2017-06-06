@@ -107,7 +107,7 @@ public class CadFisicoView extends JFrame {
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FisicosDao fisicodao = new FisicosDao();
-				Fisicos fisico = new Fisicos();
+				//Fisicos fisico = new Fisicos();
 				
 			
 		//	String confSenha =  new String (pswConfSenha.getPassword());
@@ -118,7 +118,7 @@ public class CadFisicoView extends JFrame {
 			String senha = new String (pswSenha.getPassword()).trim();
 			
 				fisicodao.salvar(nome, abfm, userSigla, senha);
-				//JOptionPane.showMessageDialog(null, "Físico salvo com Sucesso!");
+				
 				limpar();	
 				
 				
@@ -166,8 +166,7 @@ public class CadFisicoView extends JFrame {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FisicosDao fDao = new FisicosDao();	
-				Fisicos fisico = new Fisicos();
-				
+								
 				String abfm = txtABFM.getText().toUpperCase();
 					
 				

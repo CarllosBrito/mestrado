@@ -48,6 +48,7 @@ public class FisicosDao {
 			JOptionPane.showMessageDialog(null, "Físico alterado(a) com sucesso!!!");
 	}
 	
+	@SuppressWarnings({ "unchecked", "unused" })
 	public Fisicos buscar(String a, String b) {
 		
 		String ABFM;

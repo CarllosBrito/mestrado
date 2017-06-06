@@ -10,8 +10,7 @@ public class Medicos {
 	
 	
 	private Long codigo;
-	private String Nome;
-	
+	private String nome;
 	private String CRM;
 	private String sigla;
 	
@@ -25,17 +24,17 @@ public class Medicos {
 	}
 	
 	public String getNome() {
-		return Nome;
+		return nome;
 	}
 	public void setNome(String nome) {
-		Nome = nome;
+		this.nome = nome;
 	}
 	
 	public String getCRM() {
 		return CRM;
 	}
-	public void setCRM(String cRM) {
-		CRM = cRM;
+	public void setCRM(String CRM) {
+		this.CRM = CRM;
 	}
 	public String getSigla() {
 		return sigla;
