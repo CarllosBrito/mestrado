@@ -16,6 +16,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 
 import com.mestrado.Dao.OrigemDao;
+import com.mestrado.model.Fisicos;
+import com.mestrado.model.Origem;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -71,15 +73,18 @@ public class CadOrigemView extends JFrame {
 		lblDescrio.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		txtDescOrigem = new JTextField();
+		txtDescOrigem.setToolTipText("Digite a Cl\u00EDnica de Origem!");
 		txtDescOrigem.setColumns(10);
 		
 		JLabel lblSigla = new JLabel("Sigla:");
 		lblSigla.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		txtSiglaOrigem = new JTextField();
+		txtSiglaOrigem.setToolTipText("Digite a sigla da Cl\u00EDnica de Origem!");
 		txtSiglaOrigem.setColumns(10);
 		
 		JButton btnSalvar = new JButton("");
+		btnSalvar.setToolTipText("Salvar Origem!!");
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				OrigemDao orDAO = new OrigemDao();
@@ -96,7 +101,6 @@ public class CadOrigemView extends JFrame {
 					}
 					else{
 						orDAO.salvar(desc, sigla);
-						JOptionPane.showMessageDialog(null, "Origem cadastrada com sucesso!!");
 						Limpar();
 						
 					}
@@ -106,12 +110,62 @@ public class CadOrigemView extends JFrame {
 		btnSalvar.setIcon(new ImageIcon(CadOrigemView.class.getResource("/imagens/1482301942_Save_Icon.png")));
 		
 		JButton btnAlterar = new JButton("");
+		btnAlterar.setToolTipText("Alterar dados!!");
+		btnAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OrigemDao orDAO = new OrigemDao();
+				Origem or = new Origem();
+				
+				Long cod = Long.parseLong(txtCodOrigem.getText());
+				String descr = txtDescOrigem.getText().toUpperCase();
+				String sigla = txtSiglaOrigem.getText().toUpperCase();
+				
+				if(sigla==null || sigla.trim().equals("")){
+					JOptionPane.showMessageDialog(null, "A Sigla é obrigatória!!");
+					Limpar();
+				}else{
+					or.setCodigo(cod);
+					or.setDescricao(descr);
+					or.setSigla(sigla);
+										
+					orDAO.alterar(or);
+					
+					Limpar();
+					btnSalvar.setVisible(true);
+						
+					}
+				
+			}
+		});
 		btnAlterar.setIcon(new ImageIcon(CadOrigemView.class.getResource("/imagens/1482302103_txt2.png")));
 		
 		JButton btnBuscar = new JButton("");
+		btnBuscar.setToolTipText("Busca atrav\u00E9s da sigla!!");
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				OrigemDao orDAO = new OrigemDao();
+				String sigla = txtSiglaOrigem.getText().toUpperCase();
+				
+				if(sigla==null|| sigla.trim().equals("")){
+					
+					JOptionPane.showMessageDialog(null, "Sigla Inválida!!");
+					
+				}else{
+					Origem objBusca = new Origem();
+					objBusca = orDAO.buscar(sigla, new String());
+					
+					txtCodOrigem.setText(objBusca.getCodigo().toString());
+					txtDescOrigem.setText(objBusca.getDescricao());
+					txtSiglaOrigem.setText(objBusca.getSigla());
+					
+					btnSalvar.setVisible(false);
+				}
+			}
+		});
 		btnBuscar.setIcon(new ImageIcon(CadOrigemView.class.getResource("/imagens/1482302067_Magnifier.png")));
 		
 		JButton btnSair = new JButton("");
+		btnSair.setToolTipText("Fechar Janela!!");
 		btnSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CadOrigemView.this.setVisible(false);
@@ -121,6 +175,7 @@ public class CadOrigemView extends JFrame {
 		btnSair.setIcon(new ImageIcon(CadOrigemView.class.getResource("/imagens/1482302161_10.png")));
 		
 		JButton btnLimpar = new JButton("");
+		btnLimpar.setToolTipText("Limpar Campos!!");
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Limpar();
