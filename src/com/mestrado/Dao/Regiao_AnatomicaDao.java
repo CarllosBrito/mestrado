@@ -7,8 +7,9 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JOptionPane;
-import com.mestrado.model.Regiao_Anatomica;
 
+import com.mestrado.model.Regiao_Anatomica;
+import com.mestrado.view.CadRegAnatomicaView;
 
 
 public class Regiao_AnatomicaDao {
@@ -34,7 +35,7 @@ public class Regiao_AnatomicaDao {
 			em.merge(regiao);
 			em.getTransaction().commit();
 			em.close();
-			System.out.println(regiao);
+			//System.out.println(regiao);
 			JOptionPane.showMessageDialog(null, "Região Anatômica alterada com sucesso!!!");
 	}
 		
@@ -45,8 +46,7 @@ public class Regiao_AnatomicaDao {
 	
 		String descricao;
 		Long codigo;
-		
-		Query query = em.createQuery (" select a from Regiao_Anatomica a where a.descricao = :descr");
+				Query query = em.createQuery (" select a from Regiao_Anatomica a where a.descricao = :descr");
 		
 		query.setParameter("descr", a);
 		 List <Regiao_Anatomica > regioes = query . getResultList ();
@@ -56,10 +56,10 @@ public class Regiao_AnatomicaDao {
 			 codigo = regiao.getCodigo();
 			 descricao = regiao.getDescricao();
 			 
-			 System .out . println (" Código da Região: " + regiao.getCodigo());
+		/*	 System .out . println (" Código da Região: " + regiao.getCodigo());
 			 System .out . println (" descrição da Região: " + regiao.getDescricao());
 			
-			 System .out . println ();
+			 System .out . println ();*/
 		 }
 		
 		 return !regioes.isEmpty() ? regioes.get(0) : new Regiao_Anatomica();   

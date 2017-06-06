@@ -102,7 +102,7 @@ public class CadRegAnatomicaView extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				Regiao_AnatomicaDao dao = new Regiao_AnatomicaDao();
 				Regiao_Anatomica regiao = new Regiao_Anatomica();
-				
+								
 				String descricao = txtDescricao.getText().toUpperCase();
 				Long cod = Long.parseLong(txtCodRegAnatomica.getText());
 						
@@ -115,6 +115,7 @@ public class CadRegAnatomicaView extends JFrame {
 				dao.alterar(regiao);
 				
 				Limpar();
+				btnSalvar.setVisible(true);
 				}
 				
 			}
@@ -126,14 +127,22 @@ public class CadRegAnatomicaView extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				String descr = txtDescricao.getText().toUpperCase();	
 				Regiao_AnatomicaDao regDAO = new Regiao_AnatomicaDao();
+
+				if(descr == null|| descr.trim().equals("")){
+					JOptionPane.showMessageDialog(null, "Região Não encontrada! Digite Novamente!");
+					Limpar();		
+						
+				}else{
+					Regiao_Anatomica objBusca= new Regiao_Anatomica ();
+					objBusca = (Regiao_Anatomica) regDAO.buscar(descr, new String());
+					txtCodRegAnatomica.setText(objBusca.getCodigo().toString());
+					txtDescricao.setText(objBusca.getDescricao());
+					
+					btnSalvar.setVisible(false);
+			
 				
-				Regiao_Anatomica objBusca= new Regiao_Anatomica ();
-				objBusca = (Regiao_Anatomica) regDAO.buscar(descr, new String());
-				
-				txtCodRegAnatomica.setText(objBusca.getCodigo().toString());
-				txtDescricao.setText(objBusca.getDescricao());
-				
-			}
+				}
+		}
 				
 			
 		});

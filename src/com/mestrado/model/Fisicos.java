@@ -9,7 +9,7 @@ import javax.persistence.Id;
 public class Fisicos {
 	
 	private Long codigo;
-	private String Nome;
+	private String nome;
 	private String ABFM;
 	private String sigla;
 	private String senha;
@@ -24,11 +24,11 @@ public class Fisicos {
 		this.codigo = codigo;
 	}
 	
-	public String getNome() {
-		return Nome;
+	public String getnome() {
+		return nome;
 	}
 	public void setNome(String nome) {
-		Nome = nome;
+		this.nome = nome;
 	}
 	
 	public String getABFM() {

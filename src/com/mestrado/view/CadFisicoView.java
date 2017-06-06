@@ -21,6 +21,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 
 import com.mestrado.Dao.FisicosDao;
+import com.mestrado.model.Fisicos;
 
 public class CadFisicoView extends JFrame {
 
@@ -29,7 +30,7 @@ public class CadFisicoView extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textField;
+	private JTextField txtCodigo;
 	private JTextField txtNomeFisico;
 	private JTextField txtABFM;
 	private JTextField txtUserSigla;
@@ -68,10 +69,10 @@ public class CadFisicoView extends JFrame {
 		JLabel lblNewLabel = new JLabel("C\u00F3digo");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
-		textField = new JTextField();
-		textField.setEditable(false);
-		textField.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		textField.setColumns(10);
+		txtCodigo = new JTextField();
+		txtCodigo.setEditable(false);
+		txtCodigo.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txtCodigo.setColumns(10);
 		
 		JLabel lblNewLabel_1 = new JLabel("Nome:");
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -106,17 +107,18 @@ public class CadFisicoView extends JFrame {
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FisicosDao fisicodao = new FisicosDao();
+				Fisicos fisico = new Fisicos();
 				
 			
 		//	String confSenha =  new String (pswConfSenha.getPassword());
 			
-			String Nome = txtNomeFisico.getText().toUpperCase();
+			String nome = txtNomeFisico.getText().toUpperCase();
 			String abfm = txtABFM.getText();
 			String userSigla = txtUserSigla.getText().toUpperCase();
 			String senha = new String (pswSenha.getPassword()).trim();
 			
-				fisicodao.salvar(Nome, abfm, userSigla, senha);
-				JOptionPane.showMessageDialog(null, "Físico salvo com Sucesso!");
+				fisicodao.salvar(nome, abfm, userSigla, senha);
+				//JOptionPane.showMessageDialog(null, "Físico salvo com Sucesso!");
 				limpar();	
 				
 				
@@ -126,11 +128,68 @@ public class CadFisicoView extends JFrame {
 		btnSalvar.setIcon(new ImageIcon(CadFisicoView.class.getResource("/imagens/1482301942_Save_Icon.png")));
 		
 		JButton btnAlterar = new JButton("");
+		btnAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				FisicosDao fisdao = new FisicosDao();
+				Fisicos fisico = new Fisicos();
+				
+				String abfm = txtABFM.getText().toUpperCase();
+				Long codigo = Long.parseLong(txtCodigo.getText());
+				String nome = txtNomeFisico.getText().toUpperCase();
+				String sigla = txtUserSigla.getText().toUpperCase();
+				String senha = new String(pswSenha.getPassword());
+				
+				if(abfm==null || abfm.trim().equals("")){
+					JOptionPane.showMessageDialog(null, "O núbero ABFM é obrigatório!!");
+					limpar();
+				}else{
+					fisico.setCodigo(codigo);
+					fisico.setABFM(abfm);
+					fisico.setNome(nome);
+					fisico.setSigla(sigla);
+					fisico.setSenha(senha);
+					
+					fisdao.alterar(fisico);
+					
+					limpar();
+					btnSalvar.setVisible(true);
+						
+					}
+				}
+				
+			
+		});
 		btnAlterar.setToolTipText("Alterar dados");
 		btnAlterar.setIcon(new ImageIcon(CadFisicoView.class.getResource("/imagens/1482302103_txt2.png")));
 		
 		JButton btnBuscar = new JButton("");
-		btnBuscar.setToolTipText("Busca Fisico por Nome ou ABFM");
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				FisicosDao fDao = new FisicosDao();	
+				Fisicos fisico = new Fisicos();
+				
+				String abfm = txtABFM.getText().toUpperCase();
+					
+				
+				if(abfm==null|| abfm.trim().equals("")){
+					
+					JOptionPane.showMessageDialog(null, "ABFM Inválido!!");
+					
+				}else{
+					Fisicos objBusca = new Fisicos();
+					objBusca = fDao.buscar(abfm, new String());
+					
+					txtCodigo.setText(objBusca.getCodigo().toString());
+					txtABFM.setText(objBusca.getABFM());
+					txtNomeFisico.setText(objBusca.getnome());
+					txtUserSigla.setText(objBusca.getSigla());
+					
+					btnSalvar.setVisible(false);
+				}
+				
+			}
+		});
+		btnBuscar.setToolTipText("Busca Físico pelo número ABFM");
 		btnBuscar.setIcon(new ImageIcon(CadFisicoView.class.getResource("/imagens/1482302067_Magnifier.png")));
 		
 		JButton btnSair = new JButton("");
@@ -144,13 +203,13 @@ public class CadFisicoView extends JFrame {
 		
 		pswSenha = new JPasswordField();
 		
-		JButton btnNewButton = new JButton("");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnLimpar = new JButton("");
+		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				limpar();
 			}
 		});
-		btnNewButton.setIcon(new ImageIcon(CadFisicoView.class.getResource("/imagens/1482302193_edit-clear.png")));
+		btnLimpar.setIcon(new ImageIcon(CadFisicoView.class.getResource("/imagens/1482302193_edit-clear.png")));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
@@ -162,7 +221,7 @@ public class CadFisicoView extends JFrame {
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 										.addGroup(gl_contentPane.createSequentialGroup()
-											.addComponent(textField, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
+											.addComponent(txtCodigo, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
 											.addGap(13))
 										.addGroup(gl_contentPane.createSequentialGroup()
 											.addComponent(lblNewLabel)
@@ -194,7 +253,7 @@ public class CadFisicoView extends JFrame {
 											.addGap(29)
 											.addComponent(btnAlterar, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
 											.addGap(119)
-											.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
+											.addComponent(btnLimpar, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
 											.addGap(27)
 											.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE))))))
 						.addGroup(gl_contentPane.createSequentialGroup()
@@ -212,7 +271,7 @@ public class CadFisicoView extends JFrame {
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(txtNomeFisico, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addComponent(textField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addComponent(txtCodigo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(10)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
@@ -232,7 +291,7 @@ public class CadFisicoView extends JFrame {
 							.addGap(26)))
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+						.addComponent(btnLimpar, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
 						.addComponent(btnSair, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
 						.addComponent(btnAlterar, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
 						.addComponent(btnSalvar, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
@@ -249,6 +308,7 @@ public class CadFisicoView extends JFrame {
 		txtUserSigla.setText("");
 		pswSenha.setText("");
 		pswConfSenha.setText("");
+		txtCodigo.setText("");
 		
 	}
 }
