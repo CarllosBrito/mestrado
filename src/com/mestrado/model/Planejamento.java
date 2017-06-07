@@ -13,6 +13,7 @@ public class Planejamento{
 	private String impressao;
 	private String alvo;
 	private String contorno;
+	private String prioridade;
 	private String observacoes;
 	
 	

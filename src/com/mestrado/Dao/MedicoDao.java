@@ -7,8 +7,6 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JOptionPane;
-
-import com.mestrado.model.Fisicos;
 import com.mestrado.model.Medicos;
 
 public class MedicoDao {
@@ -69,6 +67,13 @@ public class MedicoDao {
 			sigla = medico.getSigla();	
 		}
 		return !Medicos.isEmpty() ? Medicos.get(0) : new Medicos();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Medicos> buscaTodos(String a, String b){
+		Query query = em.createQuery("select a from Medicos a");
+		List<Medicos> result = query.getResultList();
+		return result;
 	}
 	
 }

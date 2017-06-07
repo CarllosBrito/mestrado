@@ -17,9 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
-
 import com.mestrado.Dao.MedicoDao;
-import com.mestrado.model.Fisicos;
 import com.mestrado.model.Medicos;
 
 public class CadMedicoView extends JFrame {

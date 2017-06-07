@@ -4,15 +4,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = "ABFM", name="ABFMFisico_uk"))
 public class Fisicos {
 	
 	private Long codigo;
 	private String nome;
 	private String ABFM;
 	private String sigla;
-	private String senha;
+	
 	
 	
 	@Id
@@ -43,13 +46,5 @@ public class Fisicos {
 	public void setSigla(String sigla) {
 		this.sigla = sigla;
 	}
-	
-	public String getSenha() {
-		return senha;
-	}
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
-
 	
 }

@@ -25,6 +25,7 @@ public class PrincipalView {
 
 	private JFrame frame;
 	private JTable table;
+	CadMedicoView medicoView = new CadMedicoView();
 
 	/**
 	 * Launch the application.
@@ -32,6 +33,8 @@ public class PrincipalView {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				
+				
 				try {
 					PrincipalView window = new PrincipalView();
 					window.frame.setVisible(true);
@@ -235,6 +238,11 @@ public class PrincipalView {
 		mnCadFuncionarios.add(separator);
 		
 		JMenuItem mntmMedicos = new JMenuItem("M\u00E9dicos");
+		mntmMedicos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				medicoView.setVisible(true);
+			}
+		});
 		mnCadFuncionarios.add(mntmMedicos);
 		
 		JSeparator separator_3 = new JSeparator();

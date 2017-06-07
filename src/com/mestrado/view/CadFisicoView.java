@@ -5,7 +5,6 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -15,11 +14,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
-
 import com.mestrado.Dao.FisicosDao;
 import com.mestrado.model.Fisicos;
 
@@ -34,8 +31,6 @@ public class CadFisicoView extends JFrame {
 	private JTextField txtNomeFisico;
 	private JTextField txtABFM;
 	private JTextField txtUserSigla;
-	private JPasswordField pswConfSenha;
-	private JPasswordField pswSenha;
 
 	/**
 	 * Launch the application.
@@ -61,7 +56,7 @@ public class CadFisicoView extends JFrame {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(CadFisicoView.class.getResource("/imagens/1483149248_personal.png")));
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 502, 250);
+		setBounds(100, 100, 434, 250);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -86,19 +81,11 @@ public class CadFisicoView extends JFrame {
 		txtABFM = new JTextField();
 		txtABFM.setColumns(10);
 		
-		JLabel lblNewLabel_3 = new JLabel("Usu\u00E1rio:");
+		JLabel lblNewLabel_3 = new JLabel("Sigla");
 		lblNewLabel_3.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		txtUserSigla = new JTextField();
 		txtUserSigla.setColumns(10);
-		
-		JLabel lblSenha = new JLabel("Senha:");
-		lblSenha.setFont(new Font("Tahoma", Font.BOLD, 12));
-		
-		JLabel lblConfirmaoDeSenha = new JLabel("Confirme a senha:");
-		lblConfirmaoDeSenha.setFont(new Font("Tahoma", Font.BOLD, 12));
-		
-		pswConfSenha = new JPasswordField();
 		
 		JFormattedTextField fmtdDataNascFis = new JFormattedTextField();
 		fmtdDataNascFis.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -107,20 +94,23 @@ public class CadFisicoView extends JFrame {
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				FisicosDao fisicodao = new FisicosDao();
-				//Fisicos fisico = new Fisicos();
-				
-			
-		//	String confSenha =  new String (pswConfSenha.getPassword());
 			
 			String nome = txtNomeFisico.getText().toUpperCase();
 			String abfm = txtABFM.getText();
 			String userSigla = txtUserSigla.getText().toUpperCase();
-			String senha = new String (pswSenha.getPassword()).trim();
 			
-				fisicodao.salvar(nome, abfm, userSigla, senha);
+			
+				if(txtNomeFisico.getText().trim().equals(null)||txtABFM.getText().trim().equals("")||txtUserSigla.getText().trim().equals("")){
+					JOptionPane.showMessageDialog(null, "Favor digitar todos os dados");
+				}else{
+				try {
+					fisicodao.salvar(nome, abfm, userSigla);
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(null, "Físico, já existe, Favor verificar e tentar novamente!");
+				}
 				
 				limpar();	
-				
+				}
 				
 			}
 		});
@@ -130,6 +120,9 @@ public class CadFisicoView extends JFrame {
 		JButton btnAlterar = new JButton("");
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if(txtNomeFisico.getText().trim().equals("")||txtUserSigla.getText().trim().equals("")){
+					JOptionPane.showMessageDialog(null, "O Favor preencher todos os Campos!!");
+				}else{
 				FisicosDao fisdao = new FisicosDao();
 				Fisicos fisico = new Fisicos();
 				
@@ -137,31 +130,27 @@ public class CadFisicoView extends JFrame {
 				Long codigo = Long.parseLong(txtCodigo.getText());
 				String nome = txtNomeFisico.getText().toUpperCase();
 				String sigla = txtUserSigla.getText().toUpperCase();
-				String senha = new String(pswSenha.getPassword());
-				
+						
 				if(abfm==null || abfm.trim().equals("")){
-					JOptionPane.showMessageDialog(null, "O núbero ABFM é obrigatório!!");
-					limpar();
+					JOptionPane.showMessageDialog(null, "O Favor preencher o Campo ABFM!!");
 				}else{
 					fisico.setCodigo(codigo);
 					fisico.setABFM(abfm);
 					fisico.setNome(nome);
 					fisico.setSigla(sigla);
-					fisico.setSenha(senha);
+					
 					
 					fisdao.alterar(fisico);
-					
-					limpar();
 					btnSalvar.setVisible(true);
-						
-					}
+					limpar();
+					
+					txtNomeFisico.setFocusable(true);
 				}
-				
-			
+				}
+			}
 		});
 		btnAlterar.setToolTipText("Alterar dados");
-		btnAlterar.setIcon(new ImageIcon(CadFisicoView.class.getResource("/imagens/1482302103_txt2.png")));
-		
+		btnAlterar.setIcon(new ImageIcon(CadFisicoView.class.getResource("/imagens/1482302103_txt2.png")));	
 		JButton btnBuscar = new JButton("");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -170,10 +159,8 @@ public class CadFisicoView extends JFrame {
 				String abfm = txtABFM.getText().toUpperCase();
 					
 				
-				if(abfm==null|| abfm.trim().equals("")){
-					
-					JOptionPane.showMessageDialog(null, "ABFM Inválido!!");
-					
+				if(abfm==null || abfm.trim().equals("")){
+					JOptionPane.showMessageDialog(null, "Favor digitar um número ABFM Inválido!!");
 				}else{
 					Fisicos objBusca = new Fisicos();
 					objBusca = fDao.buscar(abfm, new String());
@@ -200,8 +187,6 @@ public class CadFisicoView extends JFrame {
 			}
 		});
 		
-		pswSenha = new JPasswordField();
-		
 		JButton btnLimpar = new JButton("");
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -213,52 +198,38 @@ public class CadFisicoView extends JFrame {
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addContainerGap()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(txtCodigo, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
+									.addGap(13))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblNewLabel)
+									.addGap(18)))
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(txtNomeFisico, GroupLayout.PREFERRED_SIZE, 326, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblNewLabel_1)))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+								.addComponent(btnSalvar, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+									.addComponent(lblNewLabel_2)
+									.addComponent(txtABFM, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)))
+							.addGap(18)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-										.addGroup(gl_contentPane.createSequentialGroup()
-											.addComponent(txtCodigo, GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
-											.addGap(13))
-										.addGroup(gl_contentPane.createSequentialGroup()
-											.addComponent(lblNewLabel)
-											.addGap(18)))
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(txtNomeFisico, GroupLayout.PREFERRED_SIZE, 326, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblNewLabel_1)))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-										.addComponent(btnSalvar, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-											.addComponent(lblNewLabel_2)
-											.addComponent(txtABFM, GroupLayout.PREFERRED_SIZE, 68, GroupLayout.PREFERRED_SIZE)))
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addGroup(gl_contentPane.createSequentialGroup()
-											.addPreferredGap(ComponentPlacement.UNRELATED)
-											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(lblNewLabel_3)
-												.addComponent(txtUserSigla, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))
-											.addPreferredGap(ComponentPlacement.UNRELATED)
-											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(lblSenha)
-												.addComponent(pswSenha, GroupLayout.PREFERRED_SIZE, 111, GroupLayout.PREFERRED_SIZE))
-											.addGap(11)
-											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(lblConfirmaoDeSenha, GroupLayout.PREFERRED_SIZE, 125, GroupLayout.PREFERRED_SIZE)
-												.addComponent(pswConfSenha, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)))
-										.addGroup(gl_contentPane.createSequentialGroup()
-											.addGap(29)
-											.addComponent(btnAlterar, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
-											.addGap(119)
-											.addComponent(btnLimpar, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
-											.addGap(27)
-											.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE))))))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(199)
-							.addComponent(btnBuscar, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(32, Short.MAX_VALUE))
+									.addComponent(btnAlterar, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(btnBuscar, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(btnLimpar, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
+									.addGap(18)
+									.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 59, GroupLayout.PREFERRED_SIZE))
+								.addComponent(lblNewLabel_3)
+								.addComponent(txtUserSigla, GroupLayout.PREFERRED_SIZE, 109, GroupLayout.PREFERRED_SIZE))))
+					.addContainerGap(89, Short.MAX_VALUE))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -274,27 +245,20 @@ public class CadFisicoView extends JFrame {
 					.addGap(10)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblNewLabel_2)
-								.addComponent(lblNewLabel_3))
+							.addComponent(lblNewLabel_2)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(txtABFM, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(txtUserSigla, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(pswSenha, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-								.addComponent(pswConfSenha, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(txtABFM, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblSenha)
-								.addComponent(lblConfirmaoDeSenha, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
-							.addGap(26)))
+							.addComponent(lblNewLabel_3)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(txtUserSigla, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnLimpar, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
 						.addComponent(btnSair, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+						.addComponent(btnLimpar, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
+						.addComponent(btnBuscar, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
 						.addComponent(btnAlterar, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
-						.addComponent(btnSalvar, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE)
-						.addComponent(btnBuscar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+						.addComponent(btnSalvar, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 57, Short.MAX_VALUE))
 					.addGap(87))
 		);
 		contentPane.setLayout(gl_contentPane);
@@ -305,8 +269,6 @@ public class CadFisicoView extends JFrame {
 		txtNomeFisico.setText("");
 		txtABFM.setText("");
 		txtUserSigla.setText("");
-		pswSenha.setText("");
-		pswConfSenha.setText("");
 		txtCodigo.setText("");
 		
 	}

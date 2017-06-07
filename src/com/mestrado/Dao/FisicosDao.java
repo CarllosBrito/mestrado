@@ -17,12 +17,11 @@ public class FisicosDao {
 	Fisicos fisico = new Fisicos();
 	
 	
-	public void salvar(String nome, String abfm, String sigla, String senha){
+	public void salvar(String nome, String abfm, String sigla)throws Exception{
 		
 				
 				fisico.setNome(nome);
 				fisico.setABFM(abfm);
-				fisico.setSenha(senha);
 				fisico.setSigla(sigla);
 				
 				em.getTransaction().begin();
@@ -67,9 +66,7 @@ public class FisicosDao {
 			 codigo = fisico.getCodigo();
 			 ABFM = fisico.getABFM();
 			 nome = fisico.getnome();
-			 sigla = fisico.getSigla();
-			 senha = fisico.getSenha();
-			 
+			 sigla = fisico.getSigla(); 
 		 }
 		
 		 return !Fisicos.isEmpty() ? Fisicos.get(0) : new Fisicos();   

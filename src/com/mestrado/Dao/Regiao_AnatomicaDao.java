@@ -9,7 +9,6 @@ import javax.persistence.Query;
 import javax.swing.JOptionPane;
 
 import com.mestrado.model.Regiao_Anatomica;
-import com.mestrado.view.CadRegAnatomicaView;
 
 
 public class Regiao_AnatomicaDao {
@@ -26,6 +25,7 @@ public class Regiao_AnatomicaDao {
 				em.close();
 		}
 	
+	@SuppressWarnings("unused")
 	public void alterar(Regiao_Anatomica regiao){
 		Regiao_Anatomica original = new Regiao_Anatomica();
 		    
@@ -41,7 +41,7 @@ public class Regiao_AnatomicaDao {
 		
 	
 	
-	  @SuppressWarnings("unchecked")
+	  @SuppressWarnings({ "unchecked", "unused" })
 	public Regiao_Anatomica buscar(String a, String b) {
 	
 		String descricao;
@@ -56,10 +56,7 @@ public class Regiao_AnatomicaDao {
 			 codigo = regiao.getCodigo();
 			 descricao = regiao.getDescricao();
 			 
-		/*	 System .out . println (" Código da Região: " + regiao.getCodigo());
-			 System .out . println (" descrição da Região: " + regiao.getDescricao());
-			
-			 System .out . println ();*/
+		
 		 }
 		
 		 return !regioes.isEmpty() ? regioes.get(0) : new Regiao_Anatomica();   
