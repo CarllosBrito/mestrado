@@ -9,14 +9,14 @@ import javax.persistence.Query;
 import javax.swing.JOptionPane;
 import com.mestrado.model.Medicos;
 
-public class MedicoDao {
+public class MedicoDao{
 	private EntityManagerFactory emf = Persistence.createEntityManagerFactory("mestradoPU");
 	private EntityManager em = emf.createEntityManager();
 	
 	Medicos medico = new Medicos();
 	
 	
-	public void salvar(String nome,String crm,String sigla){
+	public void salvar(String nome,String crm,String sigla)throws Exception{
 		Medicos MD = new Medicos();
 				
 			
@@ -43,7 +43,7 @@ public class MedicoDao {
 		em.getTransaction().commit();
 		em.close();
 		System.out.println(medico);
-		JOptionPane.showMessageDialog(null, "Físico alterado(a) com sucesso!!!");		
+		JOptionPane.showMessageDialog(null, "Médico(a) alterado(a) com sucesso!!!");		
 		
 	}
 	

@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
+
 import com.mestrado.Dao.MedicoDao;
 import com.mestrado.model.Medicos;
 
@@ -90,6 +91,10 @@ public class CadMedicoView extends JFrame {
 		JButton btnSalvar = new JButton("");
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+			
+				if(txtNomeMed.getText().trim().equals("")|| txtCRM.getText().trim().equals("")||txtSigla.getText().trim().equals("")){
+					JOptionPane.showMessageDialog(null, "Favor digitar todos os dados para salvar médico!!");
+				}else{
 				MedicoDao MDdao = new MedicoDao();
 			
 				
@@ -107,12 +112,17 @@ public class CadMedicoView extends JFrame {
 						if(Sigla==null || Sigla.trim().equals("")){
 							JOptionPane.showMessageDialog(null, "A Sigla é obrigatória!!");
 						}else{
-						MDdao.salvar(NomeMD,CRM,Sigla);
-						JOptionPane.showMessageDialog(null, "Médico Salvo com Sucesso!!");					
-						limpar();
-						txtNomeMed.requestFocus();
+						try {
+							MDdao.salvar(NomeMD,CRM,Sigla);
+							JOptionPane.showMessageDialog(null, "Médico Salvo com Sucesso!!");					
+							limpar();
+							txtNomeMed.requestFocus();
+						} catch (Exception e) {
+							JOptionPane.showMessageDialog(null, "CRM Já existe favor verificar e tentar novamente!!");
+							limpar();
 						}
-					
+					}
+				}
 			}
 
 			
@@ -123,6 +133,10 @@ public class CadMedicoView extends JFrame {
 		JButton btnAlterar = new JButton("");
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			
+				if(txtNomeMed.getText().trim().equals("")||txtCRM.getText().trim().equals("")||txtSigla.getText().trim().equals("")){
+					JOptionPane.showMessageDialog(null, "Necessário realizar a busca para realização da alteração!");
+				}else{
 				MedicoDao mdDao= new MedicoDao();
 				Medicos md = new Medicos();
 				
@@ -132,8 +146,7 @@ public class CadMedicoView extends JFrame {
 				String sigla = txtSigla.getText().toUpperCase();
 				
 				if(crm==null || crm.trim().equals("")){
-					JOptionPane.showMessageDialog(null, "O núbero ABFM é obrigatório!!");
-					limpar();
+					JOptionPane.showMessageDialog(null, "O CRM é obrigatório!!");
 				}else{
 					md.setCodigo(cod);
 					md.setCRM(crm);
@@ -145,10 +158,10 @@ public class CadMedicoView extends JFrame {
 					
 					limpar();
 					btnSalvar.setVisible(true);
-						
+					
 					}
-				
-			}
+				}
+			}	
 		});
 		btnAlterar.setToolTipText("Alterar Dados!");
 		btnAlterar.setIcon(new ImageIcon(CadMedicoView.class.getResource("/imagens/1482302103_txt2.png")));
@@ -189,6 +202,7 @@ public class CadMedicoView extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				CadMedicoView.this.setVisible(false);
 			}
+		
 		});
 		btnSair.setToolTipText("Sair da Tela M\u00E9dicos");
 		btnSair.setIcon(new ImageIcon(CadMedicoView.class.getResource("/imagens/1482302161_10.png")));
@@ -216,12 +230,12 @@ public class CadMedicoView extends JFrame {
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addGroup(gl_contentPane.createSequentialGroup()
 											.addComponent(lblNome, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.RELATED, 216, Short.MAX_VALUE))
-										.addComponent(txtNomeMed, GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)))
+											.addPreferredGap(ComponentPlacement.RELATED, 205, Short.MAX_VALUE))
+										.addComponent(txtNomeMed, GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)))
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addComponent(lblCrm, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
-										.addComponent(txtCRM, GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE))
+										.addComponent(txtCRM, GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
 									.addGap(18)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addComponent(lblSigla, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
@@ -234,10 +248,10 @@ public class CadMedicoView extends JFrame {
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(btnBuscar, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(btnLimpar, GroupLayout.PREFERRED_SIZE, 53, Short.MAX_VALUE)
+							.addComponent(btnLimpar, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)
 							.addGap(18)
 							.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-							.addGap(33))))
+							.addContainerGap(33, Short.MAX_VALUE))))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -275,6 +289,7 @@ public class CadMedicoView extends JFrame {
 		txtCRM.setText("");
 		txtNomeMed.setText("");
 		txtSigla.setText("");
+		txtNomeMed.requestFocus();
 		txtNomeMed.requestFocus();
 		
 	}
