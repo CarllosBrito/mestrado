@@ -15,7 +15,7 @@ public class OrigemDao {
 	private EntityManagerFactory emf = Persistence.createEntityManagerFactory("mestradoPU");
 	private EntityManager em = emf.createEntityManager();
 	
-	public void salvar(String descricao, String sigla){
+	public void salvar(String descricao, String sigla)throws Exception{
 		Origem OR = new Origem();
 		
 		OR.setDescricao(descricao);

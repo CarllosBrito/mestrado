@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -15,14 +16,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
+
 import com.mestrado.Dao.OrigemDao;
 import com.mestrado.model.Origem;
 
 public class CadOrigemView extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtCodOrigem;
@@ -96,7 +95,11 @@ public class CadOrigemView extends JFrame {
 						JOptionPane.showMessageDialog(null, "Favor digitar a Sigla da Clinica de Origem!!");
 					}
 					else{
-						orDAO.salvar(desc, sigla);
+						try {
+							orDAO.salvar(desc, sigla);
+						} catch (Exception e) {
+							JOptionPane.showMessageDialog(null, "Origem já cadastrada, Favor verificar e tentar novamente!!");
+						}
 						Limpar();
 						
 					}
@@ -109,6 +112,11 @@ public class CadOrigemView extends JFrame {
 		btnAlterar.setToolTipText("Alterar dados!!");
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			
+				if(txtDescOrigem.getText().trim().equals("")||txtSiglaOrigem.getText().trim().equals("")){
+					JOptionPane.showMessageDialog(null, "Necessário realizar uma busca para realizar alteração!");
+					
+				}else{
 				OrigemDao orDAO = new OrigemDao();
 				Origem or = new Origem();
 				
@@ -131,6 +139,7 @@ public class CadOrigemView extends JFrame {
 						
 					}
 				
+				}
 			}
 		});
 		btnAlterar.setIcon(new ImageIcon(CadOrigemView.class.getResource("/imagens/1482302103_txt2.png")));
