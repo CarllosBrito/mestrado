@@ -34,12 +34,14 @@ public class PacientesDao {
 		Paciente original = new Paciente();
 		original= em.find(Paciente.class, paciente.getCodPaciente());
 		
+		
 		em.getTransaction().begin();
 		em.merge(paciente);
 		em.getTransaction().commit();
 		em.close();
 		
 		JOptionPane.showMessageDialog(null, "Paciente alterado com sucesso!!!");
+		
 	}
 	
 	@SuppressWarnings({ "unused", "unchecked" })

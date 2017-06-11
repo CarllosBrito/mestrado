@@ -95,6 +95,11 @@ public class CadPacienteView extends JFrame {
 		JButton btnSalvar = new JButton("");
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+			
+				if(txtNomePaciente.getText().trim().equals("")||txtRegistro.getText().trim().equals("")||fmtdDataNasc_1.getText().trim().equals("")){
+					JOptionPane.showMessageDialog(null, "Favor preencher os dados do Paciente!!");
+				}else{
+				
 				PacientesDao dao = new PacientesDao();
 				
 				
@@ -118,42 +123,82 @@ public class CadPacienteView extends JFrame {
 				try {
 					dao.salvar(Nome, registro, d);
 					JOptionPane.showMessageDialog(null, "Paciente salvo com sucesso");
+					limpar();
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, "Registro de paciente, já existe, Informe outro");
+					JOptionPane.showMessageDialog(null, "Registro de paciente, já existe, Favor verificar e tentar novamente");
 				}
 				 
-			}
+			   }
 
-			
+			  }
 			}
 		});
 		btnSalvar.setIcon(new ImageIcon(CadPacienteView.class.getResource("/imagens/1482301942_Save_Icon.png")));
 		
 		JButton btnAlterar = new JButton("");
+		btnAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				if(txtNomePaciente.getText().trim().equals("")||txtRegistro.getText().trim().equals("")||fmtdDataNasc_1.getText().trim().equals("")){
+					JOptionPane.showMessageDialog(null, "Necessário realizar a busca para realizar a alteração!");
+				}else{
+					
+					PacientesDao pDAO = new PacientesDao();
+					Paciente paciente = new Paciente();
+					
+					Long cod = Long.parseLong(txtCodigo.getText());
+					String Nome = txtNomePaciente.getText().toUpperCase();
+					String registro = txtRegistro.getText().toUpperCase();
+					String dtnasc=fmtdDataNasc_1.getText();
+					
+					SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+					Date d = null;
+					try {
+						d = new Date(format.parse(dtnasc).getTime());
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					if(registro==null || registro.trim().equals("")){
+						JOptionPane.showMessageDialog(null, "O Registro é obrigatório!!");
+					}else{
+						paciente.setCodPaciente(cod);
+						paciente.setNomePaciente(Nome);
+						paciente.setregistro(registro);
+						paciente.setDtNascimento(d);
+						
+						
+						pDAO.alterar(paciente);
+						
+						limpar();
+						btnSalvar.setVisible(true);
+						
+						}
+					
+					
+				}
+			}
+		});
 		btnAlterar.setIcon(new ImageIcon(CadPacienteView.class.getResource("/imagens/1482302103_txt2.png")));
 		
 		JButton btnBusca = new JButton("");
 		btnBusca.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				
 				PacientesDao pDAO = new PacientesDao();
 				String registro = txtRegistro.getText().toUpperCase();
 			
-				
-				
-				if(registro==null|| registro.trim().equals("")){
-					
-					JOptionPane.showMessageDialog(null, "Registro Inválido!!");
-					
+				if(registro==null|| registro.trim().equals("")){		
+					JOptionPane.showMessageDialog(null, "Registro em branco, favor digitar um registro para realizaç]ão da busca!!");
 				}else{
 					SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 					
 					Paciente objBusca = new Paciente();
 					objBusca = pDAO.buscar(registro, new String());
 					
-					System.out.println(objBusca.getNomePaciente());
-					System.out.println(objBusca.getregistro());
-					System.out.println(objBusca.getCodPaciente());
-					System.out.println(format.format(objBusca.getDtNascimento().getTime()));
+				if(objBusca.getregistro()!=registro){
+					JOptionPane.showMessageDialog(null, "Paciente não encontrado");
+				}else{
 					 
 					txtCodigo.setText(objBusca.getCodPaciente().toString());
 					txtRegistro.setText(objBusca.getregistro().toUpperCase());
@@ -163,12 +208,18 @@ public class CadPacienteView extends JFrame {
 					
 					btnSalvar.setVisible(false);
 				}
+			 }
 				
 			}
 		});
 		btnBusca.setIcon(new ImageIcon(CadPacienteView.class.getResource("/imagens/1482302067_Magnifier.png")));
 		
 		JButton btnLimpar = new JButton("");
+		btnLimpar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				limpar();
+			}
+		});
 		btnLimpar.setIcon(new ImageIcon(CadPacienteView.class.getResource("/imagens/1482302193_edit-clear.png")));
 		
 				
@@ -259,5 +310,14 @@ public class CadPacienteView extends JFrame {
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
+	public void limpar(){
+		txtCodigo.setText("");
+		txtNomePaciente.setText("");
+		txtRegistro.setText("");
+		fmtdDataNasc_1.setText("");
+		txtNomePaciente.requestFocus();
+		
+	}
+	
 }
 
