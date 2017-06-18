@@ -154,25 +154,25 @@ public class CadFisicoView extends JFrame {
 		JButton btnBuscar = new JButton("");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				FisicosDao fDao = new FisicosDao();	
-								
+				FisicosDao fDao = new FisicosDao();					
 				String abfm = txtABFM.getText().toUpperCase();
 					
+				Fisicos objBusca = new Fisicos();
+				objBusca = fDao.buscar(abfm, new String());
 				
 				if(abfm==null || abfm.trim().equals("")){
-					JOptionPane.showMessageDialog(null, "Favor digitar um número ABFM Inválido!!");
-				}else{
-					Fisicos objBusca = new Fisicos();
-					objBusca = fDao.buscar(abfm, new String());
-					
+					JOptionPane.showMessageDialog(null, "Favor digitar um ABFM Inválido!!");
+				}else 
+					if(abfm.trim().equals(objBusca.getABFM())){					
 					txtCodigo.setText(objBusca.getCodigo().toString());
 					txtABFM.setText(objBusca.getABFM());
 					txtNomeFisico.setText(objBusca.getnome());
 					txtUserSigla.setText(objBusca.getSigla());
 					
 					btnSalvar.setVisible(false);
-				}
-				
+				}else{
+					JOptionPane.showMessageDialog(null, "Físico nãio encontrado!");
+				}	
 			}
 		});
 		btnBuscar.setToolTipText("Busca Físico pelo número ABFM");
@@ -191,6 +191,7 @@ public class CadFisicoView extends JFrame {
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				limpar();
+				btnSalvar.setVisible(true);
 			}
 		});
 		btnLimpar.setIcon(new ImageIcon(CadFisicoView.class.getResource("/imagens/1482302193_edit-clear.png")));

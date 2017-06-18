@@ -170,24 +170,26 @@ public class CadMedicoView extends JFrame {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				MedicoDao mdDao= new MedicoDao();
-								
+				MedicoDao mdDao= new MedicoDao();			
 				String crm = txtCRM.getText().toUpperCase();
+				
+				Medicos objBusca = new Medicos();
+				objBusca = mdDao.buscar(crm, new String());
 				
 				if(crm==null|| crm.trim().equals("")){
 					
 					JOptionPane.showMessageDialog(null, "CRM Inválido!!");
 					
-				}else{
-					Medicos objBusca = new Medicos();
-					objBusca = mdDao.buscar(crm, new String());
-					
+				}else 
+					if(crm.trim().equals(objBusca.getCRM())){				
 					txtCodigo.setText(objBusca.getCodigo().toString());
 					txtCRM.setText(objBusca.getCRM());
 					txtNomeMed.setText(objBusca.getNome());
 					txtSigla.setText(objBusca.getSigla().toUpperCase());
 					
 					btnSalvar.setVisible(false);
+				}else{
+					JOptionPane.showMessageDialog(null, "Médico não encontrado!");
 				}
 				
 				

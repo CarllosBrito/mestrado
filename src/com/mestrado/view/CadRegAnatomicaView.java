@@ -139,20 +139,23 @@ public class CadRegAnatomicaView extends JFrame {
 				String descr = txtDescricao.getText().toUpperCase();
 				Regiao_AnatomicaDao regDAO = new Regiao_AnatomicaDao();
 
+				Regiao_Anatomica objBusca = new Regiao_Anatomica();
+				objBusca = (Regiao_Anatomica) regDAO.buscar(descr,new String());
+				
 				if (descr == null || descr.trim().equals("")) {
 					JOptionPane.showMessageDialog(null,
 							"Região Não encontrada! Digite Novamente!");
 					Limpar();
 
-				} else {
-					Regiao_Anatomica objBusca = new Regiao_Anatomica();
-					objBusca = (Regiao_Anatomica) regDAO.buscar(descr,
-							new String());
+				} else 
+					if(descr.trim().equals(objBusca.getDescricao())){
 					txtCodRegAnatomica.setText(objBusca.getCodigo().toString());
 					txtDescricao.setText(objBusca.getDescricao());
 
 					btnSalvar.setVisible(false);
 
+				}else{
+					JOptionPane.showMessageDialog(null, "Região Anatômica não encontrada!");
 				}
 			}
 
@@ -173,6 +176,7 @@ public class CadRegAnatomicaView extends JFrame {
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Limpar();
+				btnSalvar.setVisible(true);
 			}
 		});
 		btnLimpar.setIcon(new ImageIcon(CadRegAnatomicaView.class

@@ -187,19 +187,16 @@ public class CadPacienteView extends JFrame {
 				
 				PacientesDao pDAO = new PacientesDao();
 				String registro = txtRegistro.getText().toUpperCase();
-			
+				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+				
+				Paciente objBusca = new Paciente();
+				objBusca = pDAO.buscar(registro, new String());
+				
 				if(registro==null|| registro.trim().equals("")){		
-					JOptionPane.showMessageDialog(null, "Registro em branco, favor digitar um registro para realizaç]ão da busca!!");
-				}else{
-					SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-					
-					Paciente objBusca = new Paciente();
-					objBusca = pDAO.buscar(registro, new String());
-					
-				if(objBusca.getregistro()!=registro){
-					JOptionPane.showMessageDialog(null, "Paciente não encontrado");
-				}else{
-					 
+					JOptionPane.showMessageDialog(null, "Registro em branco, favor digitar um registro para realização da busca!!");
+				}else 
+					if(registro.trim().equals(objBusca.getregistro())){
+									 
 					txtCodigo.setText(objBusca.getCodPaciente().toString());
 					txtRegistro.setText(objBusca.getregistro().toUpperCase());
 					txtNomePaciente.setText(objBusca.getNomePaciente().toUpperCase());
@@ -207,10 +204,12 @@ public class CadPacienteView extends JFrame {
 					
 					
 					btnSalvar.setVisible(false);
+				}else{
+					JOptionPane.showMessageDialog(null, "Paciente não encontrado!");
 				}
 			 }
-				
-			}
+			
+			
 		});
 		btnBusca.setIcon(new ImageIcon(CadPacienteView.class.getResource("/imagens/1482302067_Magnifier.png")));
 		
@@ -218,6 +217,7 @@ public class CadPacienteView extends JFrame {
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				limpar();
+				btnSalvar.setVisible(true);
 			}
 		});
 		btnLimpar.setIcon(new ImageIcon(CadPacienteView.class.getResource("/imagens/1482302193_edit-clear.png")));

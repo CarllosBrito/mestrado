@@ -150,21 +150,22 @@ public class CadOrigemView extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				OrigemDao orDAO = new OrigemDao();
 				String sigla = txtSiglaOrigem.getText().toUpperCase();
+				Origem objBusca = new Origem();
+				
+				objBusca = orDAO.buscar(sigla, new String());
 				
 				if(sigla==null|| sigla.trim().equals("")){
+					JOptionPane.showMessageDialog(null, "Favor digitar Uma Sigla pára a busca!!");
 					
-					JOptionPane.showMessageDialog(null, "Sigla Inválida!!");
-					
+				}else if(sigla.trim().equals(objBusca.getSigla())){
+						txtCodOrigem.setText(objBusca.getCodigo().toString());
+						txtDescOrigem.setText(objBusca.getDescricao());
+						txtSiglaOrigem.setText(objBusca.getSigla());
+						
+					btnSalvar.setVisible(false);		
 				}else{
-					Origem objBusca = new Origem();
-					objBusca = orDAO.buscar(sigla, new String());
-					
-					txtCodOrigem.setText(objBusca.getCodigo().toString());
-					txtDescOrigem.setText(objBusca.getDescricao());
-					txtSiglaOrigem.setText(objBusca.getSigla());
-					
-					btnSalvar.setVisible(false);
-				}
+					JOptionPane.showMessageDialog(null, "REGIÃO NÃO ENCONTRADA!");
+				}	
 			}
 		});
 		btnBuscar.setIcon(new ImageIcon(CadOrigemView.class.getResource("/imagens/1482302067_Magnifier.png")));
@@ -184,8 +185,13 @@ public class CadOrigemView extends JFrame {
 		btnLimpar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				Limpar();
+				btnSalvar.setVisible(true);
 			}
+			
+
+			
 		});
+		
 		btnLimpar.setIcon(new ImageIcon(CadOrigemView.class.getResource("/imagens/1482302193_edit-clear.png")));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -239,8 +245,8 @@ public class CadOrigemView extends JFrame {
 					.addGap(26))
 		);
 		contentPane.setLayout(gl_contentPane);
+		
 	}
-
 	public void  Limpar() {
 		txtDescOrigem.setText("");
 		txtCodOrigem.setText("");

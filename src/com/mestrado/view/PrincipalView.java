@@ -20,6 +20,8 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableModel;
+import java.awt.Color;
+import java.awt.SystemColor;
 
 public class PrincipalView {
 
@@ -58,6 +60,7 @@ public class PrincipalView {
 	 */
 	private void initialize() {
 		frame = new JFrame("Sistema de Gerenciamento de Pacientes");
+		frame.getContentPane().setBackground(SystemColor.scrollbar);
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(PrincipalView.class.getResource("/imagens/1482302223_personal.png")));
 		frame.setResizable(false);
 		
@@ -72,35 +75,47 @@ public class PrincipalView {
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{"", null, "", "", null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, "", null, null, "", "", null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
 			},
 			new String[] {
-				"nome", "registro", "medico", "Regiao", "Data CT", "Contorno", "Alvo", "Aprovacao", "Impressao", "1 assinatura", "2 assinatura", "Bloco", "SIstema Gerenciamento", "Observacoes"
+				"Data ", "Registro", "Nome", "Cl\u00EDnica Origem", "Medico Resp.", "Regiao", "Data CT", "Contorno", "Alvo", "Qtde Cpos", "T\u00E9cnica", "Aparelho", "Sistema Gerenciamento", "Aprovacao", "Impressao", "1 assinatura", "2 assinatura", "Bloco", "Data Inicio", "Observacoes"
 			}
 		));
-		table.getColumnModel().getColumn(0).setPreferredWidth(180);
-		table.getColumnModel().getColumn(2).setPreferredWidth(90);
-		table.getColumnModel().getColumn(3).setPreferredWidth(90);
-		table.getColumnModel().getColumn(4).setPreferredWidth(65);
-		table.getColumnModel().getColumn(12).setPreferredWidth(100);
-		table.getColumnModel().getColumn(13).setPreferredWidth(120);
+		table.getColumnModel().getColumn(0).setPreferredWidth(70);
+		table.getColumnModel().getColumn(1).setPreferredWidth(80);
+		table.getColumnModel().getColumn(2).setPreferredWidth(195);
+		table.getColumnModel().getColumn(3).setPreferredWidth(91);
+		table.getColumnModel().getColumn(4).setPreferredWidth(90);
+		table.getColumnModel().getColumn(5).setPreferredWidth(95);
+		table.getColumnModel().getColumn(6).setPreferredWidth(65);
+		table.getColumnModel().getColumn(9).setPreferredWidth(80);
+		table.getColumnModel().getColumn(10).setPreferredWidth(85);
+		table.getColumnModel().getColumn(11).setPreferredWidth(85);
+		table.getColumnModel().getColumn(12).setPreferredWidth(125);
+		table.getColumnModel().getColumn(13).setPreferredWidth(85);
+		table.getColumnModel().getColumn(14).setPreferredWidth(85);
+		table.getColumnModel().getColumn(15).setPreferredWidth(100);
+		table.getColumnModel().getColumn(16).setPreferredWidth(100);
+		table.getColumnModel().getColumn(17).setPreferredWidth(70);
+		table.getColumnModel().getColumn(18).setPreferredWidth(70);
+		table.getColumnModel().getColumn(19).setPreferredWidth(120);
 		
 		JLabel lblNome = new JLabel("Nome Paciente");
 		
@@ -116,76 +131,108 @@ public class PrincipalView {
 		
 		JLabel lblAlvo = new JLabel("Alvo");
 		
-		JLabel lblAprovacao = new JLabel("Aprova\u00E7\u00E3o");
+		JLabel lblSistGerenciamento = new JLabel("Sist. Gerenc.");
 		
-		JLabel lblImpressao = new JLabel("Impress\u00E3o");
+		JLabel lblObs = new JLabel("Observa\u00E7\u00F5es");
 		
-		JLabel lbl1Assinatura = new JLabel("1\u00AA Assinatura");
+		JLabel lblData = new JLabel("Data");
 		
-		JLabel lbl2Assinatura = new JLabel("2\u00AA Assinatura");
+		JLabel lblClinicaOrigem = new JLabel("Clinica Origem");
+		
+		JLabel lblQtdeCpos = new JLabel("Qtde Cpos");
+		
+		JLabel lblTcnica = new JLabel("T\u00E9cnica");
+		
+		JLabel lblAparelho = new JLabel("Aparelho");
+		
+		JLabel lblAprovao = new JLabel("Aprova\u00E7\u00E3o");
+		
+		JLabel lblImpresso = new JLabel("Impress\u00E3o");
+		
+		JLabel lblAssinatura = new JLabel("1\u00AA Assinatura");
+		
+		JLabel lblAssinatura_1 = new JLabel("2\u00AA Assinatura");
 		
 		JLabel lblBloco = new JLabel("Bloco");
 		
-		JLabel lblSistGerenciamento = new JLabel("Sist. Gerenciamento");
-		
-		JLabel lblObs = new JLabel("Observa\u00E7\u00F5es");
+		JLabel lblDataIncio = new JLabel("Dta in\u00EDcio");
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
-			groupLayout.createParallelGroup(Alignment.LEADING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(48)
-					.addComponent(lblNome)
-					.addPreferredGap(ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
-					.addComponent(lblRegistro)
-					.addGap(51)
-					.addComponent(lblMedico)
-					.addGap(50)
-					.addComponent(lblRegiao)
-					.addGap(37)
-					.addComponent(lblDataCT)
-					.addGap(33)
-					.addComponent(lblContorno)
-					.addGap(50)
-					.addComponent(lblAlvo)
-					.addGap(44)
-					.addComponent(lblAprovacao)
-					.addGap(33)
-					.addComponent(lblImpressao)
-					.addGap(27)
-					.addComponent(lbl1Assinatura)
-					.addGap(18)
-					.addComponent(lbl2Assinatura)
-					.addGap(26)
-					.addComponent(lblBloco)
-					.addGap(35)
-					.addComponent(lblSistGerenciamento)
-					.addGap(31)
-					.addComponent(lblObs)
-					.addGap(53))
+			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap()
 					.addComponent(table, GroupLayout.DEFAULT_SIZE, 1340, Short.MAX_VALUE)
 					.addContainerGap())
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGap(20)
+					.addComponent(lblData)
+					.addGap(24)
+					.addComponent(lblRegistro)
+					.addGap(43)
+					.addComponent(lblNome)
+					.addGap(36)
+					.addComponent(lblClinicaOrigem)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblMedico)
+					.addGap(18)
+					.addComponent(lblRegiao)
+					.addGap(12)
+					.addComponent(lblDataCT)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblContorno)
+					.addGap(18)
+					.addComponent(lblAlvo)
+					.addGap(29)
+					.addComponent(lblQtdeCpos)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblTcnica)
+					.addGap(28)
+					.addComponent(lblAparelho)
+					.addGap(28)
+					.addComponent(lblSistGerenciamento)
+					.addGap(18)
+					.addComponent(lblAprovao)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblImpresso)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblAssinatura)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblAssinatura_1)
+					.addPreferredGap(ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+					.addComponent(lblBloco)
+					.addGap(18)
+					.addComponent(lblDataIncio)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblObs)
+					.addGap(24))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblObs)
-						.addComponent(lblNome)
-						.addComponent(lblRegistro)
-						.addComponent(lblMedico)
-						.addComponent(lblRegiao)
-						.addComponent(lblDataCT)
-						.addComponent(lblContorno)
-						.addComponent(lblAprovacao)
-						.addComponent(lblAlvo)
-						.addComponent(lbl2Assinatura)
-						.addComponent(lblImpressao)
-						.addComponent(lbl1Assinatura)
-						.addComponent(lblBloco)
-						.addComponent(lblSistGerenciamento))
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lblData)
+							.addComponent(lblRegistro)
+							.addComponent(lblObs)
+							.addComponent(lblNome)
+							.addComponent(lblClinicaOrigem)
+							.addComponent(lblMedico)
+							.addComponent(lblContorno)
+							.addComponent(lblAlvo)
+							.addComponent(lblQtdeCpos)
+							.addComponent(lblTcnica)
+							.addComponent(lblDataIncio)
+							.addComponent(lblRegiao)
+							.addComponent(lblDataCT))
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lblBloco)
+							.addComponent(lblAssinatura_1)
+							.addComponent(lblAssinatura)
+							.addComponent(lblImpresso)
+							.addComponent(lblAprovao)
+							.addComponent(lblSistGerenciamento)
+							.addComponent(lblAparelho)))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(table, GroupLayout.PREFERRED_SIZE, 457, GroupLayout.PREFERRED_SIZE)
 					.addGap(230))

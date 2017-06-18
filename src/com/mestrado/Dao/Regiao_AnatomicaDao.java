@@ -1,13 +1,11 @@
 package com.mestrado.Dao;
 
 import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JOptionPane;
-
 import com.mestrado.model.Regiao_Anatomica;
 
 public class Regiao_AnatomicaDao {
@@ -67,4 +65,10 @@ public class Regiao_AnatomicaDao {
 
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Regiao_Anatomica> buscaTodos(String a, String b) {
+		Query query = em.createQuery("select a from Regiao_anatomica a");
+		List<Regiao_Anatomica> result = query.getResultList();
+		return result;
+	}
 }
