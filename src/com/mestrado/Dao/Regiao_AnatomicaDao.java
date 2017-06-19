@@ -67,7 +67,7 @@ public class Regiao_AnatomicaDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Regiao_Anatomica> buscaTodos(String a, String b) {
-		Query query = em.createQuery("select a from Regiao_anatomica a");
+		Query query = em.createQuery("select a from Regiao_Anatomica a");
 		List<Regiao_Anatomica> result = query.getResultList();
 		return result;
 	}
