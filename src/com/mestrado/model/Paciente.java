@@ -1,6 +1,7 @@
 package com.mestrado.model;
 
 import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,6 +19,7 @@ public class Paciente {
 	private String nomePaciente;
 	private String registro;
 	private Date dtNascimento;
+	
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -50,5 +52,32 @@ public class Paciente {
 	public void setregistro (String registro) {
 		this.registro = registro;
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((codPaciente == null) ? 0 : codPaciente.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Paciente other = (Paciente) obj;
+		if (codPaciente == null) {
+			if (other.codPaciente != null)
+				return false;
+		} else if (!codPaciente.equals(other.codPaciente))
+			return false;
+		return true;
+	}
+
 
 }
