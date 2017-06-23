@@ -119,14 +119,13 @@ public class CadRegAnatomicaView extends JFrame {
 							"O nome da Região Anatômica é obrigatório!!");
 					Limpar();
 				} else {
-						regiao.setCodigo(cod);
-						regiao.setDescricao(descricao);
-						dao.alterar(regiao);
+					regiao.setCodigo(cod);
+					regiao.setDescricao(descricao);
+					dao.alterar(regiao);
 
-						Limpar();
-						btnSalvar.setVisible(true);
-					}
-				
+					Limpar();
+					btnSalvar.setVisible(true);
+				}
 
 			}
 		});
@@ -140,22 +139,23 @@ public class CadRegAnatomicaView extends JFrame {
 				Regiao_AnatomicaDao regDAO = new Regiao_AnatomicaDao();
 
 				Regiao_Anatomica objBusca = new Regiao_Anatomica();
-				objBusca = (Regiao_Anatomica) regDAO.buscar(descr,new String());
-				
+				objBusca = (Regiao_Anatomica) regDAO
+						.buscar(descr, new String());
+
 				if (descr == null || descr.trim().equals("")) {
 					JOptionPane.showMessageDialog(null,
 							"Região Não encontrada! Digite Novamente!");
 					Limpar();
 
-				} else 
-					if(descr.trim().equals(objBusca.getDescricao())){
+				} else if (descr.trim().equals(objBusca.getDescricao())) {
 					txtCodRegAnatomica.setText(objBusca.getCodigo().toString());
 					txtDescricao.setText(objBusca.getDescricao());
 
 					btnSalvar.setVisible(false);
 
-				}else{
-					JOptionPane.showMessageDialog(null, "Região Anatômica não encontrada!");
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"Região Anatômica não encontrada!");
 				}
 			}
 

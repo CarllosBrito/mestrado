@@ -104,7 +104,8 @@ public class CadSist_GerenciamentoView extends JFrame {
 		JButton btnAlterar = new JButton("");
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (txtDescr.getText().trim().equals("")||txtCod.getText().trim().equals("")) {
+				if (txtDescr.getText().trim().equals("")
+						|| txtCod.getText().trim().equals("")) {
 					JOptionPane
 							.showMessageDialog(null,
 									"Necessário Realizar uma busca para alteração dos dados");
@@ -142,22 +143,21 @@ public class CadSist_GerenciamentoView extends JFrame {
 				Sistema_Gerenciamento objBusca = new Sistema_Gerenciamento();
 				String descr = txtDescr.getText().toUpperCase();
 				objBusca = sisDAO.buscar(descr, new String());
-				
-				
-				if(txtDescr.getText().trim().equals("")){
+
+				if (txtDescr.getText().trim().equals("")) {
 					JOptionPane
-					.showMessageDialog(null,
-							"Necessário digitar o nome do sistema para realizar a busca!!");
-				}else if(descr.trim().equals(objBusca.getDescricao())){
+							.showMessageDialog(null,
+									"Necessário digitar o nome do sistema para realizar a busca!!");
+				} else if (descr.trim().equals(objBusca.getDescricao())) {
 					txtCod.setText(objBusca.getCodigo().toString());
 					txtDescr.setText(objBusca.getDescricao());
-					
+
 					btnSalvar.setVisible(false);
-				}else{
+				} else {
 					JOptionPane.showMessageDialog(null,
 							"Sistema não encontrado!");
 				}
-				
+
 			}
 		});
 		btnBuscar.setToolTipText("Busca pele Descri\u00E7\u00E3o!");

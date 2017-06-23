@@ -55,95 +55,104 @@ public class CadOrigemView extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		
+
 		JLabel lblNewLabel = new JLabel("C\u00F3digo:");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 12));
-		
+
 		txtCodOrigem = new JTextField();
 		txtCodOrigem.setEditable(false);
 		txtCodOrigem.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtCodOrigem.setColumns(10);
-		
+
 		JLabel lblDescrio = new JLabel("Descri\u00E7\u00E3o:");
 		lblDescrio.setFont(new Font("Tahoma", Font.BOLD, 12));
-		
+
 		txtDescOrigem = new JTextField();
 		txtDescOrigem.setToolTipText("Digite a Cl\u00EDnica de Origem!");
 		txtDescOrigem.setColumns(10);
-		
+
 		JLabel lblSigla = new JLabel("Sigla:");
 		lblSigla.setFont(new Font("Tahoma", Font.BOLD, 12));
-		
+
 		txtSiglaOrigem = new JTextField();
-		txtSiglaOrigem.setToolTipText("Digite a sigla da Cl\u00EDnica de Origem!");
+		txtSiglaOrigem
+				.setToolTipText("Digite a sigla da Cl\u00EDnica de Origem!");
 		txtSiglaOrigem.setColumns(10);
-		
+
 		JButton btnSalvar = new JButton("");
 		btnSalvar.setToolTipText("Salvar Origem!!");
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				OrigemDao orDAO = new OrigemDao();
-				
+
 				String desc = txtDescOrigem.getText().toUpperCase();
 				String sigla = txtSiglaOrigem.getText().toUpperCase();
-				
-				if(desc==null|| desc.trim().equals("")){
-					JOptionPane.showMessageDialog(null, "Favor digitar Clinica de Origem!!");
-					
-				}else
-					if(sigla==null|| sigla.trim().equals("")){
-						JOptionPane.showMessageDialog(null, "Favor digitar a Sigla da Clinica de Origem!!");
+
+				if (desc == null || desc.trim().equals("")) {
+					JOptionPane.showMessageDialog(null,
+							"Favor digitar Clinica de Origem!!");
+
+				} else if (sigla == null || sigla.trim().equals("")) {
+					JOptionPane.showMessageDialog(null,
+							"Favor digitar a Sigla da Clinica de Origem!!");
+				} else {
+					try {
+						orDAO.salvar(desc, sigla);
+					} catch (Exception e) {
+						JOptionPane
+								.showMessageDialog(null,
+										"Origem já cadastrada, Favor verificar e tentar novamente!!");
 					}
-					else{
-						try {
-							orDAO.salvar(desc, sigla);
-						} catch (Exception e) {
-							JOptionPane.showMessageDialog(null, "Origem já cadastrada, Favor verificar e tentar novamente!!");
-						}
-						Limpar();
-						
-					}
-				
+					Limpar();
+
+				}
+
 			}
 		});
-		btnSalvar.setIcon(new ImageIcon(CadOrigemView.class.getResource("/imagens/1482301942_Save_Icon.png")));
-		
+		btnSalvar.setIcon(new ImageIcon(CadOrigemView.class
+				.getResource("/imagens/1482301942_Save_Icon.png")));
+
 		JButton btnAlterar = new JButton("");
 		btnAlterar.setToolTipText("Alterar dados!!");
 		btnAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-			
-				if(txtDescOrigem.getText().trim().equals("")||txtSiglaOrigem.getText().trim().equals("")){
-					JOptionPane.showMessageDialog(null, "Necessário realizar uma busca para realizar alteração!");
-					
-				}else{
-				OrigemDao orDAO = new OrigemDao();
-				Origem or = new Origem();
-				
-				Long cod = Long.parseLong(txtCodOrigem.getText());
-				String descr = txtDescOrigem.getText().toUpperCase();
-				String sigla = txtSiglaOrigem.getText().toUpperCase();
-				
-				if(sigla==null || sigla.trim().equals("")){
-					JOptionPane.showMessageDialog(null, "A Sigla é obrigatória!!");
-					Limpar();
-				}else{
-					or.setCodigo(cod);
-					or.setDescricao(descr);
-					or.setSigla(sigla);
-										
-					orDAO.alterar(or);
-					
-					Limpar();
-					btnSalvar.setVisible(true);
-						
+
+				if (txtDescOrigem.getText().trim().equals("")
+						|| txtSiglaOrigem.getText().trim().equals("")) {
+					JOptionPane
+							.showMessageDialog(null,
+									"Necessário realizar uma busca para realizar alteração!");
+
+				} else {
+					OrigemDao orDAO = new OrigemDao();
+					Origem or = new Origem();
+
+					Long cod = Long.parseLong(txtCodOrigem.getText());
+					String descr = txtDescOrigem.getText().toUpperCase();
+					String sigla = txtSiglaOrigem.getText().toUpperCase();
+
+					if (sigla == null || sigla.trim().equals("")) {
+						JOptionPane.showMessageDialog(null,
+								"A Sigla é obrigatória!!");
+						Limpar();
+					} else {
+						or.setCodigo(cod);
+						or.setDescricao(descr);
+						or.setSigla(sigla);
+
+						orDAO.alterar(or);
+
+						Limpar();
+						btnSalvar.setVisible(true);
+
 					}
-				
+
 				}
 			}
 		});
-		btnAlterar.setIcon(new ImageIcon(CadOrigemView.class.getResource("/imagens/1482302103_txt2.png")));
-		
+		btnAlterar.setIcon(new ImageIcon(CadOrigemView.class
+				.getResource("/imagens/1482302103_txt2.png")));
+
 		JButton btnBuscar = new JButton("");
 		btnBuscar.setToolTipText("Busca atrav\u00E9s da sigla!!");
 		btnBuscar.addActionListener(new ActionListener() {
@@ -151,35 +160,39 @@ public class CadOrigemView extends JFrame {
 				OrigemDao orDAO = new OrigemDao();
 				String sigla = txtSiglaOrigem.getText().toUpperCase();
 				Origem objBusca = new Origem();
-				
+
 				objBusca = orDAO.buscar(sigla, new String());
-				
-				if(sigla==null|| sigla.trim().equals("")){
-					JOptionPane.showMessageDialog(null, "Favor digitar Uma Sigla pára a busca!!");
-					
-				}else if(sigla.trim().equals(objBusca.getSigla())){
-						txtCodOrigem.setText(objBusca.getCodigo().toString());
-						txtDescOrigem.setText(objBusca.getDescricao());
-						txtSiglaOrigem.setText(objBusca.getSigla());
-						
-					btnSalvar.setVisible(false);		
-				}else{
-					JOptionPane.showMessageDialog(null, "REGIÃO NÃO ENCONTRADA!");
-				}	
+
+				if (sigla == null || sigla.trim().equals("")) {
+					JOptionPane.showMessageDialog(null,
+							"Favor digitar Uma Sigla pára a busca!!");
+
+				} else if (sigla.trim().equals(objBusca.getSigla())) {
+					txtCodOrigem.setText(objBusca.getCodigo().toString());
+					txtDescOrigem.setText(objBusca.getDescricao());
+					txtSiglaOrigem.setText(objBusca.getSigla());
+
+					btnSalvar.setVisible(false);
+				} else {
+					JOptionPane.showMessageDialog(null,
+							"REGIÃO NÃO ENCONTRADA!");
+				}
 			}
 		});
-		btnBuscar.setIcon(new ImageIcon(CadOrigemView.class.getResource("/imagens/1482302067_Magnifier.png")));
-		
+		btnBuscar.setIcon(new ImageIcon(CadOrigemView.class
+				.getResource("/imagens/1482302067_Magnifier.png")));
+
 		JButton btnSair = new JButton("");
 		btnSair.setToolTipText("Fechar Janela!!");
 		btnSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				CadOrigemView.this.setVisible(false);
-		
+
 			}
 		});
-		btnSair.setIcon(new ImageIcon(CadOrigemView.class.getResource("/imagens/1482302161_10.png")));
-		
+		btnSair.setIcon(new ImageIcon(CadOrigemView.class
+				.getResource("/imagens/1482302161_10.png")));
+
 		JButton btnLimpar = new JButton("");
 		btnLimpar.setToolTipText("Limpar Campos!!");
 		btnLimpar.addActionListener(new ActionListener() {
@@ -187,71 +200,168 @@ public class CadOrigemView extends JFrame {
 				Limpar();
 				btnSalvar.setVisible(true);
 			}
-			
 
-			
 		});
-		
-		btnLimpar.setIcon(new ImageIcon(CadOrigemView.class.getResource("/imagens/1482302193_edit-clear.png")));
+
+		btnLimpar.setIcon(new ImageIcon(CadOrigemView.class
+				.getResource("/imagens/1482302193_edit-clear.png")));
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane.setHorizontalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-						.addComponent(lblDescrio, GroupLayout.PREFERRED_SIZE, 120, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtCodOrigem, GroupLayout.PREFERRED_SIZE, 62, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel)
-						.addComponent(lblSigla, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
-						.addComponent(txtSiglaOrigem, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addComponent(btnSalvar, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(btnAlterar, GroupLayout.PREFERRED_SIZE, 55, GroupLayout.PREFERRED_SIZE)
-							.addGap(14)
-							.addComponent(btnBuscar, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(btnLimpar, GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE))
-						.addComponent(txtDescOrigem))
-					.addContainerGap(16, Short.MAX_VALUE))
-		);
-		gl_contentPane.setVerticalGroup(
-			gl_contentPane.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_contentPane.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(lblNewLabel)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(txtCodOrigem, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(lblDescrio, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(txtDescOrigem, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-						.addComponent(btnSair)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGap(18)
-							.addComponent(lblSigla, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(txtSiglaOrigem, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
-								.addComponent(btnSalvar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(btnAlterar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(btnBuscar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(btnLimpar, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-					.addGap(26))
-		);
+		gl_contentPane
+				.setHorizontalGroup(gl_contentPane
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPane
+										.createSequentialGroup()
+										.addContainerGap()
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.LEADING,
+																false)
+														.addComponent(
+																lblDescrio,
+																GroupLayout.PREFERRED_SIZE,
+																120,
+																GroupLayout.PREFERRED_SIZE)
+														.addComponent(
+																txtCodOrigem,
+																GroupLayout.PREFERRED_SIZE,
+																62,
+																GroupLayout.PREFERRED_SIZE)
+														.addComponent(
+																lblNewLabel)
+														.addComponent(
+																lblSigla,
+																GroupLayout.PREFERRED_SIZE,
+																47,
+																GroupLayout.PREFERRED_SIZE)
+														.addComponent(
+																txtSiglaOrigem,
+																GroupLayout.PREFERRED_SIZE,
+																GroupLayout.DEFAULT_SIZE,
+																GroupLayout.PREFERRED_SIZE)
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addComponent(
+																				btnSalvar,
+																				GroupLayout.PREFERRED_SIZE,
+																				54,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addGap(18)
+																		.addComponent(
+																				btnAlterar,
+																				GroupLayout.PREFERRED_SIZE,
+																				55,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addGap(14)
+																		.addComponent(
+																				btnBuscar,
+																				GroupLayout.PREFERRED_SIZE,
+																				57,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addGap(18)
+																		.addComponent(
+																				btnLimpar,
+																				GroupLayout.PREFERRED_SIZE,
+																				56,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addGap(18)
+																		.addComponent(
+																				btnSair,
+																				GroupLayout.PREFERRED_SIZE,
+																				60,
+																				GroupLayout.PREFERRED_SIZE))
+														.addComponent(
+																txtDescOrigem))
+										.addContainerGap(16, Short.MAX_VALUE)));
+		gl_contentPane
+				.setVerticalGroup(gl_contentPane
+						.createParallelGroup(Alignment.LEADING)
+						.addGroup(
+								gl_contentPane
+										.createSequentialGroup()
+										.addContainerGap()
+										.addComponent(lblNewLabel)
+										.addPreferredGap(
+												ComponentPlacement.RELATED)
+										.addComponent(txtCodOrigem,
+												GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(
+												ComponentPlacement.UNRELATED)
+										.addComponent(lblDescrio,
+												GroupLayout.PREFERRED_SIZE, 15,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(
+												ComponentPlacement.RELATED)
+										.addComponent(txtDescOrigem,
+												GroupLayout.PREFERRED_SIZE,
+												GroupLayout.DEFAULT_SIZE,
+												GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(
+												ComponentPlacement.RELATED)
+										.addGroup(
+												gl_contentPane
+														.createParallelGroup(
+																Alignment.TRAILING)
+														.addComponent(btnSair)
+														.addGroup(
+																gl_contentPane
+																		.createSequentialGroup()
+																		.addGap(18)
+																		.addComponent(
+																				lblSigla,
+																				GroupLayout.PREFERRED_SIZE,
+																				15,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addPreferredGap(
+																				ComponentPlacement.RELATED)
+																		.addComponent(
+																				txtSiglaOrigem,
+																				GroupLayout.PREFERRED_SIZE,
+																				GroupLayout.DEFAULT_SIZE,
+																				GroupLayout.PREFERRED_SIZE)
+																		.addPreferredGap(
+																				ComponentPlacement.RELATED,
+																				14,
+																				Short.MAX_VALUE)
+																		.addGroup(
+																				gl_contentPane
+																						.createParallelGroup(
+																								Alignment.TRAILING,
+																								false)
+																						.addComponent(
+																								btnSalvar,
+																								GroupLayout.DEFAULT_SIZE,
+																								GroupLayout.DEFAULT_SIZE,
+																								Short.MAX_VALUE)
+																						.addComponent(
+																								btnAlterar,
+																								GroupLayout.DEFAULT_SIZE,
+																								GroupLayout.DEFAULT_SIZE,
+																								Short.MAX_VALUE)
+																						.addComponent(
+																								btnBuscar,
+																								GroupLayout.DEFAULT_SIZE,
+																								GroupLayout.DEFAULT_SIZE,
+																								Short.MAX_VALUE)
+																						.addComponent(
+																								btnLimpar,
+																								GroupLayout.DEFAULT_SIZE,
+																								GroupLayout.DEFAULT_SIZE,
+																								Short.MAX_VALUE))))
+										.addGap(26)));
 		contentPane.setLayout(gl_contentPane);
-		
+
 	}
-	public void  Limpar() {
+
+	public void Limpar() {
 		txtDescOrigem.setText("");
 		txtCodOrigem.setText("");
 		txtSiglaOrigem.setText("");
 		txtDescOrigem.requestFocus();
-		
+
 	}
 }

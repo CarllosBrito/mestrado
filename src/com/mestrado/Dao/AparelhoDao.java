@@ -7,6 +7,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JOptionPane;
+
 import com.mestrado.model.Aparelho;
 
 public class AparelhoDao {
