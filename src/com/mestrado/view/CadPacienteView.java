@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -21,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
+
 import com.mestrado.Dao.PacientesDao;
 import com.mestrado.model.Paciente;
 
@@ -81,7 +83,6 @@ public class CadPacienteView extends JFrame {
 		txtNomePaciente.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtNomePaciente.setColumns(10);
 
-		
 		MaskFormatter fmtData;
 		fmtData = new MaskFormatter("##/##/####");
 		fmtdDataNasc_1 = new JFormattedTextField(fmtData);

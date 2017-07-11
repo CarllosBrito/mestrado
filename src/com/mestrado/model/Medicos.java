@@ -1,23 +1,41 @@
 package com.mestrado.model;
 
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "CRM", name = "CRM_uk"))
-public class Medicos {
+public class Medicos implements Serializable {
 
-	private Long codigo;
-	private String nome;
-	private String CRM;
-	private String sigla;
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "codigo")
+    private Long codigo;
+    
+    @Column(name = "CRM")
+    private String CRM;
+    
+    @Column(name = "sigla")
+    private String sigla;
+    
+    @Column(name = "nome")
+    private String nome;
+    
+    @OneToMany(mappedBy = "medicos")
+    private List<Planejamento> planejamentoList;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getCodigo() {
 		return codigo;
 	}

@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.swing.JOptionPane;
 
 import com.mestrado.model.Planejamento;
 
@@ -15,13 +16,14 @@ public class PlanejamentoDao {
 	private EntityManager em = emf.createEntityManager();
 
 	
-	public void salvar(Planejamento plan)
+	public void salvar(Planejamento planejamento)
 			throws Exception {
 		
 		em.getTransaction().begin();
-		em.merge(plan);
+		em.persist(planejamento);
 		em.getTransaction().commit();
 		em.close();
+		JOptionPane.showMessageDialog(null, "Planejamento salvo com sucesso!");
 	}
 	
 	

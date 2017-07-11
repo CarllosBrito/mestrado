@@ -11,7 +11,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -49,9 +48,9 @@ import com.mestrado.model.Planejamento;
 import com.mestrado.model.Regiao_Anatomica;
 import com.mestrado.model.Sistema_Gerenciamento;
 
-@SuppressWarnings("serial")
 public class CadPlanejamentoView extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField txtRegistro;
 	private JTextField txtNomePaciente;
@@ -65,13 +64,22 @@ public class CadPlanejamentoView extends JFrame {
 	private JTextField txtObs;
 	private JFormattedTextField fmtdDTInicio_1;
 
-
 	Paciente objBusca = new Paciente();
-	Origem orCmbSelecionado;
-	Medicos mdSelecionado;
-	String cont;
+	Aparelho selectAparelho = new Aparelho();
+	Sistema_Gerenciamento selectSisGerencia = new Sistema_Gerenciamento();
+	Regiao_Anatomica selectRegiao = new Regiao_Anatomica();
+
+	Origem selectOrigem = new Origem();
+	Medicos selectMedico = new Medicos();
+	Fisicos selectfisico1 = new Fisicos();
+	Fisicos selectfisico2 = new Fisicos();
+	String contorno;
 	String alvo;
 	String plano;
+	String impressao;
+	String tecnica;
+	Boolean status;
+
 	/**
 	 * Launch the application.
 	 */
@@ -121,64 +129,62 @@ public class CadPlanejamentoView extends JFrame {
 		btnSalvar.setIcon(new ImageIcon(CadPlanejamentoView.class
 				.getResource("/imagens/1482301942_Save_Icon.png")));
 		btnSalvar.addActionListener(new ActionListener() {
-			@SuppressWarnings("unused")
 			public void actionPerformed(ActionEvent arg0) {
 				if (txtNomePaciente.getText().trim().equals("")
-						|| txtRegistro.getText().trim().equals("")
-						|| fmtData_1Paciente.getText().trim().endsWith("")) {
+						|| txtRegistro.getText().trim().equals("")|| fmtData_1Paciente.getText().trim().equals("  /  /    ")) {
 					JOptionPane.showMessageDialog(null,
 							"Favor preencher os dados do Paciente!!");
-				
+
 				} else {
 					Planejamento plan = new Planejamento();
 					PlanejamentoDao pDAO = new PlanejamentoDao();
-					
+
 					String bloco = txtQtdeBlocos.getText();
 					String dtBlocoEnvio = fmtdDataBlocos_1.getText();
 					String dtBlocoChegada = fmtdDataBlocoschegada_1.getText();
 					String dtNasc = fmtData_1Paciente.getText();
 					String dtInicio = fmtdDTInicio_1.getText();
 					String dtCT = fmtdDataCT_1.getText();
-										
+					
 					SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 					Date dtnas, dtinicio = null, dtblocoEnvio = null, dtblocoChegada = null, dtct = null;
 
 					// data nascimento paciente
+					
 					try {
 						dtnas = new Date(format.parse(dtNasc).getTime());
 					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						dtnas = null;
 					}
-
+					
 					// Data cadastro
-					plan.setData_cad(Calendar.getInstance());
+					plan.setData_cad(new Date());
 
 					// Data inicio
+				
 					try {
 						dtinicio = new Date(format.parse(dtInicio).getTime());
 					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						dtinicio = null;
 					}
 					plan.setData_inicio(dtinicio);
 					
 					// Data CT
+					
 					try {
 						dtct = new Date(format.parse(dtCT).getTime());
 					} catch (ParseException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
+						dtct = null;
 					}
 					
 					// Qtde Blocos
-					plan.setQtde_blocos(Integer.parseInt(bloco));
+					plan.setQtde_blocos(bloco !=null && !bloco.equals("") ? Integer.parseInt(bloco): plan.getQtde_blocos());
 
 					// Datas blocos
 					// envio
 					try {
-						dtblocoEnvio = new Date(format.parse(dtBlocoEnvio)
-								.getTime());
+						dtblocoEnvio = dtBlocoEnvio != null && !dtBlocoEnvio.equals("  /  /    ") ? new Date(format.parse(dtBlocoEnvio)
+								.getTime()) : null;
 					} catch (ParseException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -187,8 +193,8 @@ public class CadPlanejamentoView extends JFrame {
 
 					// chegada
 					try {
-						dtblocoChegada = new Date(format.parse(dtBlocoChegada)
-								.getTime());
+						dtblocoChegada = dtBlocoChegada != null && !dtBlocoChegada.equals("  /  /    ") ? new Date(format.parse(dtBlocoChegada)
+								.getTime()):null;
 					} catch (ParseException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -196,28 +202,40 @@ public class CadPlanejamentoView extends JFrame {
 					plan.setBloco_chegada(dtblocoChegada);
 
 					// Entidades
-					/*
-					 * 
-					 * plan.setPrimeira_ass(); 
-					 * plan.setSegunda_ass();
-					 * plan.setSis_gerenciamento();
-					 *  plan.setAparelho();
-					 */
-					plan.setPaciente(objBusca);
-					// plan.setOrigem(orCmbSelecionado);
-					plan.setMedicos(mdSelecionado);
+				
+					plan.setAparelho(selectAparelho != null && selectAparelho.getCodigo() != null ? selectAparelho : null);
+					plan.setPaciente(objBusca != null && objBusca.getCodPaciente() !=null ? objBusca :null);
+					plan.setOrigem(selectOrigem != null && selectOrigem.getCodigo() !=null ? selectOrigem :null);
+					plan.setMedicos(selectMedico !=null && selectMedico.getCodigo() !=null ? selectMedico :null);
+					plan.setPrimeira_ass(selectfisico1 !=null && selectfisico1.getCodigo() != null? selectfisico1 : null);
+					plan.setSegunda_ass(selectfisico2 !=null && selectfisico2.getCodigo() != null ? selectfisico2 :null);
+					plan.setSis_gerenciamento(selectSisGerencia !=null && selectSisGerencia.getCodigo() !=null ? selectSisGerencia :null);
 
 					// Strings
-					plan.getContorno();
-					plan.setImpressao(cont);
-					plan.getPlano();
+					plan.setContorno(contorno);
+					plan.setImpressao(impressao);
+					plan.setPlano(plano);
 					plan.setAlvo(alvo);
 					plan.setTecnica(txtTecnica.getText().toUpperCase());
 					plan.setObservacoes(txtObs.getText());
+					
+					// DATAS
+					plan.setCt(dtct);
+					plan.setBloco_envio(dtblocoEnvio);
+					plan.setBloco_chegada(dtblocoChegada);
 
 					// Boolean
-					plan.getStatus_ativo();
-					plan.getStatus_inativo();
+
+					plan.setStatus_inativo(status);
+
+					try {
+						pDAO.salvar(plan);
+					} catch (Exception e) {
+						e.printStackTrace();
+						JOptionPane
+						.showMessageDialog(null,
+								"Registro de paciente, já existe, Favor verificar e tentar novamente");
+					}
 
 				}
 			}
@@ -305,10 +323,13 @@ public class CadPlanejamentoView extends JFrame {
 		OrigemDao orDAO = new OrigemDao();
 		List<Origem> listaor = orDAO.buscaTodos(null, null);
 		for (Origem origem : listaor) {
-			cmbOrigem.addItem(origem.getDescricao());
+			cmbOrigem.addItem(origem.getSigla()+"-"+ origem.getDescricao());
 		}
+		String OrSelecionada = (String) cmbOrigem.getSelectedItem().toString();
+		String arrayOR[] = new String[2];
+		arrayOR = OrSelecionada.split("-");
+		selectOrigem = orDAO.buscar(arrayOR[0], new String());
 
-		// orCmbSelecionado=(Origem) cmbOrigem.getSelectedItem();
 
 		JLabel lblMedico = new JLabel("M\u00E9dico");
 		lblMedico.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -320,10 +341,13 @@ public class CadPlanejamentoView extends JFrame {
 		cmbMedico.setToolTipText("Selcione o M\u00E9dico Respons\u00E1vel");
 		List<Medicos> lista = mDAO.buscaTodos(null, null);
 		for (Medicos medicos : lista) {
-			cmbMedico.addItem(medicos.getNome());
+			cmbMedico.addItem(medicos.getCRM() + "-" + medicos.getNome());
 
 		}
-		// mdSelecionado = (Medicos) cmbMedico.getSelectedItem();
+		String mdSelecionado = (String) cmbMedico.getSelectedItem().toString();
+		String arrayMd[] = new String[2];
+		arrayMd = mdSelecionado.split("-");
+		selectMedico = mDAO.buscar(arrayMd[0], new String());
 
 		JLabel lblRegiaoanat = new JLabel("Regi\u00E3o Anat.");
 		lblRegiaoanat.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -334,8 +358,14 @@ public class CadPlanejamentoView extends JFrame {
 		Regiao_AnatomicaDao reDAO = new Regiao_AnatomicaDao();
 		List<Regiao_Anatomica> listaRegioes = reDAO.buscaTodos(null, null);
 		for (Regiao_Anatomica regioes : listaRegioes) {
-			cmbRegiaoAnat.addItem(regioes.getDescricao());
+			cmbRegiaoAnat.addItem(regioes.getCodigo()+"-"+ regioes.getDescricao());
+
 		}
+		String reSelecionado = cmbRegiaoAnat.getSelectedItem()
+				.toString();
+		String arrayRE[] = new String[2];
+		arrayRE = reSelecionado.split("-");
+		selectRegiao = reDAO.buscar(arrayRE[0], new String());
 
 		JLabel lblDataCT = new JLabel("Data CT");
 		lblDataCT.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -360,7 +390,7 @@ public class CadPlanejamentoView extends JFrame {
 				"N\u00E3o", "Sim" }));
 		cmbContorno
 				.setToolTipText("Selecione o sistema onde o contorno foi realizado!");
-		cont = (String) cmbContorno.getSelectedItem();
+		contorno = (String) cmbContorno.getSelectedItem();
 
 		JLabel lblAlvo = new JLabel("Alvo");
 		lblAlvo.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -370,7 +400,7 @@ public class CadPlanejamentoView extends JFrame {
 		cmbAlvo.setModel(new DefaultComboBoxModel(new String[] { "N\u00E3o",
 				"Sim" }));
 		cmbAlvo.setToolTipText("Selecione se o alvo foi definido!");
-		alvo = (String) cmbAlvo.getSelectedItem();
+		alvo = cmbAlvo.getSelectedItem().toString();
 
 		JLabel lblPlano = new JLabel("Plano");
 		lblPlano.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -380,7 +410,7 @@ public class CadPlanejamentoView extends JFrame {
 		cmbPlano.setModel(new DefaultComboBoxModel(new String[] { "N\u00E3o",
 				"Aprovado" }));
 		cmbPlano.setToolTipText("Selecione se o plano foi definido!");
-		plano = (String) cmbPlano.getSelectedItem();
+		plano = cmbPlano.getSelectedItem().toString();
 
 		JLabel lblImpressao = new JLabel("Impress\u00E3o");
 		lblImpressao.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -390,7 +420,7 @@ public class CadPlanejamentoView extends JFrame {
 		cmbImpressao.setModel(new DefaultComboBoxModel(new String[] {
 				"N\u00E3o", "Sim" }));
 		cmbImpressao.setToolTipText("Selcione se a ficha floi impressa!");
-		String impressao = (String) cmbImpressao.getSelectedItem();
+		String impressao = cmbImpressao.getSelectedItem().toString();
 
 		JLabel lbl1Assinatura = new JLabel("1\u00AA Assinatura");
 		lbl1Assinatura.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -407,16 +437,24 @@ public class CadPlanejamentoView extends JFrame {
 		FisicosDao fDAO = new FisicosDao();
 		List<Fisicos> listaFis1Ass = fDAO.buscaTodos(null, null);
 		for (Fisicos fisico : listaFis1Ass) {
-			cmb1Ass.addItem(fisico.getnome());
+			cmb1Ass.addItem(fisico.getABFM() + "-" + fisico.getnome());
 		}
+		String fisSeleceao = cmb1Ass.getSelectedItem().toString();
+		String array1ass[] = new String[2];
+		array1ass = fisSeleceao.split("-");
+		selectfisico1 = fDAO.buscar(array1ass[0], null);
 
 		JComboBox cmb2Ass = new JComboBox();
 		cmb2Ass.setFont(new Font("Tahoma", Font.BOLD, 12));
 		cmb2Ass.setToolTipText("2\u00AA assinatura F\u00EDsica M\u00E9dica");
 		List<Fisicos> listaFis2Ass = fDAO.buscaTodos(null, null);
 		for (Fisicos fisico : listaFis2Ass) {
-			cmb2Ass.addItem(fisico.getnome());
+			cmb2Ass.addItem(fisico.getABFM() + "-" + fisico.getnome());
 		}
+		String fisSeleceao2 = cmb2Ass.getSelectedItem().toString();
+		String array2ass[] = new String[2];
+		array2ass = fisSeleceao2.split("-");
+		selectfisico2 = fDAO.buscar(array2ass[0], null);
 
 		JLabel lblSisGerenciamento = new JLabel("Sist. Gerenciamento");
 		lblSisGerenciamento.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -428,8 +466,13 @@ public class CadPlanejamentoView extends JFrame {
 		Sistema_GerenciamentoDao sisDAO = new Sistema_GerenciamentoDao();
 		List<Sistema_Gerenciamento> listaSisGer = sisDAO.buscatodos(null, null);
 		for (Sistema_Gerenciamento sistemas : listaSisGer) {
-			cmbSisGerenciamento.addItem(sistemas.getDescricao());
+			cmbSisGerenciamento.addItem(sistemas.getCodigo()+ "-" + sistemas.getDescricao());
 		}
+		String sisSelecao = cmbSisGerenciamento.getSelectedItem()
+				.toString();
+		String arraySis[] = new String[2];
+		arraySis = sisSelecao.split("-");
+		selectSisGerencia = sisDAO.buscaPOrCodigo(new Long(arraySis[0]));
 
 		JLabel lblDtaBlocosEnvio = new JLabel("Data Envio");
 		lblDtaBlocosEnvio.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -470,9 +513,8 @@ public class CadPlanejamentoView extends JFrame {
 				.setToolTipText("Selecione se o paciente est\u00E1 ativo ou inativo! ");
 		lblStatus.setFont(new Font("Tahoma", Font.BOLD, 12));
 
-		JCheckBox chbAtivo = new JCheckBox("Ativo");
-
-		JCheckBox chbInativo = new JCheckBox("Inativo");
+		JCheckBox chbInativo = new JCheckBox("Inativar Paciente");
+		status = chbInativo.isSelected();
 
 		txtQtdeBlocos = new JTextField();
 		txtQtdeBlocos.setFont(new Font("Tahoma", Font.BOLD, 14));
@@ -495,9 +537,13 @@ public class CadPlanejamentoView extends JFrame {
 		AparelhoDao apDAO = new AparelhoDao();
 		List<Aparelho> listaAP = apDAO.buscaTodos(null, null);
 		for (Aparelho aparelhos : listaAP) {
-			cmbAparelho.addItem(aparelhos.getDescricao());
+			cmbAparelho.addItem(aparelhos.getCodigo()+"-"+ aparelhos.getDescricao());
 
 		}
+		String apSelecao = cmbAparelho.getSelectedItem().toString();
+		String arrayAp[] = new String[2];
+		arrayAp = apSelecao.split("-");
+		selectAparelho = apDAO.buscar(arrayAp[0], null);
 
 		JLabel lblObservaes = new JLabel("Observa\u00E7\u00F5es:");
 		lblObservaes.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -975,25 +1021,20 @@ public class CadPlanejamentoView extends JFrame {
 																										.addGroup(
 																												gl_contentPane
 																														.createParallelGroup(
-																																Alignment.LEADING,
+																																Alignment.TRAILING,
 																																false)
 																														.addComponent(
+																																chbInativo,
+																																Alignment.LEADING,
+																																GroupLayout.DEFAULT_SIZE,
+																																GroupLayout.DEFAULT_SIZE,
+																																Short.MAX_VALUE)
+																														.addComponent(
 																																lblStatus,
+																																Alignment.LEADING,
 																																GroupLayout.PREFERRED_SIZE,
 																																127,
-																																GroupLayout.PREFERRED_SIZE)
-																														.addGroup(
-																																gl_contentPane
-																																		.createSequentialGroup()
-																																		.addComponent(
-																																				chbAtivo)
-																																		.addPreferredGap(
-																																				ComponentPlacement.UNRELATED)
-																																		.addComponent(
-																																				chbInativo,
-																																				GroupLayout.DEFAULT_SIZE,
-																																				GroupLayout.DEFAULT_SIZE,
-																																				Short.MAX_VALUE)))))))
+																																GroupLayout.PREFERRED_SIZE))))))
 										.addGap(118)));
 		gl_contentPane
 				.setVerticalGroup(gl_contentPane
@@ -1301,15 +1342,9 @@ public class CadPlanejamentoView extends JFrame {
 																				15,
 																				GroupLayout.PREFERRED_SIZE)
 																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addGroup(
-																				gl_contentPane
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addComponent(
-																								chbAtivo)
-																						.addComponent(
-																								chbInativo))))
+																				ComponentPlacement.UNRELATED)
+																		.addComponent(
+																				chbInativo)))
 										.addContainerGap(40, Short.MAX_VALUE)));
 		contentPane.setLayout(gl_contentPane);
 	}

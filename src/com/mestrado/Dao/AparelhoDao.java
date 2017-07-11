@@ -57,7 +57,7 @@ public class AparelhoDao {
 		String descricao;
 
 		Query query = em
-				.createQuery(" select a from Aparelho a where a.descricao = :descr");
+				.createQuery(" select a from Aparelho a where a.Descricao = :descr");
 		query.setParameter("descr", a);
 
 		List<Aparelho> Aparelho = query.getResultList();

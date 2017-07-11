@@ -1,5 +1,9 @@
 package com.mestrado.model;
 
+import java.io.Serializable;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,13 +13,19 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "descricao", name = "descricaoregiao_uk"))
-public class Regiao_Anatomica {
+public class Regiao_Anatomica implements Serializable {
 
-	private Long codigo;
-	private String descricao;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "codigo")
+    private Long codigo;
+    
+    @Basic(optional = false)
+    @Column(name = "descricao")
+    private String descricao;
+    
 	public Long getCodigo() {
 		return codigo;
 	}

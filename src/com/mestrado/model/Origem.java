@@ -1,22 +1,39 @@
 package com.mestrado.model;
 
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "sigla", name = "sigla_uk"))
-public class Origem {
+public class Origem implements Serializable {
 
-	private Long codigo;
-	private String descricao;
-	private String sigla;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private static final long serialVersionUID = 1L;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "codigo")
+    private Long codigo;
+    
+    @Column(name = "descricao")
+    private String descricao;
+    
+    @Column(name = "sigla")
+    private String sigla;
+    
+    @OneToMany(mappedBy = "origem")
+    private List<Planejamento> planejamentoList;
+    
 	public Long getCodigo() {
 		return codigo;
 	}

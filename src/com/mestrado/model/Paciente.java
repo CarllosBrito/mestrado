@@ -1,11 +1,16 @@
 package com.mestrado.model;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -13,46 +18,58 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(uniqueConstraints = @UniqueConstraint(columnNames = "registro", name = "registropaciente_uk"))
-public class Paciente {
+public class Paciente implements Serializable {
 
-	private Long codPaciente;
-	private String nomePaciente;
-	private String registro;
-	private Date dtNascimento;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "codPaciente")
+    private Long codPaciente;
+    
+    @Column(name = "dtNascimento")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dtNascimento;
+    
+    @Column(name = "nomePaciente")
+    private String nomePaciente;
+    
+    @Column(name = "registro")
+    private String registro;
+    
+    @OneToMany(mappedBy = "paciente")
+    private List<Planejamento> planejamentos;
+	
 	public Long getCodPaciente() {
 		return codPaciente;
 	}
-
 	public void setCodPaciente(Long codPaciente) {
 		this.codPaciente = codPaciente;
 	}
-
 	public String getNomePaciente() {
 		return nomePaciente;
 	}
-
 	public void setNomePaciente(String nomePaciente) {
 		this.nomePaciente = nomePaciente;
 	}
-
 	@Temporal(TemporalType.DATE)
 	public Date getDtNascimento() {
 		return dtNascimento;
 	}
-
 	public void setDtNascimento(Date data) {
 		this.dtNascimento = data;
 	}
-
 	public String getregistro() {
 		return registro;
 	}
-
 	public void setregistro(String registro) {
 		this.registro = registro;
+	}
+	public List<Planejamento> getPlanejamentos() {
+		return planejamentos;
+	}
+	public void setPlanejamentos(List<Planejamento> planejamentos) {
+		this.planejamentos = planejamentos;
 	}
 
 	@Override

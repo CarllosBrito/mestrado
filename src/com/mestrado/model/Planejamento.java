@@ -1,45 +1,105 @@
 package com.mestrado.model;
 
-import java.util.Calendar;
+import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-public class Planejamento {
-
-	private Long codigo;
-	private int qtde_blocos;
-	private Date bloco_envio;
-	private Date bloco_chegada;
-	private Calendar data_cad;
-	private Date data_inicio;
-	private Date ct;
-	private String impressao;
-	private String tecnica;
-	private String plano;
-	private String observacoes;
-	private Boolean status_ativo;
-	private Boolean status_inativo;
-
-	private Paciente paciente;
-	private Medicos medicos;
-	private Fisicos primeira_ass;
-	private Fisicos segunda_ass;
-	private Aparelho aparelho;
-	private Sistema_Gerenciamento sis_gerenciamento;
-	private Origem origem;
-	private String alvo;
-	private String contorno;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+@Table(name = "planejamento", uniqueConstraints = @UniqueConstraint(columnNames = "codigo", name = "codigo_uk"))
+public class Planejamento implements Serializable{
+	
+    private static final long serialVersionUID = 1L;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
+    @Column(name = "codigo")
+    private Long codigo;
+    
+    @Column(name = "alvo")
+    private String alvo;
+    
+    @Column(name = "bloco_chegada")
+    @Temporal(TemporalType.DATE)
+    private Date bloco_chegada;
+    
+    @Column(name = "bloco_envio")
+    @Temporal(TemporalType.DATE)
+    private Date bloco_envio;
+    
+    @Column(name = "contorno")
+    private String contorno;
+    
+    @Basic(optional = false)
+    @Column(name = "data_cad")
+    @Temporal(TemporalType.DATE)
+    private Date data_cad;
+    
+    @Column(name = "data_inicio")
+    @Temporal(TemporalType.DATE)
+    private Date data_inicio;
+    
+    @Column(name = "impressao")
+    private String impressao;
+    
+    @Column(name = "observacoes")
+    private String observacoes;
+    
+    @Column(name = "plano")
+    private String plano;
+    
+    @Column(name = "qtde_blocos")
+    private Integer qtde_blocos;
+    
+    @Column(name = "tecnica")
+    private String tecnica;
+    
+    @Column(name = "status_inativo")
+    private Boolean status_inativo;
+    
+    @Column(name = "ct")
+    @Temporal(TemporalType.DATE)
+    private Date ct;
+    
+    @JoinColumn(name = "segunda_ass_codigo", referencedColumnName = "codigo")
+    @ManyToOne
+    private Fisicos segunda_ass;
+    
+    @JoinColumn(name = "aparelho_codigo", referencedColumnName = "codigo")
+    @ManyToOne
+    private Aparelho aparelho;
+    
+    @JoinColumn(name = "origem_codigo", referencedColumnName = "codigo")
+    @ManyToOne
+    private Origem origem;
+    
+    @JoinColumn(name = "paciente_codPaciente", referencedColumnName = "codPaciente")
+    @ManyToOne
+    private Paciente paciente;
+    
+    @JoinColumn(name = "primeira_ass_codigo", referencedColumnName = "codigo")
+    @ManyToOne
+    private Fisicos primeira_ass;
+    
+    @JoinColumn(name = "medicos_codigo", referencedColumnName = "codigo")
+    @ManyToOne
+    private Medicos medicos;
+    
+    @JoinColumn(name = "sis_gerenciamento_codigo", referencedColumnName = "codigo")
+    @ManyToOne
+    private Sistema_Gerenciamento sis_gerenciamento;
+    
 	public Long getCodigo() {
 		return codigo;
 	}
@@ -75,11 +135,11 @@ public class Planejamento {
 	}
 
 	@Temporal(TemporalType.DATE)
-	public Calendar getData_cad() {
+	public Date getData_cad() {
 		return data_cad;
 	}
 
-	public void setData_cad(Calendar data_cad) {
+	public void setData_cad(Date data_cad) {
 		this.data_cad = data_cad;
 	}
 
@@ -134,8 +194,8 @@ public class Planejamento {
 		this.observacoes = observacoes;
 	}
 
-	@ManyToOne
-	public Paciente getPaciente() {
+	
+		public Paciente getPaciente() {
 		return paciente;
 	}
 
@@ -143,7 +203,6 @@ public class Planejamento {
 		this.paciente = paciente;
 	}
 
-	@ManyToOne
 	public Medicos getMedicos() {
 		return medicos;
 	}
@@ -152,7 +211,6 @@ public class Planejamento {
 		this.medicos = medicos;
 	}
 
-	@ManyToOne
 	public Fisicos getPrimeira_ass() {
 		return primeira_ass;
 	}
@@ -161,7 +219,6 @@ public class Planejamento {
 		this.primeira_ass = primeira_ass;
 	}
 
-	@ManyToOne
 	public Fisicos getSegunda_ass() {
 		return segunda_ass;
 	}
@@ -170,7 +227,6 @@ public class Planejamento {
 		this.segunda_ass = segunda_ass;
 	}
 
-	@ManyToOne
 	public Aparelho getAparelho() {
 		return aparelho;
 	}
@@ -179,7 +235,6 @@ public class Planejamento {
 		this.aparelho = aparelho;
 	}
 
-	@ManyToOne
 	public Sistema_Gerenciamento getSis_gerenciamento() {
 		return sis_gerenciamento;
 	}
@@ -188,7 +243,6 @@ public class Planejamento {
 		this.sis_gerenciamento = sis_gerenciamento;
 	}
 
-	@ManyToOne
 	public Origem getOrigem() {
 		return origem;
 	}
@@ -211,14 +265,6 @@ public class Planejamento {
 
 	public void setContorno(String contorno) {
 		this.contorno = contorno;
-	}
-
-	public Boolean getStatus_ativo() {
-		return status_ativo;
-	}
-
-	public void setStatus_ativo(Boolean status_ativo) {
-		this.status_ativo = status_ativo;
 	}
 
 	public Boolean getStatus_inativo() {

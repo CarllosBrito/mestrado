@@ -1,5 +1,6 @@
 package com.mestrado.Dao;
 
+import java.text.ParseException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -50,6 +51,20 @@ public class Sistema_GerenciamentoDao {
 
 	}
 
+	@SuppressWarnings({ "unused", "unchecked" })
+	public Sistema_Gerenciamento buscaPOrCodigo(Long a){
+		Long codigo =a;
+		
+		Query query = em
+				.createQuery(" select a from Sistema_Gerenciamento a where a.codigo = :cod");
+		query.setParameter("cod", a);
+
+		List<Sistema_Gerenciamento> Sistema = query.getResultList();
+
+		
+		return !Sistema.isEmpty() ? Sistema.get(0) : new Sistema_Gerenciamento();
+		
+	}
 	@SuppressWarnings({ "unused", "unchecked" })
 	public Sistema_Gerenciamento buscar(String a, String b) {
 		Long codigo;
