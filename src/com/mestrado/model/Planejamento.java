@@ -27,7 +27,10 @@ public class Planejamento implements Serializable{
     @Column(name = "codigo")
     private Long codigo;
     
-    @Column(name = "alvo")
+    @Column(name = "qtdeCampos")
+    private Integer qtdeCampos;
+    
+	@Column(name = "alvo")
     private String alvo;
     
     @Column(name = "bloco_chegada")
@@ -62,8 +65,14 @@ public class Planejamento implements Serializable{
     @Column(name = "qtde_blocos")
     private Integer qtde_blocos;
     
-    @Column(name = "tecnica")
+    @Column(name = "fila")
+    private Integer fila;
+    
+   
+	@Column(name = "tecnica")
     private String tecnica;
+    
+    
     
     @Column(name = "status_inativo")
     private Boolean status_inativo;
@@ -100,12 +109,25 @@ public class Planejamento implements Serializable{
     @ManyToOne
     private Sistema_Gerenciamento sis_gerenciamento;
     
+    
+	@JoinColumn(name = "regiao_codigo", referencedColumnName = "codigo")
+    @ManyToOne
+    private Regiao_Anatomica regiao;
+    
 	public Long getCodigo() {
 		return codigo;
 	}
 
 	public void setCodigo(Long codigo) {
 		this.codigo = codigo;
+	}
+	
+	public Integer getQtdeCampos() {
+		return qtdeCampos;
+	}
+
+	public void setQtdeCampos(Integer qtdeCampos) {
+		this.qtdeCampos = qtdeCampos;
 	}
 
 	public int getQtde_blocos() {
@@ -116,6 +138,13 @@ public class Planejamento implements Serializable{
 		this.qtde_blocos = qtde_blocos;
 	}
 
+	 public Integer getFila() {
+			return fila;
+		}
+
+		public void setFila(Integer fila) {
+			this.fila = fila;
+		}
 	@Temporal(TemporalType.DATE)
 	public Date getBloco_envio() {
 		return bloco_envio;
@@ -249,6 +278,14 @@ public class Planejamento implements Serializable{
 
 	public void setOrigem(Origem origem) {
 		this.origem = origem;
+	}
+	
+	public Regiao_Anatomica getRegiao() {
+		return regiao;
+	}
+
+	public void setRegiao(Regiao_Anatomica regiao) {
+		this.regiao = regiao;
 	}
 
 	public String getAlvo() {

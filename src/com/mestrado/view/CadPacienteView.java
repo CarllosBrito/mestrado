@@ -251,202 +251,89 @@ public class CadPacienteView extends JFrame {
 		txtCodigo = new JTextField();
 		txtCodigo.setEditable(false);
 		txtCodigo.setColumns(10);
+		
+		JButton btnListaPacientes = new JButton("Lista Pacientes");
+		btnListaPacientes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				BuscaPaciente lista = new BuscaPaciente();
+				lista.setVisible(true);
+			}
+		});
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
-		gl_contentPane
-				.setHorizontalGroup(gl_contentPane
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGap(19)
-																		.addComponent(
-																				btnSalvar,
-																				GroupLayout.PREFERRED_SIZE,
-																				51,
-																				GroupLayout.PREFERRED_SIZE))
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addContainerGap()
-																		.addComponent(
-																				lblCdigo))
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addContainerGap()
-																		.addGroup(
-																				gl_contentPane
-																						.createParallelGroup(
-																								Alignment.TRAILING,
-																								false)
-																						.addComponent(
-																								txtCodigo,
-																								Alignment.LEADING,
-																								0,
-																								0,
-																								Short.MAX_VALUE)
-																						.addComponent(
-																								lblCodPaciente,
-																								Alignment.LEADING)
-																						.addComponent(
-																								txtRegistro,
-																								Alignment.LEADING,
-																								GroupLayout.DEFAULT_SIZE,
-																								84,
-																								Short.MAX_VALUE))))
-										.addPreferredGap(
-												ComponentPlacement.RELATED)
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGap(3)
-																		.addComponent(
-																				btnAlterar,
-																				GroupLayout.PREFERRED_SIZE,
-																				53,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(25)
-																		.addComponent(
-																				btnBusca,
-																				GroupLayout.PREFERRED_SIZE,
-																				54,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(28)
-																		.addComponent(
-																				btnLimpar,
-																				GroupLayout.PREFERRED_SIZE,
-																				51,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addGap(30)
-																		.addComponent(
-																				btnSair,
-																				GroupLayout.PREFERRED_SIZE,
-																				53,
-																				GroupLayout.PREFERRED_SIZE))
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGap(28)
-																		.addGroup(
-																				gl_contentPane
-																						.createParallelGroup(
-																								Alignment.LEADING)
-																						.addComponent(
-																								lblNomePaciente)
-																						.addGroup(
-																								gl_contentPane
-																										.createSequentialGroup()
-																										.addGap(2)
-																										.addGroup(
-																												gl_contentPane
-																														.createParallelGroup(
-																																Alignment.LEADING)
-																														.addComponent(
-																																lblDtNasc,
-																																GroupLayout.PREFERRED_SIZE,
-																																74,
-																																GroupLayout.PREFERRED_SIZE)
-																														.addComponent(
-																																txtNomePaciente,
-																																GroupLayout.PREFERRED_SIZE,
-																																277,
-																																GroupLayout.PREFERRED_SIZE)
-																														.addComponent(
-																																fmtdDataNasc_1,
-																																GroupLayout.PREFERRED_SIZE,
-																																82,
-																																GroupLayout.PREFERRED_SIZE))))))
-										.addContainerGap(11, Short.MAX_VALUE)));
-		gl_contentPane
-				.setVerticalGroup(gl_contentPane
-						.createParallelGroup(Alignment.LEADING)
-						.addGroup(
-								gl_contentPane
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.TRAILING)
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addGroup(
-																				gl_contentPane
-																						.createParallelGroup(
-																								Alignment.BASELINE)
-																						.addComponent(
-																								lblNomePaciente)
-																						.addComponent(
-																								lblCdigo))
-																		.addPreferredGap(
-																				ComponentPlacement.UNRELATED)
-																		.addGroup(
-																				gl_contentPane
-																						.createParallelGroup(
-																								Alignment.BASELINE)
-																						.addComponent(
-																								txtNomePaciente,
-																								GroupLayout.PREFERRED_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE)
-																						.addComponent(
-																								txtCodigo,
-																								GroupLayout.PREFERRED_SIZE,
-																								GroupLayout.DEFAULT_SIZE,
-																								GroupLayout.PREFERRED_SIZE))
-																		.addGap(18)
-																		.addComponent(
-																				lblDtNasc,
-																				GroupLayout.PREFERRED_SIZE,
-																				15,
-																				GroupLayout.PREFERRED_SIZE)
-																		.addPreferredGap(
-																				ComponentPlacement.RELATED)
-																		.addComponent(
-																				fmtdDataNasc_1,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE))
-														.addGroup(
-																gl_contentPane
-																		.createSequentialGroup()
-																		.addComponent(
-																				lblCodPaciente)
-																		.addPreferredGap(
-																				ComponentPlacement.UNRELATED)
-																		.addComponent(
-																				txtRegistro,
-																				GroupLayout.PREFERRED_SIZE,
-																				GroupLayout.DEFAULT_SIZE,
-																				GroupLayout.PREFERRED_SIZE)))
-										.addGap(43)
-										.addGroup(
-												gl_contentPane
-														.createParallelGroup(
-																Alignment.LEADING)
-														.addComponent(
-																btnSalvar,
-																GroupLayout.PREFERRED_SIZE,
-																57,
-																GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																btnAlterar)
-														.addComponent(btnSair)
-														.addComponent(btnBusca)
-														.addComponent(btnLimpar))
-										.addGap(2)));
+		gl_contentPane.setHorizontalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(19)
+							.addComponent(btnSalvar, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblCdigo))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING, false)
+								.addComponent(txtCodigo, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
+								.addComponent(lblCodPaciente, Alignment.LEADING)
+								.addComponent(txtRegistro, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(3)
+							.addComponent(btnAlterar, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)
+							.addGap(25)
+							.addComponent(btnBusca, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
+							.addGap(28)
+							.addComponent(btnLimpar, GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
+							.addGap(30)
+							.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(28)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblNomePaciente)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGap(2)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(lblDtNasc, GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)
+										.addComponent(txtNomePaciente, GroupLayout.PREFERRED_SIZE, 277, GroupLayout.PREFERRED_SIZE)
+										.addGroup(gl_contentPane.createSequentialGroup()
+											.addComponent(fmtdDataNasc_1, GroupLayout.PREFERRED_SIZE, 82, GroupLayout.PREFERRED_SIZE)
+											.addGap(18)
+											.addComponent(btnListaPacientes)))))))
+					.addContainerGap(11, Short.MAX_VALUE))
+		);
+		gl_contentPane.setVerticalGroup(
+			gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_contentPane.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(lblNomePaciente)
+								.addComponent(lblCdigo))
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(txtNomePaciente, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(txtCodigo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGap(18)
+							.addComponent(lblDtNasc, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+								.addComponent(fmtdDataNasc_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addComponent(btnListaPacientes)))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addComponent(lblCodPaciente)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(txtRegistro, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+					.addGap(43)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(btnSalvar, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnAlterar)
+						.addComponent(btnSair)
+						.addComponent(btnBusca)
+						.addComponent(btnLimpar))
+					.addGap(2))
+		);
 		contentPane.setLayout(gl_contentPane);
 	}
 
@@ -458,5 +345,4 @@ public class CadPacienteView extends JFrame {
 		txtNomePaciente.requestFocus();
 
 	}
-
 }

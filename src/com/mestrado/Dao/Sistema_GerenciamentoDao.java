@@ -65,6 +65,7 @@ public class Sistema_GerenciamentoDao {
 		return !Sistema.isEmpty() ? Sistema.get(0) : new Sistema_Gerenciamento();
 		
 	}
+	
 	@SuppressWarnings({ "unused", "unchecked" })
 	public Sistema_Gerenciamento buscar(String a, String b) {
 		Long codigo;

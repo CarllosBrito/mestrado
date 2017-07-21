@@ -29,6 +29,22 @@ public class AparelhoDao {
 		JOptionPane.showMessageDialog(null, "Aparelho Salvo com sucesso!!!");
 
 	}
+	
+	@SuppressWarnings({ "unused", "unchecked" })
+	public Aparelho buscaPOrCodigo(Long a){
+		Long codigo =a;
+		
+		Query query = em
+				.createQuery(" select a from Sistema_Gerenciamento a where a.codigo = :cod");
+		query.setParameter("cod", a);
+
+		List<Aparelho> ap = query.getResultList();
+
+		
+		return !ap.isEmpty() ? ap.get(0) : new Aparelho();
+		
+	}
+
 
 	public void alterar(Aparelho aparelho) {
 		Aparelho original = new Aparelho();

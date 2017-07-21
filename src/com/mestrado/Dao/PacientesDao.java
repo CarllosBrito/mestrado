@@ -71,4 +71,9 @@ public class PacientesDao {
 		List<Paciente> result = query.getResultList();
 		return result;
 	}
+	public List<Paciente> buscaPlan(Paciente paciente) {
+		Query query = em.createQuery("select a from Paciente");
+		List<Paciente> result = query.getResultList();
+		return result;
+	}
 }

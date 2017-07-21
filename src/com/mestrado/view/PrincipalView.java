@@ -8,9 +8,19 @@ import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -21,14 +31,55 @@ import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
+
+import com.mestrado.Dao.PlanejamentoDao;
+import com.mestrado.model.Paciente;
+import com.mestrado.model.Planejamento;
 
 public class PrincipalView {
 
 	private JFrame frame;
-	private JTable table;
 	CadMedicoView medicoView = new CadMedicoView();
+	private JTable JTablePrincipal;
+	DefaultTableModel modelo;
+	
+	
+	public void readJTable(){
+		modelo = (DefaultTableModel) JTablePrincipal.getModel();
+		modelo.setNumRows(0);
+		PlanejamentoDao pDao = new PlanejamentoDao();
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		int i =0;
+		for(Planejamento plan: pDao.buscaTodosPlan(null, null)){
+			modelo.addRow(new Object[]{
+					df.format(plan.getData_cad().getTime()),
+					plan.getPaciente().getregistro(),
+					plan.getPaciente().getNomePaciente(),
+					plan.getOrigem().getDescricao(),
+					plan.getMedicos().getNome(),
+					plan.getRegiao(),
+					df.format(plan.getCt().getTime()),
+					plan.getContorno(),
+					plan.getAlvo(),
+					plan.getQtdeCampos(),
+					plan.getTecnica(),
+					plan.getAparelho(),
+					plan.getSis_gerenciamento().getDescricao(),
+					plan.getAlvo(),
+					plan.getImpressao(),
+					plan.getPrimeira_ass(),
+					plan.getSegunda_ass(),
+					plan.getQtde_blocos(),
+					df.format(plan.getBloco_envio().getTime()),
+					df.format(plan.getBloco_chegada().getTime()),
+					df.format(plan.getData_inicio().getTime()),
+					plan.getObservacoes(),
+					plan.getFila(),
+					 		
+			});
+			
+		}
+	}
 
 	/**
 	 * Launch the application.
@@ -52,6 +103,8 @@ public class PrincipalView {
 	 */
 	public PrincipalView() {
 		initialize();
+		readJTable();
+		
 
 	}
 
@@ -71,217 +124,193 @@ public class PrincipalView {
 		frame.setVisible(true);
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		table = new JTable();
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, "", null, null, "", "", null, null, null, null, null, null, null, null, null, null, null, null, null, null, ""},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
-			},
-			new String[] {
-				"Data ", "Registro", "Nome", "Cl\u00EDnica Origem", "Medico Resp.", "Regiao", "Data CT", "Contorno", "Alvo", "Qtde Cpos", "T\u00E9cnica", "Aparelho", "Sistema Gerenciamento", "Aprovacao", "Impressao", "1 assinatura", "2 assinatura", "Bloco", "Data Inicio", "Observacoes", "Dias"
-			}
-		));
-		table.getColumnModel().getColumn(0).setPreferredWidth(95);
-		table.getColumnModel().getColumn(1).setPreferredWidth(80);
-		table.getColumnModel().getColumn(2).setPreferredWidth(195);
-		table.getColumnModel().getColumn(3).setPreferredWidth(91);
-		table.getColumnModel().getColumn(4).setPreferredWidth(110);
-		table.getColumnModel().getColumn(5).setPreferredWidth(95);
-		table.getColumnModel().getColumn(6).setPreferredWidth(95);
-		table.getColumnModel().getColumn(9).setPreferredWidth(80);
-		table.getColumnModel().getColumn(10).setPreferredWidth(85);
-		table.getColumnModel().getColumn(11).setPreferredWidth(85);
-		table.getColumnModel().getColumn(12).setPreferredWidth(125);
-		table.getColumnModel().getColumn(13).setPreferredWidth(85);
-		table.getColumnModel().getColumn(14).setPreferredWidth(85);
-		table.getColumnModel().getColumn(15).setPreferredWidth(100);
-		table.getColumnModel().getColumn(16).setPreferredWidth(100);
-		table.getColumnModel().getColumn(17).setPreferredWidth(70);
-		table.getColumnModel().getColumn(18).setPreferredWidth(95);
-		table.getColumnModel().getColumn(19).setPreferredWidth(110);
-		table.getColumnModel().getColumn(20).setPreferredWidth(65);
-
-		JLabel lblNome = new JLabel("Nome Paciente");
+		
+		
+		
+		JLabel lblNome = new JLabel("Paciente");
 
 		JLabel lblRegistro = new JLabel("Registro");
 
 		JLabel lblMedico = new JLabel("M\u00E9dico");
 
-		JLabel lblRegiao = new JLabel("Regi\u00E3o Anat.");
+		JLabel lblRegiao = new JLabel("Reg. Anat.");
 
-		JLabel lblDataCT = new JLabel("Data CT");
+		JLabel lblDataCT = new JLabel("Dt CT");
 
 		JLabel lblContorno = new JLabel("Contorno");
 
 		JLabel lblAlvo = new JLabel("Alvo");
 
-		JLabel lblSistGerenciamento = new JLabel("Sist. Gerenc.");
+		JLabel lblSistGerenciamento = new JLabel("Sis Gerenc.");
 
-		JLabel lblObs = new JLabel("Observa\u00E7\u00F5es");
+		JLabel lblObs = new JLabel("Obs");
 
 		JLabel lblData = new JLabel("Data");
 
-		JLabel lblClinicaOrigem = new JLabel("Clinica Origem");
+		JLabel lblClinicaOrigem = new JLabel("Origem");
 
-		JLabel lblQtdeCpos = new JLabel("Qtde Cpos");
+		JLabel lblQtdeCpos = new JLabel("Campos");
 
 		JLabel lblTcnica = new JLabel("T\u00E9cnica");
 
 		JLabel lblAparelho = new JLabel("Aparelho");
 
-		JLabel lblAprovao = new JLabel("Aprova\u00E7\u00E3o");
+		JLabel lblAprovao = new JLabel("Aprov");
 
-		JLabel lblImpresso = new JLabel("Impress\u00E3o");
+		JLabel lblImpresso = new JLabel("Impr");
 
 		JLabel lblAssinatura = new JLabel("1\u00AA Ass.");
 
 		JLabel lblAssinatura_1 = new JLabel("2\u00AA Ass.");
 
-		JLabel lblBloco = new JLabel("Bloco");
-
-		JLabel lblDataIncio = new JLabel("Dta in\u00EDcio");
-		
-		JButton btnNovoPlan = new JButton("");
-		btnNovoPlan.setToolTipText("Novo Planejamento");
-		btnNovoPlan.setIcon(new ImageIcon(PrincipalView.class.getResource("/imagens/1483155448_plus_add_green.png")));
+		JLabel lblDataIncio = new JLabel("Dt in\u00EDcio");
 		
 		JButton btnNewButton = new JButton("");
 		btnNewButton.setToolTipText("Alterar Planejamento!");
 		btnNewButton.setIcon(new ImageIcon(PrincipalView.class.getResource("/imagens/1482302103_txt2.png")));
 		
-		JButton button = new JButton("");
-		button.setToolTipText("Busca Planejamento Por Registro!");
-		button.setIcon(new ImageIcon(PrincipalView.class.getResource("/imagens/1482302067_Magnifier.png")));
-		
 		JButton btnSair = new JButton("");
+		btnSair.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
 		btnSair.setToolTipText("Sair do Programa!");
 		btnSair.setIcon(new ImageIcon(PrincipalView.class.getResource("/imagens/1482302161_10.png")));
 		
 		JLabel lblFila = new JLabel("Fila");
+		
+		JLabel lblBlocos = new JLabel("Blocos");
+		
+		JLabel lblDtEnvio = new JLabel("Dt Envio");
+		
+		JLabel lblDtCheg = new JLabel("Dt Cheg.");
+		
+		JTablePrincipal = new JTable();
+		JTablePrincipal.setModel(new DefaultTableModel(
+			new Object[][] {
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
+			},
+			new String[] {
+				"Data Cad", "registroPaciente", "nomePaciente", "origem", "medico", "regiao", "dataCt", "contorno", "alvo", "campos", "tecnica", "aparelho", "sisGerenciamento", "aprovacao", "impressao", "primAss", "segAss", "blocos", "dataEnvio", "dataCheg", "dataInicio", "observacoes", "fila"
+			}
+		));
+		JTablePrincipal.getColumnModel().getColumn(0).setPreferredWidth(94);
+		JTablePrincipal.getColumnModel().getColumn(1).setPreferredWidth(81);
+		JTablePrincipal.getColumnModel().getColumn(2).setPreferredWidth(170);
+		JTablePrincipal.getColumnModel().getColumn(4).setPreferredWidth(85);
+		JTablePrincipal.getColumnModel().getColumn(5).setPreferredWidth(100);
+		JTablePrincipal.getColumnModel().getColumn(6).setPreferredWidth(90);
+		JTablePrincipal.getColumnModel().getColumn(7).setPreferredWidth(65);
+		JTablePrincipal.getColumnModel().getColumn(8).setPreferredWidth(65);
+		JTablePrincipal.getColumnModel().getColumn(9).setPreferredWidth(47);
+		JTablePrincipal.getColumnModel().getColumn(10).setPreferredWidth(67);
+		JTablePrincipal.getColumnModel().getColumn(12).setPreferredWidth(90);
+		JTablePrincipal.getColumnModel().getColumn(13).setPreferredWidth(65);
+		JTablePrincipal.getColumnModel().getColumn(14).setPreferredWidth(65);
+		JTablePrincipal.getColumnModel().getColumn(17).setPreferredWidth(47);
+		JTablePrincipal.getColumnModel().getColumn(18).setPreferredWidth(94);
+		JTablePrincipal.getColumnModel().getColumn(19).setPreferredWidth(94);
+		JTablePrincipal.getColumnModel().getColumn(20).setPreferredWidth(94);
+		JTablePrincipal.getColumnModel().getColumn(21).setPreferredWidth(95);
+		JTablePrincipal.getColumnModel().getColumn(22).setPreferredWidth(47);
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(27)
-					.addComponent(btnNovoPlan, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-					.addGap(72)
-					.addComponent(button, GroupLayout.PREFERRED_SIZE, 64, GroupLayout.PREFERRED_SIZE)
-					.addGap(64)
+					.addContainerGap()
 					.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-					.addGap(61)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap())
+					.addGap(1093))
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(20)
+					.addContainerGap()
 					.addComponent(lblData)
-					.addGap(32)
+					.addGap(28)
 					.addComponent(lblRegistro)
 					.addGap(18)
 					.addComponent(lblNome)
-					.addGap(35)
+					.addGap(65)
 					.addComponent(lblClinicaOrigem)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGap(18)
 					.addComponent(lblMedico)
 					.addGap(18)
 					.addComponent(lblRegiao)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGap(18)
 					.addComponent(lblDataCT)
-					.addGap(18)
+					.addGap(26)
 					.addComponent(lblContorno)
-					.addGap(18)
-					.addComponent(lblAlvo)
-					.addGap(18)
-					.addComponent(lblQtdeCpos)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(lblTcnica)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
-					.addComponent(lblAparelho)
-					.addGap(18)
-					.addComponent(lblSistGerenciamento)
-					.addGap(18)
-					.addComponent(lblAprovao)
 					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblAlvo)
+					.addGap(14)
+					.addComponent(lblQtdeCpos)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblTcnica)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblAparelho)
+					.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+					.addComponent(lblSistGerenciamento)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(lblAprovao)
+					.addGap(22)
 					.addComponent(lblImpresso)
 					.addGap(18)
 					.addComponent(lblAssinatura)
-					.addGap(28)
-					.addComponent(lblAssinatura_1)
-					.addGap(26)
-					.addComponent(lblBloco)
-					.addPreferredGap(ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
-					.addComponent(lblDataIncio)
 					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblAssinatura_1)
+					.addGap(18)
+					.addComponent(lblBlocos)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblDtEnvio)
+					.addGap(24)
+					.addComponent(lblDtCheg)
+					.addGap(18)
+					.addComponent(lblDataIncio)
+					.addGap(30)
 					.addComponent(lblObs)
-					.addGap(26)
+					.addGap(18)
 					.addComponent(lblFila, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-					.addGap(22))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(table, GroupLayout.PREFERRED_SIZE, 1299, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(32, Short.MAX_VALUE))
+					.addGap(24))
+				.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
+					.addGap(2)
+					.addComponent(JTablePrincipal, GroupLayout.DEFAULT_SIZE, 1231, Short.MAX_VALUE)
+					.addContainerGap())
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
 				.addGroup(groupLayout.createSequentialGroup()
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addContainerGap()
-							.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblData)
-								.addComponent(lblRegistro)
-								.addComponent(lblFila)
-								.addComponent(lblDataIncio)
-								.addComponent(lblObs)
-								.addComponent(lblClinicaOrigem)
-								.addComponent(lblMedico)
-								.addComponent(lblRegiao)
-								.addComponent(lblDataCT)
-								.addComponent(lblContorno)
-								.addComponent(lblAlvo)
-								.addComponent(lblQtdeCpos)
-								.addComponent(lblTcnica)
-								.addComponent(lblAparelho)
-								.addComponent(lblSistGerenciamento)
-								.addComponent(lblAprovao)
-								.addComponent(lblImpresso)
-								.addComponent(lblAssinatura)
-								.addComponent(lblAssinatura_1)
-								.addComponent(lblBloco))
-							.addPreferredGap(ComponentPlacement.RELATED))
-						.addGroup(Alignment.TRAILING, groupLayout.createSequentialGroup()
-							.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-							.addComponent(lblNome)
-							.addPreferredGap(ComponentPlacement.RELATED)))
-					.addComponent(table, GroupLayout.PREFERRED_SIZE, 552, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(button, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-									.addComponent(btnNovoPlan)
-									.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-							.addGap(26))
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())))
+					.addContainerGap()
+					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblNome)
+						.addComponent(lblData)
+						.addComponent(lblRegistro)
+						.addComponent(lblObs)
+						.addComponent(lblDataIncio)
+						.addComponent(lblDtEnvio)
+						.addComponent(lblDtCheg)
+						.addComponent(lblBlocos)
+						.addComponent(lblAssinatura)
+						.addComponent(lblImpresso)
+						.addComponent(lblTcnica)
+						.addComponent(lblRegiao)
+						.addComponent(lblMedico)
+						.addComponent(lblClinicaOrigem)
+						.addComponent(lblAparelho)
+						.addComponent(lblSistGerenciamento)
+						.addComponent(lblAprovao)
+						.addComponent(lblDataCT)
+						.addComponent(lblQtdeCpos)
+						.addComponent(lblAlvo)
+						.addComponent(lblContorno)
+						.addComponent(lblAssinatura_1)
+						.addComponent(lblFila))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(JTablePrincipal, GroupLayout.PREFERRED_SIZE, 547, GroupLayout.PREFERRED_SIZE)
+					.addGap(11)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(btnSair, GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE)
+						.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, 74, Short.MAX_VALUE))
+					.addContainerGap())
 		);
 		frame.getContentPane().setLayout(groupLayout);
 
@@ -294,15 +323,16 @@ public class PrincipalView {
 		JMenuItem mniCadPaciente = new JMenuItem("Cadastro de Pacientes");
 		mniCadPaciente.addActionListener(new ActionListener() {
 
+			
 			public void actionPerformed(ActionEvent arg0) {
-				CadPlanejamentoView paciente = new CadPlanejamentoView();
-				paciente.setTitle("Cadastro de Pacientes");
-				paciente.setResizable(false);
-				// paciente.setSize(800, 600);
+				CadPacienteView paciente = null;
+				try {
+					paciente = new CadPacienteView();
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
 				paciente.setVisible(true);
 				paciente.setLocationRelativeTo(null);
-				paciente.setAlwaysOnTop(true);
-
 			}
 		});
 		mnCadastros.add(mniCadPaciente);
@@ -349,7 +379,14 @@ public class PrincipalView {
 		mnCadastros.add(separator_4);
 
 		JMenuItem mniCadProcedimentos = new JMenuItem(
-				"Cadastro de Procedimentos");
+				"Cadastro de Planejamentos");
+		mniCadProcedimentos.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CadPlanejamentoView plan = new CadPlanejamentoView();
+				plan.setVisible(true);
+				plan.setLocationRelativeTo(null);
+			}
+		});
 		mnCadastros.add(mniCadProcedimentos);
 
 		JMenu mnSistema = new JMenu("Sistema");
@@ -379,5 +416,14 @@ public class PrincipalView {
 		JSeparator separator_1 = new JSeparator();
 		mnSistema.add(separator_1);
 		mnSistema.add(mniSistSair);
+		
+	
+		
 	}
+	
+	
+		
+		
 }
+	
+
