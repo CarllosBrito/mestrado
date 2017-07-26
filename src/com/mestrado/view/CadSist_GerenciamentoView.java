@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.mestrado.Dao.Sistema_GerenciamentoDao;
 import com.mestrado.model.Sistema_Gerenciamento;
+import java.awt.Toolkit;
 
 public class CadSist_GerenciamentoView extends JFrame {
 
@@ -50,7 +51,8 @@ public class CadSist_GerenciamentoView extends JFrame {
 	 * Create the frame.
 	 */
 	public CadSist_GerenciamentoView() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setIconImage(Toolkit.getDefaultToolkit().getImage(CadSist_GerenciamentoView.class.getResource("/imagens/1482302223_personal.png")));
+		setTitle("Cadastro Sistemas Gerenciamento");
 		setBounds(100, 100, 426, 252);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

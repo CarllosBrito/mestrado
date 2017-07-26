@@ -76,7 +76,7 @@ public class FisicosDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Fisicos> buscaTodos(String a, String b) {
-		Query query = em.createQuery("select a from Fisicos a");
+		Query query = em.createQuery("select a from Fisicos a ORDER BY ABFM");
 		List<Fisicos> result = query.getResultList();
 		return result;
 	}

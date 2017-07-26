@@ -67,9 +67,23 @@ public class Regiao_AnatomicaDao {
 
 	}
 
+	@SuppressWarnings({ "unused", "unchecked" })
+	public Regiao_Anatomica buscaPOrCodigo(Long a){
+		Long codigo =a;
+		
+		Query query = em
+				.createQuery(" select a from Regiao_Anatomica a where a.codigo = :cod");
+		query.setParameter("cod", a);
+
+		List<Regiao_Anatomica> Regiao = query.getResultList();
+
+		
+		return !Regiao.isEmpty() ? Regiao.get(0) : new Regiao_Anatomica();
+		
+	}
 	@SuppressWarnings("unchecked")
 	public List<Regiao_Anatomica> buscaTodos(String a, String b) {
-		Query query = em.createQuery("select a from Regiao_Anatomica a");
+		Query query = em.createQuery("select a from Regiao_Anatomica a ORDER BY codigo");
 		List<Regiao_Anatomica> result = query.getResultList();
 		return result;
 	}

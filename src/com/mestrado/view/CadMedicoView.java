@@ -59,7 +59,6 @@ public class CadMedicoView extends JFrame {
 				CadMedicoView.class
 						.getResource("/imagens/1483149248_personal.png")));
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 389, 251);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

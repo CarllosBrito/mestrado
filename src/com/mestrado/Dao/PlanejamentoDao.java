@@ -1,5 +1,6 @@
 package com.mestrado.Dao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -16,16 +17,14 @@ public class PlanejamentoDao {
 			.createEntityManagerFactory("mestradoPU");
 	private EntityManager em = emf.createEntityManager();
 
-	
-	public void salvar(Planejamento planejamento)
-			throws Exception {
-		
+	public void salvar(Planejamento planejamento)throws Exception {
 		em.getTransaction().begin();
 		em.persist(planejamento);
 		em.getTransaction().commit();
 		em.close();
 		JOptionPane.showMessageDialog(null, "Planejamento salvo com sucesso!");
 	}
+	
 	public void alterar(Planejamento planejamento) {
 		@SuppressWarnings("unused")
 		Planejamento original = new Planejamento();
@@ -38,6 +37,7 @@ public class PlanejamentoDao {
 
 		JOptionPane.showMessageDialog(null, "Planejamento alterado com sucesso!!!");
 	}
+
 	
 	@SuppressWarnings("unchecked")
 	public List<Planejamento> buscaTodos(String a, String b) {

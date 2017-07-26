@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.mestrado.Dao.Regiao_AnatomicaDao;
 import com.mestrado.model.Regiao_Anatomica;
+import java.awt.Toolkit;
 
 public class CadRegAnatomicaView extends JFrame {
 
@@ -48,9 +49,9 @@ public class CadRegAnatomicaView extends JFrame {
 	}
 
 	public CadRegAnatomicaView() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(CadRegAnatomicaView.class.getResource("/imagens/1483156433_8.png")));
 		setTitle("Cadastro Regi\u00E3o Anat\u00F4mica");
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 378, 273);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

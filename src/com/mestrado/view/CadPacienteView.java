@@ -46,7 +46,7 @@ public class CadPacienteView extends JFrame {
 			public void run() {
 				try {
 					CadPacienteView frame = new CadPacienteView();
-					frame.setVisible(true);
+					frame.setVisible(true);	
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -63,7 +63,6 @@ public class CadPacienteView extends JFrame {
 		setTitle("Cadastro de Pacientes");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				CadPacienteView.class.getResource("/imagens/1483156433_8.png")));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 438, 282);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

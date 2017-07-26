@@ -30,22 +30,6 @@ public class AparelhoDao {
 
 	}
 	
-	@SuppressWarnings({ "unused", "unchecked" })
-	public Aparelho buscaPOrCodigo(Long a){
-		Long codigo =a;
-		
-		Query query = em
-				.createQuery(" select a from Sistema_Gerenciamento a where a.codigo = :cod");
-		query.setParameter("cod", a);
-
-		List<Aparelho> ap = query.getResultList();
-
-		
-		return !ap.isEmpty() ? ap.get(0) : new Aparelho();
-		
-	}
-
-
 	public void alterar(Aparelho aparelho) {
 		Aparelho original = new Aparelho();
 
@@ -86,8 +70,22 @@ public class AparelhoDao {
 		return !Aparelho.isEmpty() ? Aparelho.get(0) : new Aparelho();
 	}
 
+	@SuppressWarnings({ "unused", "unchecked" })
+	public Aparelho buscaPOrCodigo(Long a){
+		Long codigo =a;
+		
+		Query query = em
+				.createQuery(" select a from Aparelho a where a.codigo = :cod");
+		query.setParameter("cod", a);
+
+		List<Aparelho> aparelho = query.getResultList();
+
+		
+		return !aparelho.isEmpty() ? aparelho.get(0) : new Aparelho();
+		
+	}
 	public List<Aparelho> buscaTodos(String a, String b) {
-		Query query = em.createQuery("select a from Aparelho a");
+		Query query = em.createQuery("select a from Aparelho a ORDER BY codigo");
 		@SuppressWarnings("unchecked")
 		List<Aparelho> result = query.getResultList();
 		return result;

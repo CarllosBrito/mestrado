@@ -7,15 +7,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.ImageIcon;
@@ -48,8 +49,10 @@ import com.mestrado.model.Paciente;
 import com.mestrado.model.Planejamento;
 import com.mestrado.model.Regiao_Anatomica;
 import com.mestrado.model.Sistema_Gerenciamento;
-import java.awt.event.ItemListener;
-import java.awt.event.ItemEvent;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 public class CadPlanejamentoView extends JFrame {
 
@@ -66,6 +69,7 @@ public class CadPlanejamentoView extends JFrame {
 	private JTextField txtTecnica;
 	private JTextField txtObs;
 	private JFormattedTextField fmtdDTInicio_1;
+	private JTextField txtQtdeCampos;
 
 	Paciente objBusca = new Paciente();
 	Aparelho selectAparelho = new Aparelho();
@@ -82,14 +86,55 @@ public class CadPlanejamentoView extends JFrame {
 	String impressao;
 	String tecnica;
 	Boolean status;
-	private JTextField txtQtdeCampos;
+	String regiao;
+	
+	@SuppressWarnings("rawtypes")
+	JComboBox cmbOrigem = new JComboBox();
+	@SuppressWarnings("rawtypes")
+	JComboBox cmbMedico = new JComboBox();
+	@SuppressWarnings("rawtypes")
+	JComboBox cmbRegiaoAnat = new JComboBox();
+	@SuppressWarnings("rawtypes")
+	JComboBox cmbContorno = new JComboBox();
+	@SuppressWarnings("rawtypes")
+	JComboBox cmbAlvo = new JComboBox();
+	@SuppressWarnings("rawtypes")
+	JComboBox cmbPlano = new JComboBox();
+	@SuppressWarnings("rawtypes")
+	JComboBox cmbImpressao = new JComboBox();
+	@SuppressWarnings("rawtypes")
+	JComboBox cmb1Ass = new JComboBox();
+	@SuppressWarnings("rawtypes")
+	JComboBox cmb2Ass = new JComboBox();
+	@SuppressWarnings("rawtypes")
+	JComboBox cmbAparelho = new JComboBox();
+	@SuppressWarnings("rawtypes")
+	JComboBox cmbSisGerenciamento = new JComboBox();
+	private JTable tbBuscaPlan;
+	DefaultTableModel modelo = new DefaultTableModel();
 
+	
+	public void carregaTabelaPlan(){
+		
+		PlanejamentoDao pDao = new PlanejamentoDao();
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		for(Planejamento plan: pDao.buscaTodos(null, null)){
+			modelo.addRow(new Object[]{
+					plan.getPaciente().getNomePaciente(),
+					plan.getPaciente().getregistro(),
+					plan.getMedicos().getNome(),
+					df.format(plan.getData_cad().getTime())
+			
+			});
+		}
+	}
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
+				
 				try {
 					CadPlanejamentoView frame = new CadPlanejamentoView();
 					frame.setVisible(true);
@@ -104,15 +149,14 @@ public class CadPlanejamentoView extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
+	@SuppressWarnings({ "unchecked", "unused", "serial" })
 	public CadPlanejamentoView() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(
 				CadPlanejamentoView.class
 						.getResource("/imagens/1483156433_8.png")));
 		setTitle("Cadastro de Planejamento");
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 950, 395);
+		setBounds(100, 100, 1036, 552);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -128,14 +172,16 @@ public class CadPlanejamentoView extends JFrame {
 
 		JLabel lblOrigem = new JLabel("Origem:");
 		lblOrigem.setFont(new Font("Tahoma", Font.BOLD, 12));
-
+		
 		JButton btnSalvar = new JButton("");
 		btnSalvar.setIcon(new ImageIcon(CadPlanejamentoView.class
 				.getResource("/imagens/1482301942_Save_Icon.png")));
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (txtNomePaciente.getText().trim().equals("")
-						|| txtRegistro.getText().trim().equals("")|| fmtData_1Paciente.getText().trim().equals("  /  /    ")) {
+						|| txtRegistro.getText().trim().equals("")
+						|| fmtData_1Paciente.getText().trim()
+								.equals("  /  /    ")) {
 					JOptionPane.showMessageDialog(null,
 							"Favor preencher os dados do Paciente!!");
 
@@ -143,53 +189,51 @@ public class CadPlanejamentoView extends JFrame {
 					Planejamento plan = new Planejamento();
 					PlanejamentoDao pDAO = new PlanejamentoDao();
 
-					String bloco = txtQtdeBlocos.getText();
+					String qtBloco = txtQtdeBlocos.getText();
 					String dtBlocoEnvio = fmtdDataBlocos_1.getText();
 					String dtBlocoChegada = fmtdDataBlocoschegada_1.getText();
 					String dtNasc = fmtData_1Paciente.getText();
 					String dtInicio = fmtdDTInicio_1.getText();
 					String dtCT = fmtdDataCT_1.getText();
-					Integer qtdeCAmpos = Integer.parseInt(txtQtdeCampos.getText());
-					
+					String qtdeCAmpos = txtQtdeCampos.getText();
+
 					SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 					Date dtnas, dtinicio = null, dtblocoEnvio = null, dtblocoChegada = null, dtct = null;
 
 					// data nascimento paciente
-					
+
 					try {
 						dtnas = new Date(format.parse(dtNasc).getTime());
 					} catch (ParseException e) {
 						dtnas = null;
 					}
-					
+
 					// Data cadastro
 					plan.setData_cad(new Date());
 
 					// Data inicio
-				
+
 					try {
 						dtinicio = new Date(format.parse(dtInicio).getTime());
 					} catch (ParseException e) {
 						dtinicio = null;
 					}
 					plan.setData_inicio(dtinicio);
-					
+
 					// Data CT
-					
+
 					try {
 						dtct = new Date(format.parse(dtCT).getTime());
 					} catch (ParseException e1) {
 						dtct = null;
 					}
-					
-					// Qtde Blocos
-					plan.setQtde_blocos(bloco !=null && !bloco.equals("") ? Integer.parseInt(bloco): plan.getQtde_blocos());
 
 					// Datas blocos
 					// envio
 					try {
-						dtblocoEnvio = dtBlocoEnvio != null && !dtBlocoEnvio.equals("  /  /    ") ? new Date(format.parse(dtBlocoEnvio)
-								.getTime()) : null;
+						dtblocoEnvio = dtBlocoEnvio != null
+								&& !dtBlocoEnvio.equals("  /  /    ") ? new Date(
+								format.parse(dtBlocoEnvio).getTime()) : null;
 					} catch (ParseException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -198,8 +242,9 @@ public class CadPlanejamentoView extends JFrame {
 
 					// chegada
 					try {
-						dtblocoChegada = dtBlocoChegada != null && !dtBlocoChegada.equals("  /  /    ") ? new Date(format.parse(dtBlocoChegada)
-								.getTime()):null;
+						dtblocoChegada = dtBlocoChegada != null
+								&& !dtBlocoChegada.equals("  /  /    ") ? new Date(
+								format.parse(dtBlocoChegada).getTime()) : null;
 					} catch (ParseException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -207,15 +252,31 @@ public class CadPlanejamentoView extends JFrame {
 					plan.setBloco_chegada(dtblocoChegada);
 
 					// Entidades
-				 
-					plan.setAparelho(selectAparelho != null && selectAparelho.getCodigo() != null ? selectAparelho : null);
-					plan.setPaciente(objBusca != null && objBusca.getCodPaciente() !=null ? objBusca :null);
-					plan.setOrigem(selectOrigem != null && selectOrigem.getCodigo() !=null ? selectOrigem :null);
-					plan.setMedicos(selectMedico !=null && selectMedico.getCodigo() !=null ? selectMedico :null);
-					plan.setPrimeira_ass(selectfisico1 !=null && selectfisico1.getCodigo() != null? selectfisico1 : null);
-					plan.setSegunda_ass(selectfisico2 !=null && selectfisico2.getCodigo() != null ? selectfisico2 :null);
-					plan.setSis_gerenciamento(selectSisGerencia !=null && selectSisGerencia.getCodigo() !=null ? selectSisGerencia :null);
-					plan.setRegiao(selectRegiao != null && selectRegiao.getCodigo() != null ? selectRegiao : null);
+
+					plan.setAparelho(selectAparelho != null
+							&& selectAparelho.getCodigo() != null ? selectAparelho
+							: null);
+					plan.setPaciente(objBusca != null
+							&& objBusca.getCodPaciente() != null ? objBusca
+							: null);
+					plan.setOrigem(selectOrigem != null
+							&& selectOrigem.getCodigo() != null ? selectOrigem
+							: null);
+					plan.setMedicos(selectMedico != null
+							&& selectMedico.getCodigo() != null ? selectMedico
+							: null);
+					plan.setPrimeira_ass(selectfisico1 != null
+							&& selectfisico1.getCodigo() != null ? selectfisico1
+							: null);
+					plan.setSegunda_ass(selectfisico2 != null
+							&& selectfisico2.getCodigo() != null ? selectfisico2
+							: null);
+					plan.setSis_gerenciamento(selectSisGerencia != null
+							&& selectSisGerencia.getCodigo() != null ? selectSisGerencia
+							: null);
+					plan.setRegiao(selectRegiao != null
+							&& selectRegiao.getCodigo() != null ? selectRegiao
+							: null);
 
 					// Strings
 					plan.setContorno(contorno);
@@ -223,9 +284,12 @@ public class CadPlanejamentoView extends JFrame {
 					plan.setPlano(plano);
 					plan.setAlvo(alvo);
 					plan.setTecnica(txtTecnica.getText().toUpperCase());
-					plan.setQtdeCampos(qtdeCAmpos);
+					//plan.setQtdeCampos(qtdeCAmpos);
+					plan.setQtdeCampos(qtdeCAmpos != null && !qtdeCAmpos.equals("") ? Integer.parseInt(qtdeCAmpos) : null);
 					plan.setObservacoes(txtObs.getText());
-					
+					//plan.setQtde_blocos(qtBloco);
+					plan.setQtde_blocos(qtBloco != null && !qtBloco.equals("") ? Integer.parseInt(qtBloco) : null);
+
 					// DATAS
 					plan.setCt(dtct);
 					plan.setBloco_envio(dtblocoEnvio);
@@ -240,10 +304,10 @@ public class CadPlanejamentoView extends JFrame {
 					} catch (Exception e) {
 						e.printStackTrace();
 						JOptionPane
-						.showMessageDialog(null,
-								"Se persistir o erro entrar em contato com o suporte técnico!");
+								.showMessageDialog(null,
+										"Se persistir o erro entrar em contato com o suporte técnico!");
 					}
-
+						limpar();
 				}
 			}
 		});
@@ -327,25 +391,33 @@ public class CadPlanejamentoView extends JFrame {
 			e.printStackTrace();
 		}
 
-		JComboBox cmbOrigem = new JComboBox();
+		//JComboBox cmbOrigem = new JComboBox();
+		OrigemDao orDao = new OrigemDao();
+		cmbOrigem.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				String orSelecionado = cmbOrigem.getSelectedItem().toString();
+				String arrayOr[] = new String[2];
+				arrayOr = orSelecionado.split("-");
+				selectOrigem = orDao.buscar(arrayOr[0], new String());
+			}
+		});
 		cmbOrigem
 				.setToolTipText("Selecione a cl\u00EDnica de origem do paciente");
 		cmbOrigem.setFont(new Font("Tahoma", Font.BOLD, 12));
 		OrigemDao orDAO = new OrigemDao();
 		List<Origem> listaor = orDAO.buscaTodos(null, null);
 		for (Origem origem : listaor) {
-			cmbOrigem.addItem(origem.getSigla()+"-"+ origem.getDescricao());
+			cmbOrigem.addItem(origem.getSigla() + "-" + origem.getDescricao());
 		}
 		String OrSelecionada = (String) cmbOrigem.getSelectedItem().toString();
 		String arrayOR[] = new String[2];
 		arrayOR = OrSelecionada.split("-");
 		selectOrigem = orDAO.buscar(arrayOR[0], new String());
 
-
 		JLabel lblMedico = new JLabel("M\u00E9dico");
 		lblMedico.setFont(new Font("Tahoma", Font.BOLD, 12));
 
-		JComboBox cmbMedico = new JComboBox();
+		
 		MedicoDao mDAO = new MedicoDao();
 		cmbMedico.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -364,24 +436,30 @@ public class CadPlanejamentoView extends JFrame {
 			cmbMedico.addItem(medicos.getCRM() + "-" + medicos.getNome());
 
 		}
-		
+
 		JLabel lblRegiaoanat = new JLabel("Regi\u00E3o Anat.");
 		lblRegiaoanat.setFont(new Font("Tahoma", Font.BOLD, 12));
 
-		JComboBox cmbRegiaoAnat = new JComboBox();
+		
+		Regiao_AnatomicaDao reDAO = new Regiao_AnatomicaDao();
+		cmbRegiaoAnat.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				regiao = cmbRegiaoAnat.getSelectedItem().toString();
+				String arrayRE[] = new String[2];
+				arrayRE = regiao.split("-");
+				Long codReg = Long.parseLong(arrayRE[0]);
+				selectRegiao = reDAO.buscaPOrCodigo(codReg);
+			}
+		});
 		cmbRegiaoAnat.setFont(new Font("Tahoma", Font.BOLD, 12));
 		cmbRegiaoAnat.setToolTipText("Selecione a Regi\u00E3o Anat\u00F4mica");
-		Regiao_AnatomicaDao reDAO = new Regiao_AnatomicaDao();
+
 		List<Regiao_Anatomica> listaRegioes = reDAO.buscaTodos(null, null);
 		for (Regiao_Anatomica regioes : listaRegioes) {
-			cmbRegiaoAnat.addItem(regioes.getCodigo()+"-"+ regioes.getDescricao());
+			cmbRegiaoAnat.addItem(regioes.getCodigo() + "-"
+					+ regioes.getDescricao());
 
 		}
-		String reSelecionado = cmbRegiaoAnat.getSelectedItem()
-				.toString();
-		String arrayRE[] = new String[2];
-		arrayRE = reSelecionado.split("-");
-		selectRegiao = reDAO.buscar(arrayRE[0], new String());
 
 		JLabel lblDataCT = new JLabel("Data CT");
 		lblDataCT.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -403,7 +481,7 @@ public class CadPlanejamentoView extends JFrame {
 		JLabel lblAlvo = new JLabel("Alvo");
 		lblAlvo.setFont(new Font("Tahoma", Font.BOLD, 12));
 
-		JComboBox cmbAlvo = new JComboBox();
+		
 		cmbAlvo.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				alvo = cmbAlvo.getSelectedItem().toString();
@@ -411,16 +489,15 @@ public class CadPlanejamentoView extends JFrame {
 		});
 		cmbAlvo.setFont(new Font("Tahoma", Font.BOLD, 12));
 		cmbAlvo.setToolTipText("Selecione se o alvo foi definido!");
-		String dadosAlvo[] ={"","SIM","NÃO"};
-		for(int i =0; i<dadosAlvo.length;i++){
+		String dadosAlvo[] = { "", "SIM", "NÃO" };
+		for (int i = 0; i < dadosAlvo.length; i++) {
 			cmbAlvo.addItem(dadosAlvo[i]);
 		}
-		
 
 		JLabel lblPlano = new JLabel("Plano");
 		lblPlano.setFont(new Font("Tahoma", Font.BOLD, 12));
 
-		JComboBox cmbPlano = new JComboBox();
+		
 		cmbPlano.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				plano = cmbPlano.getSelectedItem().toString();
@@ -428,16 +505,15 @@ public class CadPlanejamentoView extends JFrame {
 		});
 		cmbPlano.setFont(new Font("Tahoma", Font.BOLD, 12));
 		cmbPlano.setToolTipText("Selecione se o plano foi definido!");
-		String dadosPlano[] ={"","Aprovado","NÃO"};
-		for(int i =0; i<dadosPlano.length;i++){
+		String dadosPlano[] = { "", "Aprovado", "NÃO" };
+		for (int i = 0; i < dadosPlano.length; i++) {
 			cmbPlano.addItem(dadosPlano[i]);
 		}
-		
 
 		JLabel lblImpressao = new JLabel("Impress\u00E3o");
 		lblImpressao.setFont(new Font("Tahoma", Font.BOLD, 12));
 
-		JComboBox cmbImpressao = new JComboBox();
+		
 		cmbImpressao.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				impressao = cmbImpressao.getSelectedItem().toString();
@@ -445,11 +521,10 @@ public class CadPlanejamentoView extends JFrame {
 		});
 		cmbImpressao.setFont(new Font("Tahoma", Font.BOLD, 12));
 		cmbImpressao.setToolTipText("Selcione se a ficha foi impressa!");
-		String dadosImpressao[]={"","SIM","NÃO"};
-		for(int i =0;i<dadosImpressao.length;i++){
+		String dadosImpressao[] = { "", "SIM", "NÃO" };
+		for (int i = 0; i < dadosImpressao.length; i++) {
 			cmbImpressao.addItem(dadosImpressao[i]);
 		}
-		
 
 		JLabel lbl1Assinatura = new JLabel("1\u00AA Assinatura");
 		lbl1Assinatura.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -460,35 +535,44 @@ public class CadPlanejamentoView extends JFrame {
 		JLabel lblBlocos = new JLabel("Blocos");
 		lblBlocos.setFont(new Font("Tahoma", Font.BOLD, 12));
 
-		JComboBox cmb1Ass = new JComboBox();
+		
+		FisicosDao fDAO = new FisicosDao();
+		cmb1Ass.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				String fisSelecao = cmb1Ass.getSelectedItem().toString();
+				String array1ass[] = new String[2];
+				array1ass = fisSelecao.split("-");
+				selectfisico1 = fDAO.buscar(array1ass[0], null);
+			}
+		});
 		cmb1Ass.setFont(new Font("Tahoma", Font.BOLD, 12));
 		cmb1Ass.setToolTipText("1\u00AA assinatura F\u00EDsica M\u00E9dica");
-		FisicosDao fDAO = new FisicosDao();
+
 		List<Fisicos> listaFis1Ass = fDAO.buscaTodos(null, null);
 		for (Fisicos fisico : listaFis1Ass) {
 			cmb1Ass.addItem(fisico.getABFM() + "-" + fisico.getnome());
 		}
-		String fisSelecao = cmb1Ass.getSelectedItem().toString();
-		String array1ass[] = new String[2];
-		array1ass = fisSelecao.split("-");
-		selectfisico1 = fDAO.buscar(array1ass[0], null);
 
-		JComboBox cmb2Ass = new JComboBox();
+		
+		cmb2Ass.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				String fisSelecao2 = cmb2Ass.getSelectedItem().toString();
+				String array2ass[] = new String[2];
+				array2ass = fisSelecao2.split("-");
+				selectfisico2 = fDAO.buscar(array2ass[0], null);
+			}
+		});
 		cmb2Ass.setFont(new Font("Tahoma", Font.BOLD, 12));
 		cmb2Ass.setToolTipText("2\u00AA assinatura F\u00EDsica M\u00E9dica");
 		List<Fisicos> listaFis2Ass = fDAO.buscaTodos(null, null);
 		for (Fisicos fisico : listaFis2Ass) {
 			cmb2Ass.addItem(fisico.getABFM() + "-" + fisico.getnome());
 		}
-		String fisSelecao2 = cmb2Ass.getSelectedItem().toString();
-		String array2ass[] = new String[2];
-		array2ass = fisSelecao2.split("-");
-		selectfisico2 = fDAO.buscar(array2ass[0], null);
 
 		JLabel lblSisGerenciamento = new JLabel("Sist. Gerenciamento");
 		lblSisGerenciamento.setFont(new Font("Tahoma", Font.BOLD, 12));
 
-		JComboBox cmbSisGerenciamento = new JComboBox();
+		
 		Sistema_GerenciamentoDao sisDAO = new Sistema_GerenciamentoDao();
 		cmbSisGerenciamento.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
@@ -496,18 +580,17 @@ public class CadPlanejamentoView extends JFrame {
 						.toString();
 				String arraySis[] = new String[2];
 				arraySis = sisSelecao.split("-");
-				selectSisGerencia = sisDAO.buscar(arraySis[0], new String());
+				Long cod = Long.parseLong(arraySis[0]);
+				selectSisGerencia = sisDAO.buscaPOrCodigo(cod);
 			}
 		});
 		cmbSisGerenciamento.setFont(new Font("Tahoma", Font.BOLD, 12));
-		cmbSisGerenciamento
-				.setToolTipText("");
-		
+		cmbSisGerenciamento.setToolTipText("");
 		List<Sistema_Gerenciamento> listaSisGer = sisDAO.buscatodos(null, null);
 		for (Sistema_Gerenciamento sistemas : listaSisGer) {
-			cmbSisGerenciamento.addItem(sistemas.getCodigo()+ "-" + sistemas.getDescricao());
+			cmbSisGerenciamento.addItem(sistemas.getCodigo() + "-"
+					+ sistemas.getDescricao());
 		}
-		
 
 		JLabel lblDtaBlocosEnvio = new JLabel("Data Envio");
 		lblDtaBlocosEnvio.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -549,9 +632,14 @@ public class CadPlanejamentoView extends JFrame {
 		lblStatus.setFont(new Font("Tahoma", Font.BOLD, 12));
 
 		JCheckBox chbInativo = new JCheckBox("Inativar Paciente");
-		status = chbInativo.isSelected();
+		chbInativo.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				status = chbInativo.isSelected();
+			}
+		});
 
 		txtQtdeBlocos = new JTextField();
+		txtQtdeBlocos.setText("0");
 		txtQtdeBlocos.setFont(new Font("Tahoma", Font.BOLD, 14));
 		txtQtdeBlocos.setColumns(10);
 
@@ -566,24 +654,25 @@ public class CadPlanejamentoView extends JFrame {
 		txtTecnica.setFont(new Font("Tahoma", Font.BOLD, 14));
 		txtTecnica.setColumns(10);
 
-		JComboBox cmbAparelho = new JComboBox();
+		
 		AparelhoDao apDAO = new AparelhoDao();
 		cmbAparelho.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				String apSelecao = cmbAparelho.getSelectedItem().toString();
 				String arrayAp[] = new String[2];
 				arrayAp = apSelecao.split("-");
-				selectAparelho = apDAO.buscar(arrayAp[0], new String());
+				Long codAp = Long.parseLong(arrayAp[0]);
+				selectAparelho = apDAO.buscaPOrCodigo(codAp);
 			}
 		});
 		cmbAparelho.setFont(new Font("Tahoma", Font.BOLD, 12));
 		cmbAparelho.setToolTipText("");
-		
+
 		List<Aparelho> listaAP = apDAO.buscaTodos(null, null);
 		for (Aparelho aparelhos : listaAP) {
-			cmbAparelho.addItem(aparelhos.getCodigo()+"-"+ aparelhos.getDescricao());
+			cmbAparelho.addItem(aparelhos.getCodigo() + "-"
+					+ aparelhos.getDescricao());
 		}
-		
 
 		JLabel lblObservaes = new JLabel("Observa\u00E7\u00F5es:");
 		lblObservaes.setFont(new Font("Tahoma", Font.BOLD, 12));
@@ -622,93 +711,61 @@ public class CadPlanejamentoView extends JFrame {
 		}
 		fmtdDTInicio_1 = new JFormattedTextField(dataInicio);
 		fmtdDTInicio_1.setFont(new Font("Tahoma", Font.BOLD, 14));
-		
+
 		txtQtdeCampos = new JTextField();
+		txtQtdeCampos.setText("0");
 		txtQtdeCampos.setFont(new Font("Tahoma", Font.BOLD, 14));
 		txtQtdeCampos.setColumns(10);
-		
+
 		JLabel lblQtdeCampos = new JLabel("Qtde Campos");
 		lblQtdeCampos.setFont(new Font("Tahoma", Font.BOLD, 12));
+
 		
-		JComboBox cmbContorno = new JComboBox();
 		cmbContorno.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
 				contorno = cmbContorno.getSelectedItem().toString();
 			}
 		});
 		cmbContorno.setFont(new Font("Tahoma", Font.BOLD, 14));
-		String dados[] ={"","SIM","NÃO"};
-		for(int i =0; i<dados.length;i++){
+		String dados[] = { "", "SIM", "NÃO" };
+		for (int i = 0; i < dados.length; i++) {
 			cmbContorno.addItem(dados[i]);
 		}
-	
 		
+		JScrollPane scrollPane = new JScrollPane();
+		
+		JButton btnNewButton = new JButton("Atualizar");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				carregaTabelaPlan();
+			}
+		});
+
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_contentPane.createSequentialGroup()
 					.addContainerGap()
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 1010, Short.MAX_VALUE)
 						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(txtTecnica, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblTcnica))
-									.addGap(10)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(cmbImpressao, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblImpressao, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))
+										.addComponent(lblAparelho)
+										.addComponent(cmbAparelho, GroupLayout.PREFERRED_SIZE, 180, GroupLayout.PREFERRED_SIZE))
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(lbl1Assinatura, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
-										.addComponent(cmb1Ass, GroupLayout.PREFERRED_SIZE, 119, GroupLayout.PREFERRED_SIZE)))
-								.addGroup(gl_contentPane.createSequentialGroup()
+										.addComponent(cmbSisGerenciamento, GroupLayout.PREFERRED_SIZE, 245, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblSisGerenciamento, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE))
+									.addGap(28)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(cmbAparelho, GroupLayout.PREFERRED_SIZE, 158, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblAparelho))
-									.addGap(18)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblSisGerenciamento, GroupLayout.PREFERRED_SIZE, 140, GroupLayout.PREFERRED_SIZE)
-										.addComponent(cmbSisGerenciamento, GroupLayout.PREFERRED_SIZE, 182, GroupLayout.PREFERRED_SIZE)))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addComponent(btnSalvar, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(btnAlterar, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(btnBuscar, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-									.addGap(18)
-									.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-									.addComponent(chbInativo, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-									.addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE))
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
-									.addComponent(lblObservaes)
-									.addGroup(gl_contentPane.createSequentialGroup()
-										.addComponent(cmb2Ass, GroupLayout.PREFERRED_SIZE, 116, GroupLayout.PREFERRED_SIZE)
-										.addGap(18)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-											.addComponent(txtQtdeBlocos, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
-											.addComponent(lblBlocos, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE))
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-											.addComponent(fmtdDataBlocos_1, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-											.addComponent(lblDtaBlocosEnvio))
-										.addGap(18)
-										.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-											.addGroup(gl_contentPane.createSequentialGroup()
-												.addComponent(fmtdDataBlocoschegada_1, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.UNRELATED)
-												.addComponent(fmtdDTInicio_1, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE))
-											.addGroup(gl_contentPane.createSequentialGroup()
-												.addComponent(lblBlocosChegada)
-												.addGap(18)
-												.addComponent(lblNewLabel))))
-									.addComponent(txtObs))))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(lblObservaes)
+										.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+											.addComponent(txtObs, GroupLayout.PREFERRED_SIZE, 514, GroupLayout.PREFERRED_SIZE)
+											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+												.addComponent(chbInativo)
+												.addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, 127, GroupLayout.PREFERRED_SIZE)))))
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addComponent(lblRegistro)
@@ -718,52 +775,92 @@ public class CadPlanejamentoView extends JFrame {
 											.addComponent(btnBuscapaciente, GroupLayout.PREFERRED_SIZE, 30, GroupLayout.PREFERRED_SIZE)))
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(txtNomePaciente, GroupLayout.PREFERRED_SIZE, 295, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblNome)))
+										.addComponent(txtNomePaciente, GroupLayout.PREFERRED_SIZE, 366, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblNome))
+									.addGap(22)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(fmtData_1Paciente, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblDataDeNascimento))
+									.addGap(18)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(cmbMedico, 0, 300, Short.MAX_VALUE)
+										.addComponent(lblMedico, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)))
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_contentPane.createSequentialGroup()
+											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+												.addComponent(txtTecnica, GroupLayout.PREFERRED_SIZE, 112, GroupLayout.PREFERRED_SIZE)
+												.addComponent(lblTcnica))
+											.addGap(10)
+											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+												.addComponent(cmbImpressao, GroupLayout.PREFERRED_SIZE, 121, GroupLayout.PREFERRED_SIZE)
+												.addComponent(lblImpressao, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+												.addComponent(cmb1Ass, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)
+												.addComponent(lbl1Assinatura, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE))
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+												.addComponent(lbl2Assinatura, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+												.addComponent(cmb2Ass, GroupLayout.PREFERRED_SIZE, 150, GroupLayout.PREFERRED_SIZE)))
+										.addGroup(gl_contentPane.createSequentialGroup()
+											.addComponent(btnSalvar, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.UNRELATED)
+											.addComponent(btnAlterar, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.UNRELATED)
+											.addComponent(btnBuscar, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
+											.addGap(18)
+											.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)))
+									.addGap(17)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(lblBlocos, GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)
+										.addComponent(txtQtdeBlocos, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE))
+									.addGap(18)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(fmtdDataBlocos_1, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblDtaBlocosEnvio))
+									.addGap(16)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+										.addComponent(fmtdDataBlocoschegada_1, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblBlocosChegada)
+										.addGroup(gl_contentPane.createSequentialGroup()
+											.addComponent(lblAlvo, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)
+											.addGap(55)))
+									.addGap(18)
+									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+										.addComponent(lblPlano, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
+										.addComponent(fmtdDTInicio_1, GroupLayout.PREFERRED_SIZE, 99, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblNewLabel)))
 								.addGroup(gl_contentPane.createSequentialGroup()
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addComponent(lblOrigem)
 										.addComponent(cmbOrigem, GroupLayout.PREFERRED_SIZE, 213, GroupLayout.PREFERRED_SIZE))
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(cmbRegiaoAnat, 0, 159, Short.MAX_VALUE)
-										.addGroup(gl_contentPane.createSequentialGroup()
-											.addComponent(lblRegiaoanat)
-											.addGap(79)))
+										.addComponent(lblRegiaoanat)
+										.addComponent(cmbRegiaoAnat, GroupLayout.PREFERRED_SIZE, 208, GroupLayout.PREFERRED_SIZE))
 									.addPreferredGap(ComponentPlacement.UNRELATED)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblQtdeCampos, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
-										.addComponent(txtQtdeCampos, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lbl2Assinatura, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE))
-									.addGap(4)))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(fmtdDataCT_1, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblDataCT, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE))
+										.addGroup(gl_contentPane.createSequentialGroup()
+											.addComponent(txtQtdeCampos, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(fmtdDataCT_1, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
+										.addGroup(gl_contentPane.createSequentialGroup()
+											.addComponent(lblQtdeCampos, GroupLayout.PREFERRED_SIZE, 100, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED)
+											.addComponent(lblDataCT, GroupLayout.PREFERRED_SIZE, 57, GroupLayout.PREFERRED_SIZE)))
 									.addPreferredGap(ComponentPlacement.RELATED)
 									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblContorno, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE)
-										.addComponent(cmbContorno, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE))
-									.addGap(14)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 										.addGroup(gl_contentPane.createSequentialGroup()
+											.addComponent(cmbContorno, GroupLayout.PREFERRED_SIZE, 104, GroupLayout.PREFERRED_SIZE)
+											.addGap(18)
 											.addComponent(cmbAlvo, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-											.addPreferredGap(ComponentPlacement.UNRELATED)
-											.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-												.addComponent(cmbPlano, 0, 88, Short.MAX_VALUE)
-												.addComponent(lblPlano, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)))
-										.addComponent(lblAlvo, GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)))
-								.addGroup(gl_contentPane.createSequentialGroup()
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblDataDeNascimento)
-										.addComponent(fmtData_1Paciente, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE))
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-										.addComponent(lblMedico, GroupLayout.PREFERRED_SIZE, 47, GroupLayout.PREFERRED_SIZE)
-										.addComponent(cmbMedico, GroupLayout.PREFERRED_SIZE, 305, GroupLayout.PREFERRED_SIZE))))))
-					.addGap(37))
+											.addGap(18)
+											.addComponent(cmbPlano, GroupLayout.PREFERRED_SIZE, 128, GroupLayout.PREFERRED_SIZE))
+										.addComponent(lblContorno, GroupLayout.PREFERRED_SIZE, 80, GroupLayout.PREFERRED_SIZE))))
+							.addContainerGap(27, Short.MAX_VALUE))))
 		);
 		gl_contentPane.setVerticalGroup(
 			gl_contentPane.createParallelGroup(Alignment.LEADING)
@@ -774,89 +871,129 @@ public class CadPlanejamentoView extends JFrame {
 							.addComponent(lblRegistro)
 							.addComponent(lblNome))
 						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-							.addComponent(lblMedico, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-							.addComponent(lblDataDeNascimento)))
+							.addComponent(lblDataDeNascimento)
+							.addComponent(lblMedico, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
 						.addComponent(txtRegistro, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
 						.addComponent(txtNomePaciente, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+						.addComponent(btnBuscapaciente, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
 						.addComponent(fmtData_1Paciente, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-						.addComponent(cmbMedico, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnBuscapaciente, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+						.addComponent(cmbMedico, GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
 					.addGap(13)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lblOrigem)
+							.addComponent(lblRegiaoanat, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(lblQtdeCampos, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblDataCT, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblContorno, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblAlvo, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+							.addComponent(lblPlano, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+						.addComponent(cmbOrigem, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+							.addComponent(cmbRegiaoAnat, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+							.addComponent(txtQtdeCampos, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+							.addComponent(fmtdDataCT_1, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+							.addComponent(cmbContorno, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(cmbAlvo, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+							.addComponent(cmbPlano, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)))
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPane.createSequentialGroup()
+							.addGap(6)
 							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(lblOrigem)
-								.addComponent(lblRegiaoanat, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblContorno, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(cmbOrigem, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-									.addComponent(cmbRegiaoAnat, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-									.addComponent(txtQtdeCampos, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))))
-						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-							.addGroup(gl_contentPane.createSequentialGroup()
-								.addComponent(lblPlano, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(cmbPlano, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-							.addGroup(gl_contentPane.createSequentialGroup()
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
-									.addComponent(lblAlvo, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-									.addComponent(lblDataCT, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-									.addComponent(cmbAlvo, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-									.addComponent(cmbContorno, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-									.addComponent(fmtdDataCT_1, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))))
-						.addComponent(lblQtdeCampos, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE))
-					.addGap(6)
-					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lbl2Assinatura, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lbl1Assinatura, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblImpressao, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblTcnica)
-						.addComponent(lblBlocos, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblDtaBlocosEnvio, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblBlocosChegada, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE))
+								.addComponent(lbl1Assinatura, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblImpressao, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblTcnica)
+								.addComponent(lblBlocos, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblDtaBlocosEnvio, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblBlocosChegada, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 27, GroupLayout.PREFERRED_SIZE)))
+						.addGroup(gl_contentPane.createSequentialGroup()
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(lbl2Assinatura, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(cmb2Ass, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
 						.addComponent(cmb1Ass, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
 						.addComponent(cmbImpressao, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
 						.addComponent(txtTecnica, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+						.addComponent(cmb2Ass, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
 						.addComponent(txtQtdeBlocos, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
 						.addComponent(fmtdDataBlocos_1, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
 						.addComponent(fmtdDataBlocoschegada_1, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
 						.addComponent(fmtdDTInicio_1, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblObservaes)
 						.addComponent(lblSisGerenciamento, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblAparelho))
+						.addComponent(lblAparelho)
+						.addComponent(lblObservaes))
 					.addGap(7)
+					.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
+						.addComponent(cmbSisGerenciamento, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addComponent(cmbAparelho, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
+						.addComponent(txtObs, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
 					.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(txtObs, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
-							.addGap(18)
-							.addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(chbInativo))
-						.addGroup(gl_contentPane.createSequentialGroup()
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.BASELINE)
-								.addComponent(cmbSisGerenciamento, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE)
-								.addComponent(cmbAparelho, GroupLayout.PREFERRED_SIZE, 24, GroupLayout.PREFERRED_SIZE))
-							.addGap(18)
-							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
-								.addComponent(btnSalvar, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnAlterar, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnBuscar, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE)
-								.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE))))
-					.addContainerGap(34, Short.MAX_VALUE))
+						.addGroup(gl_contentPane.createParallelGroup(Alignment.TRAILING)
+							.addComponent(btnNewButton, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+							.addGroup(gl_contentPane.createParallelGroup(Alignment.LEADING, false)
+								.addGroup(gl_contentPane.createSequentialGroup()
+									.addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, 15, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(chbInativo))
+								.addComponent(btnSalvar, GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+								.addComponent(btnAlterar, GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+								.addComponent(btnBuscar, GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)))
+						.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 60, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 210, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
 		);
+		
+		tbBuscaPlan = new JTable(modelo);
+		tbBuscaPlan.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Nome", "Registro", "Medico", "Regiao", "Dt Cadastro"
+			}
+		) {
+			boolean[] columnEditables = new boolean[] {
+				false, true, true, true, true
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		tbBuscaPlan.getColumnModel().getColumn(0).setPreferredWidth(150);
+		scrollPane.setViewportView(tbBuscaPlan);
 		contentPane.setLayout(gl_contentPane);
+	}
+	public void limpar(){
+		txtNomePaciente.setText("");
+		txtObs.setText("");
+		txtQtdeBlocos.setText("0");
+		txtQtdeCampos.setText("0");
+		txtRegistro.setText("");
+		txtTecnica.setText("");
+		fmtData_1Paciente.setText("");
+		fmtdDataBlocos_1.setText("");
+		fmtdDataBlocoschegada_1.setText("");
+		fmtdDTInicio_1.setText("");
+		fmtdDataCT_1.setText("");
+		cmbOrigem.setSelectedIndex(0);
+		cmb1Ass.setSelectedIndex(0);
+		cmb2Ass.setSelectedIndex(0);
+		cmbAlvo.setSelectedIndex(0);
+		cmbAparelho.setSelectedIndex(0);
+		cmbContorno.setSelectedIndex(0);
+		cmbImpressao.setSelectedIndex(0);
+		cmbMedico.setSelectedIndex(0);
+		cmbPlano.setSelectedIndex(0);
+		cmbRegiaoAnat.setSelectedIndex(0);
+		cmbSisGerenciamento.setSelectedIndex(0);		
 	}
 }

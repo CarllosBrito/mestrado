@@ -16,6 +16,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.mestrado.Dao.AparelhoDao;
 import com.mestrado.model.Aparelho;
+import java.awt.Toolkit;
 
 public class CadAparelhoView extends JFrame {
 
@@ -48,8 +49,8 @@ public class CadAparelhoView extends JFrame {
 	 * Create the frame.
 	 */
 	public CadAparelhoView() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(CadAparelhoView.class.getResource("/imagens/1483156433_8.png")));
 		setTitle("Cadastro de Aparelho");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 383, 248);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

@@ -1,6 +1,5 @@
 package com.mestrado.Dao;
 
-import java.text.ParseException;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -86,7 +85,7 @@ public class Sistema_GerenciamentoDao {
 
 	@SuppressWarnings("unchecked")
 	public List<Sistema_Gerenciamento> buscatodos(String a, String b) {
-		Query query = em.createQuery("select a from Sistema_Gerenciamento a ");
+		Query query = em.createQuery("select a from Sistema_Gerenciamento a ORDER BY codigo");
 
 		List<Sistema_Gerenciamento> result = query.getResultList();
 

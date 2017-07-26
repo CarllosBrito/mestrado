@@ -19,6 +19,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.mestrado.Dao.OrigemDao;
 import com.mestrado.model.Origem;
+import java.awt.Toolkit;
 
 public class CadOrigemView extends JFrame {
 
@@ -48,9 +49,9 @@ public class CadOrigemView extends JFrame {
 	 * Create the frame.
 	 */
 	public CadOrigemView() {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(CadOrigemView.class.getResource("/imagens/1483156433_8.png")));
 		setTitle("Cadastro Clinica de Origem");
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 392, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
