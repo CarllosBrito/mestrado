@@ -11,8 +11,6 @@ import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -44,46 +42,10 @@ public class PrincipalView {
 	CadPlanejamentoView cadPlan;
 	CadRegAnatomicaView cadRegiao;
 	CadSist_GerenciamentoView cadSisGer;
-	private JTable tbPrincipal;
-	DefaultTableModel modelo = new DefaultTableModel();
+	private JTable tabelaPlan;
 	
 	
-
-	public void readJTable() {
-		PlanejamentoDao pDao = new PlanejamentoDao();
-		List<Planejamento> dados = new ArrayList<Planejamento>();
-		dados = pDao.buscaTodosPlan(null, null);
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-		
-		for (Planejamento plan : dados) {	
-			tbPrincipal.add(tbPrincipal, new Object[] {
-					plan.getPaciente().getNomePaciente(),
-					plan.getPaciente().getregistro(),
-					plan.getMedicos().getNome(),
-					plan.getRegiao().getDescricao(),
-					df.format(plan.getCt().getTime()),
-					plan.getAparelho().getDescricao(),
-					plan.getTecnica(),
-					plan.getContorno(),
-					plan.getAlvo(), 
-					plan.getPlano(),
-					plan.getSis_gerenciamento().getDescricao(),
-					plan.getImpressao(),
-					plan.getPrimeira_ass().getSigla(),
-					plan.getSegunda_ass().getSigla(), 
-					plan.getQtdeCampos(),
-					plan.getQtde_blocos(),
-					df.format(plan.getBloco_envio().getTime()),
-					df.format(plan.getBloco_chegada().getTime()),
-					df.format(plan.getData_inicio().getTime()),
-					plan.getObservacoes(),
-				
-
-			});
-				
-			
-		}
-	}
+	
 
 	/**
 	 * Launch the application.
@@ -111,13 +73,14 @@ public class PrincipalView {
 	 */
 	public PrincipalView() {
 		initialize();
-		readJTable();
+		//readJTable();
 
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	@SuppressWarnings("serial")
 	private void initialize() {
 		frame = new JFrame("Sistema de Gerenciamento de Pacientes");
 		frame.getContentPane().setBackground(SystemColor.scrollbar);
@@ -170,15 +133,68 @@ public class PrincipalView {
 					.addContainerGap())
 		);
 		
-		tbPrincipal = new JTable(new DefaultTableModel(
-			new Object[][] {
+		tabelaPlan = new JTable();
+		tabelaPlan.setModel(new DefaultTableModel(
+			new Object[][] {null, null, null, null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
 			},
 			new String[] {
-		"Nome","Registro", "Medico", "Regiao", "Dt CT","Aparelho","Tecnica","Contorno","Alvo","Plano","Sistema","Impressao","1Ass","2Ass","Campos","Blocos","Dt Envio","Dt Chegada","Dt Inicio","Obs."
+				"Paciente","Registro","Médico","Reg. Anatomica","Data CT","Aparelho","Técnica","Contorno","Alvo","Plano","Sis. Gerenciamento",
+				"Impressao","1 Ass.","2 Ass.","Campos","Blocos","Data Envio","Data Chegada","Data Inicio","Observações"
 			}
-		));
-				scrollPane.setViewportView(tbPrincipal);
+			
+		){
+			boolean[] columnEditables = new boolean[] {
+					false, false, false, false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false
+				};
+				public boolean isCellEditable(int row, int column) {
+					return columnEditables[column];
+				}
+		}
+	);
+		tabelaPlan.getColumnModel().getColumn(0).setPreferredWidth(200);
+		tabelaPlan.getColumnModel().getColumn(0).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(1).setPreferredWidth(75);
+		tabelaPlan.getColumnModel().getColumn(1).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(2).setPreferredWidth(150);
+		tabelaPlan.getColumnModel().getColumn(2).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(3).setPreferredWidth(140);
+		tabelaPlan.getColumnModel().getColumn(3).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(4).setPreferredWidth(95);
+		tabelaPlan.getColumnModel().getColumn(4).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(5).setPreferredWidth(150);
+		tabelaPlan.getColumnModel().getColumn(5).setMinWidth(85);
+		tabelaPlan.getColumnModel().getColumn(6).setPreferredWidth(75);
+		tabelaPlan.getColumnModel().getColumn(6).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(7).setPreferredWidth(75);
+		tabelaPlan.getColumnModel().getColumn(7).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(8).setPreferredWidth(75);
+		tabelaPlan.getColumnModel().getColumn(8).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(9).setPreferredWidth(80);
+		tabelaPlan.getColumnModel().getColumn(9).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(10).setPreferredWidth(85);
+		tabelaPlan.getColumnModel().getColumn(10).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(11).setPreferredWidth(80);
+		tabelaPlan.getColumnModel().getColumn(11).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(12).setPreferredWidth(67);
+		tabelaPlan.getColumnModel().getColumn(12).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(13).setPreferredWidth(67);
+		tabelaPlan.getColumnModel().getColumn(13).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(14).setPreferredWidth(60);
+		tabelaPlan.getColumnModel().getColumn(14).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(15).setPreferredWidth(55);
+		tabelaPlan.getColumnModel().getColumn(15).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(16).setPreferredWidth(95);
+		tabelaPlan.getColumnModel().getColumn(16).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(17).setPreferredWidth(95);
+		tabelaPlan.getColumnModel().getColumn(17).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(18).setPreferredWidth(95);
+		tabelaPlan.getColumnModel().getColumn(18).setMinWidth(20);
+		tabelaPlan.getColumnModel().getColumn(19).setPreferredWidth(120);
+		tabelaPlan.getColumnModel().getColumn(19).setMinWidth(20);
+		scrollPane.setViewportView(tabelaPlan);
+	
 		frame.getContentPane().setLayout(groupLayout);
+		
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
@@ -202,6 +218,7 @@ public class PrincipalView {
 				
 			}
 		});
+		
 		mnCadastros.add(mniCadPaciente);
 
 		JSeparator separator_2 = new JSeparator();
@@ -348,7 +365,42 @@ public class PrincipalView {
 		JSeparator separator_1 = new JSeparator();
 		mnSistema.add(separator_1);
 		mnSistema.add(mniSistSair);
+		
+		readJTable();
 
+	}
+	public void readJTable() {
+		PlanejamentoDao pDao = new PlanejamentoDao();
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		DefaultTableModel modelo = (DefaultTableModel) tabelaPlan.getModel();
+		modelo.setRowCount(0);
+		for (Planejamento plan : pDao.buscaTodos(null, null)) {	
+			modelo.addRow(new Object[] {
+					plan.getPaciente().getNomePaciente().toString(),
+					plan.getPaciente().getregistro().toString(),
+					plan.getMedicos().getNome().toString(),
+					plan.getRegiao().getDescricao().toString(),
+					df.format(plan.getCt().getTime()),
+					plan.getAparelho().getDescricao().toString(),
+					plan.getTecnica().toString(),
+					plan.getContorno().toString(),
+					plan.getAlvo().toString(), 
+					plan.getPlano().toString(),
+					plan.getSis_gerenciamento().getDescricao().toString(),
+					plan.getImpressao().toString(),
+					plan.getPrimeira_ass().getSigla().toString(),
+					plan.getSegunda_ass().getSigla().toString(), 
+					plan.getQtdeCampos().toString(),
+					plan.getQtde_blocos().toString() ,
+					df.format(plan.getBloco_envio().getTime()),
+					df.format(plan.getBloco_chegada().getTime()),
+					df.format(plan.getData_inicio().getTime()),
+					plan.getObservacoes(),
+					
+			});
+				
+		
+		}
 	}
 	
 }

@@ -189,7 +189,7 @@ public class CadPlanejamentoView extends JFrame {
 					Planejamento plan = new Planejamento();
 					PlanejamentoDao pDAO = new PlanejamentoDao();
 
-					String qtBloco = txtQtdeBlocos.getText();
+					int qtBloco = Integer.parseInt(txtQtdeBlocos.getText());
 					String dtBlocoEnvio = fmtdDataBlocos_1.getText();
 					String dtBlocoChegada = fmtdDataBlocoschegada_1.getText();
 					String dtNasc = fmtData_1Paciente.getText();
@@ -287,8 +287,8 @@ public class CadPlanejamentoView extends JFrame {
 					//plan.setQtdeCampos(qtdeCAmpos);
 					plan.setQtdeCampos(qtdeCAmpos != null && !qtdeCAmpos.equals("") ? Integer.parseInt(qtdeCAmpos) : null);
 					plan.setObservacoes(txtObs.getText());
-					//plan.setQtde_blocos(qtBloco);
-					plan.setQtde_blocos(qtBloco != null && !qtBloco.equals("") ? Integer.parseInt(qtBloco) : null);
+					plan.setQtde_blocos(qtBloco);
+			//		plan.setQtde_blocos(qtBloco != null && !qtBloco.equals("") ? Integer.parseInt(qtBloco) : null);
 
 					// DATAS
 					plan.setCt(dtct);

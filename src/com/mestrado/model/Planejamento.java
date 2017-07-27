@@ -113,6 +113,7 @@ public class Planejamento implements Serializable{
 	@JoinColumn(name = "regiao_codigo", referencedColumnName = "codigo")
     @ManyToOne
     private Regiao_Anatomica regiao;
+	
     
 	public Long getCodigo() {
 		return codigo;
@@ -130,11 +131,11 @@ public class Planejamento implements Serializable{
 		this.qtdeCampos = qtdeCampos;
 	}
 
-	public int getQtde_blocos() {
+	public Integer getQtde_blocos() {
 		return qtde_blocos;
 	}
 
-	public void setQtde_blocos(int qtde_blocos) {
+	public void setQtde_blocos(Integer qtde_blocos) {
 		this.qtde_blocos = qtde_blocos;
 	}
 

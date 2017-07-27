@@ -67,30 +67,6 @@ public class BuscaPaciente extends JFrame {
 		contentPane.setLayout(null);
 		
 		jTablePaciente = new JTable();
-		jTablePaciente.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				Paciente pac = new Paciente();
-				int indiceLinha = jTablePaciente.getSelectedRow();
-				int codigo = (int) jTablePaciente.getValueAt(indiceLinha, 0);
-				Long cod = Long.valueOf(codigo) ;
-				DateFormat df = new SimpleDateFormat("dd/MM//yyyy");
-				String data = df.format(jTablePaciente.getValueAt(indiceLinha, 3));
-				Date d = null;
-				try {
-					d = df.parse(data);
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				pac.setCodPaciente(cod);
-				pac.setregistro(jTablePaciente.getValueAt(indiceLinha, 1).toString());
-				pac.setNomePaciente(jTablePaciente.getValueAt(indiceLinha, 2).toString());
-				pac.setDtNascimento(d);
-				
-			}
-		});
 		jTablePaciente.setModel(new DefaultTableModel(
 			new Object[][] {
 				{null, null, null, null},
@@ -100,7 +76,7 @@ public class BuscaPaciente extends JFrame {
 			}
 		) {
 			boolean[] columnEditables = new boolean[] {
-				false, false, false, true
+				false, false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
