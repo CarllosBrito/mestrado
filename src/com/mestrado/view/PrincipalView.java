@@ -3,6 +3,7 @@
 package com.mestrado.view;
 
 import java.awt.EventQueue;
+import java.awt.Font;
 import java.awt.Rectangle;
 import java.awt.SystemColor;
 import java.awt.Toolkit;
@@ -25,6 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import com.mestrado.Dao.PlanejamentoDao;
@@ -45,11 +47,6 @@ public class PrincipalView {
 	private JTable tabelaPlan;
 	
 	
-	
-
-	/**
-	 * Launch the application.
-	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -68,12 +65,9 @@ public class PrincipalView {
 		});
 	}
 
-	/**
-	 * Create the application.
-	 */
 	public PrincipalView() {
 		initialize();
-		//readJTable();
+		readJTable();
 
 	}
 
@@ -134,44 +128,45 @@ public class PrincipalView {
 		);
 		
 		tabelaPlan = new JTable();
+		tabelaPlan.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tabelaPlan.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		tabelaPlan.setModel(new DefaultTableModel(
-			new Object[][] {null, null, null, null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null
+			new Object[][] {
+				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
 			},
 			new String[] {
-				"Paciente","Registro","Médico","Reg. Anatomica","Data CT","Aparelho","Técnica","Contorno","Alvo","Plano","Sis. Gerenciamento",
-				"Impressao","1 Ass.","2 Ass.","Campos","Blocos","Data Envio","Data Chegada","Data Inicio","Observações"
+				"Paciente", "Registro", "M\u00E9dico", "Reg. Anatomica", "Data CT", "Aparelho", "T\u00E9cnica", "Contorno", "Alvo", "Plano", "Sis. Gerenciamento", "Impressao", "1 Ass.", "2 Ass.", "Campos", "Blocos", "Data Envio", "Data Chegada", "Data Inicio", "Observa\u00E7\u00F5es"
+			}
+		) {
+			@SuppressWarnings("rawtypes")
+			Class[] columnTypes = new Class[] {
+				Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Integer.class, Object.class, Object.class, Object.class, Object.class
+			};
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
 			}
 			
-		){
-			boolean[] columnEditables = new boolean[] {
-					false, false, false, false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false
-				};
-				public boolean isCellEditable(int row, int column) {
-					return columnEditables[column];
-				}
 		}
+		
 	);
 		tabelaPlan.getColumnModel().getColumn(0).setPreferredWidth(200);
 		tabelaPlan.getColumnModel().getColumn(0).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(1).setPreferredWidth(75);
 		tabelaPlan.getColumnModel().getColumn(1).setMinWidth(20);
 		tabelaPlan.getColumnModel().getColumn(2).setPreferredWidth(150);
 		tabelaPlan.getColumnModel().getColumn(2).setMinWidth(20);
 		tabelaPlan.getColumnModel().getColumn(3).setPreferredWidth(140);
 		tabelaPlan.getColumnModel().getColumn(3).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(4).setPreferredWidth(95);
+		tabelaPlan.getColumnModel().getColumn(4).setPreferredWidth(100);
 		tabelaPlan.getColumnModel().getColumn(4).setMinWidth(20);
 		tabelaPlan.getColumnModel().getColumn(5).setPreferredWidth(150);
 		tabelaPlan.getColumnModel().getColumn(5).setMinWidth(85);
-		tabelaPlan.getColumnModel().getColumn(6).setPreferredWidth(75);
 		tabelaPlan.getColumnModel().getColumn(6).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(7).setPreferredWidth(75);
 		tabelaPlan.getColumnModel().getColumn(7).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(8).setPreferredWidth(75);
+		tabelaPlan.getColumnModel().getColumn(8).setPreferredWidth(70);
 		tabelaPlan.getColumnModel().getColumn(8).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(9).setPreferredWidth(80);
 		tabelaPlan.getColumnModel().getColumn(9).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(10).setPreferredWidth(85);
+		tabelaPlan.getColumnModel().getColumn(10).setPreferredWidth(103);
 		tabelaPlan.getColumnModel().getColumn(10).setMinWidth(20);
 		tabelaPlan.getColumnModel().getColumn(11).setPreferredWidth(80);
 		tabelaPlan.getColumnModel().getColumn(11).setMinWidth(20);
@@ -183,16 +178,15 @@ public class PrincipalView {
 		tabelaPlan.getColumnModel().getColumn(14).setMinWidth(20);
 		tabelaPlan.getColumnModel().getColumn(15).setPreferredWidth(55);
 		tabelaPlan.getColumnModel().getColumn(15).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(16).setPreferredWidth(95);
+		tabelaPlan.getColumnModel().getColumn(16).setPreferredWidth(100);
 		tabelaPlan.getColumnModel().getColumn(16).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(17).setPreferredWidth(95);
+		tabelaPlan.getColumnModel().getColumn(17).setPreferredWidth(100);
 		tabelaPlan.getColumnModel().getColumn(17).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(18).setPreferredWidth(95);
+		tabelaPlan.getColumnModel().getColumn(18).setPreferredWidth(100);
 		tabelaPlan.getColumnModel().getColumn(18).setMinWidth(20);
 		tabelaPlan.getColumnModel().getColumn(19).setPreferredWidth(120);
 		tabelaPlan.getColumnModel().getColumn(19).setMinWidth(20);
 		scrollPane.setViewportView(tabelaPlan);
-	
 		frame.getContentPane().setLayout(groupLayout);
 		
 		
@@ -337,6 +331,18 @@ public class PrincipalView {
 			}
 		});
 		mnCadastros.add(mniCadOrigem);
+		
+		JMenu mnRelatrios = new JMenu("Relat\u00F3rios");
+		menuBar.add(mnRelatrios);
+		
+		JMenuItem mnBuscaPorData = new JMenuItem("Busca Planejamento por Data");
+		mnRelatrios.add(mnBuscaPorData);
+		
+		JSeparator separator_8 = new JSeparator();
+		mnRelatrios.add(separator_8);
+		
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Busca por Paciente");
+		mnRelatrios.add(mntmNewMenuItem_1);
 
 		JMenu mnSistema = new JMenu("Sistema");
 		menuBar.add(mnSistema);
@@ -366,7 +372,7 @@ public class PrincipalView {
 		mnSistema.add(separator_1);
 		mnSistema.add(mniSistSair);
 		
-		readJTable();
+	
 
 	}
 	public void readJTable() {
@@ -378,23 +384,23 @@ public class PrincipalView {
 			modelo.addRow(new Object[] {
 					plan.getPaciente().getNomePaciente().toString(),
 					plan.getPaciente().getregistro().toString(),
-					plan.getMedicos().getNome().toString(),
-					plan.getRegiao().getDescricao().toString(),
-					df.format(plan.getCt().getTime()),
-					plan.getAparelho().getDescricao().toString(),
-					plan.getTecnica().toString(),
-					plan.getContorno().toString(),
-					plan.getAlvo().toString(), 
-					plan.getPlano().toString(),
-					plan.getSis_gerenciamento().getDescricao().toString(),
-					plan.getImpressao().toString(),
-					plan.getPrimeira_ass().getSigla().toString(),
-					plan.getSegunda_ass().getSigla().toString(), 
-					plan.getQtdeCampos().toString(),
-					plan.getQtde_blocos().toString() ,
-					df.format(plan.getBloco_envio().getTime()),
-					df.format(plan.getBloco_chegada().getTime()),
-					df.format(plan.getData_inicio().getTime()),
+					plan.getMedicos() !=null ?plan.getMedicos().getNome().toString():null,
+					plan.getRegiao() !=null ?plan.getRegiao().getDescricao().toString():null,
+				    plan.getCt() !=null ? df.format(plan.getCt().getTime()) :null,
+					plan.getAparelho() !=null ?plan.getAparelho().getDescricao().toString():null,
+					plan.getTecnica()!=null ? plan.getTecnica().toString():null,
+					plan.getContorno() !=null ?plan.getContorno().toString():null,
+					plan.getAlvo() !=null ? plan.getAlvo().toString():null, 
+					plan.getPlano() !=null ?plan.getPlano().toString():null,
+					plan.getSis_gerenciamento() !=null ?plan.getSis_gerenciamento().getDescricao().toString():null,
+					plan.getImpressao() !=null ?plan.getImpressao().toString():null,
+					plan.getPrimeira_ass() !=null ?plan.getPrimeira_ass().getSigla().toString():null,
+					plan.getSegunda_ass() !=null ? plan.getSegunda_ass().getSigla().toString():null, 
+					plan.getQtdeCampos() !=null ?plan.getQtdeCampos().toString():null,
+					plan.getQtde_blocos() !=null ?plan.getQtde_blocos().toString():null ,
+					plan.getBloco_envio() != null ? df.format(plan.getBloco_envio().getTime()) : null,
+					plan.getBloco_chegada() !=null ? df.format(plan.getBloco_chegada().getTime()) :null,
+					plan.getData_inicio() !=null ? df.format( plan.getData_inicio().getTime()) :null,
 					plan.getObservacoes(),
 					
 			});

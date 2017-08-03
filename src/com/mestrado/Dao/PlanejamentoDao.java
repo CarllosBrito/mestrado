@@ -9,7 +9,6 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JOptionPane;
 
-import com.mestrado.model.Paciente;
 import com.mestrado.model.Planejamento;
 
 public class PlanejamentoDao {
@@ -17,14 +16,14 @@ public class PlanejamentoDao {
 			.createEntityManagerFactory("mestradoPU");
 	private EntityManager em = emf.createEntityManager();
 
-	public void salvar(Planejamento planejamento)throws Exception {
+	public void salvar(Planejamento planejamento) throws Exception {
 		em.getTransaction().begin();
 		em.persist(planejamento);
 		em.getTransaction().commit();
 		em.close();
 		JOptionPane.showMessageDialog(null, "Planejamento salvo com sucesso!");
 	}
-	
+
 	public void alterar(Planejamento planejamento) {
 		@SuppressWarnings("unused")
 		Planejamento original = new Planejamento();
@@ -35,21 +34,78 @@ public class PlanejamentoDao {
 		em.getTransaction().commit();
 		em.close();
 
-		JOptionPane.showMessageDialog(null, "Planejamento alterado com sucesso!!!");
+		JOptionPane.showMessageDialog(null,
+				"Planejamento alterado com sucesso!!!");
 	}
 
-	
+	public Planejamento buscaPorCodigo(Long cod){
+		Query query = em
+				.createQuery("a from Planejamento a where a.codigo = :cod");
+		query.setParameter("cod", cod);
+		return null;
+		
+	}
 	@SuppressWarnings("unchecked")
 	public List<Planejamento> buscaTodos(String a, String b) {
-		Query query = em.createQuery("select a from Planejamento a");
+		Query query = em
+				.createQuery("select a from Planejamento a where a.status_inativo = :status_inativo OR a.status_inativo is null");
+		query.setParameter("status_inativo", false);
 		List<Planejamento> result = query.getResultList();
 		return result;
 	}
+
 	@SuppressWarnings("unchecked")
-	public List<Planejamento> buscaTodosPlan(String a, String b) {
-		Query query = em.createQuery("from Planejamento");
+	public List<Planejamento> BuscaPlanporPaciente(Long id) {
+
+		Query query = em
+				.createQuery("select a from Planejamento a left join fetch a.paciente p where p.codPaciente = :id");
+		query.setParameter("id", id);
 		List<Planejamento> result = query.getResultList();
+
 		return result;
+
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Planejamento> buscaPorData(Date dtIni, Date dtFinal) {
+
+		StringBuilder cond = new StringBuilder();
+		this.definirCondicoes(dtIni, dtFinal, cond);
+		Query query = em.createNamedQuery(" from planejamento p "
+				+ cond.toString());
+		this.definirParametros(dtIni, dtFinal, query);
+		List<Planejamento> result = query.getResultList();
+
+		return result;
+
+	}
+
+	public void definirCondicoes(Date dtIni, Date dtFinal, StringBuilder cond) {
+
+		if (dtIni != null) {
+			cond.append(cond.length() == 0 ? " where " : " and ").append(
+					" p.data_cad >= :dtIni ");
+
+		}
+		if (dtFinal != null) {
+			cond.append(cond.length() == 0 ? " where " : " and ").append(
+					" p.data_cad <= :dtFinal ");
+
+		}
+
+	}
+
+	public void definirParametros(Date dtIni, Date dtFinal, Query query) {
+
+		if (dtIni != null) {
+			query.setParameter("dtIni", dtIni);
+
+		}
+		if (dtFinal != null) {
+			query.setParameter("dtFinal", dtFinal);
+
+		}
+
 	}
 
 }

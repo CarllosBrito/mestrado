@@ -2,6 +2,7 @@ package com.mestrado.Dao;
 
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -71,6 +72,7 @@ public class PacientesDao {
 		List<Paciente> result = query.getResultList();
 		return result;
 	}
+	@SuppressWarnings("unchecked")
 	public List<Paciente> buscaPlan(Paciente paciente) {
 		Query query = em.createQuery("select a from Paciente");
 		List<Paciente> result = query.getResultList();

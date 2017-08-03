@@ -11,6 +11,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,9 +29,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
 import com.mestrado.Dao.AparelhoDao;
@@ -49,10 +53,6 @@ import com.mestrado.model.Paciente;
 import com.mestrado.model.Planejamento;
 import com.mestrado.model.Regiao_Anatomica;
 import com.mestrado.model.Sistema_Gerenciamento;
-
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 
 public class CadPlanejamentoView extends JFrame {
 
@@ -319,6 +319,8 @@ public class CadPlanejamentoView extends JFrame {
 		JButton btnBuscar = new JButton("");
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				readJTable();
+				limpar();
 			}
 		});
 		btnBuscar.setIcon(new ImageIcon(CadPlanejamentoView.class
@@ -349,7 +351,7 @@ public class CadPlanejamentoView extends JFrame {
 					String registro = txtRegistro.getText().toUpperCase();
 					SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 
-					// Paciente objBusca = new Paciente();
+					
 					objBusca = pDAO.buscar(registro, new String());
 
 					if (registro == null || registro.trim().equals("")) {
@@ -954,21 +956,27 @@ public class CadPlanejamentoView extends JFrame {
 		);
 		
 		tbBuscaPlan = new JTable(modelo);
+		tbBuscaPlan.addMouseListener(new MouseAdapter() {
+			
+		
+		});
 		tbBuscaPlan.setModel(new DefaultTableModel(
 			new Object[][] {
+				{null, null, null, null, null, null},
 			},
 			new String[] {
-				"Nome", "Registro", "Medico", "Regiao", "Dt Cadastro"
+				"Codigo Planejamento", "Nome", "Registro", "Medico", "Regi\u00E3o", "Dt Cadastro"
 			}
 		) {
 			boolean[] columnEditables = new boolean[] {
-				false, true, true, true, true
+				false, false, false, false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
 			}
 		});
-		tbBuscaPlan.getColumnModel().getColumn(0).setPreferredWidth(150);
+		tbBuscaPlan.getColumnModel().getColumn(0).setPreferredWidth(115);
+		tbBuscaPlan.getColumnModel().getColumn(1).setPreferredWidth(150);
 		scrollPane.setViewportView(tbBuscaPlan);
 		contentPane.setLayout(gl_contentPane);
 	}
@@ -995,5 +1003,32 @@ public class CadPlanejamentoView extends JFrame {
 		cmbPlano.setSelectedIndex(0);
 		cmbRegiaoAnat.setSelectedIndex(0);
 		cmbSisGerenciamento.setSelectedIndex(0);		
+	}
+	
+	public void readJTable() {
+		if(txtRegistro.getText().trim().equals("")){
+			JOptionPane.showMessageDialog(null, "Favor Digitar um registro válido!");
+			
+		}else{
+		PlanejamentoDao pDao = new PlanejamentoDao();
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		DefaultTableModel modelo = (DefaultTableModel) tbBuscaPlan.getModel();
+		modelo.setRowCount(0);
+		Long id = null;
+		id=objBusca.getCodPaciente();		
+		for (Planejamento plan : pDao.BuscaPlanporPaciente(id)) {	
+			modelo.addRow(new Object[] {
+					plan.getCodigo(),
+					plan.getPaciente().getNomePaciente().toString(),
+					plan.getPaciente().getregistro().toString(),
+					plan.getMedicos() !=null ?plan.getMedicos().getNome().toString():null,
+					plan.getRegiao() !=null ?plan.getRegiao().getDescricao().toString():null,
+				    plan.getData_cad() !=null ? df.format(plan.getData_cad().getTime()) :null,
+					
+					
+			});
+				
+		  }
+		}
 	}
 }

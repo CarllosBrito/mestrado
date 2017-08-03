@@ -65,10 +65,6 @@ public class Planejamento implements Serializable{
     @Column(name = "qtde_blocos")
     private Integer qtde_blocos;
     
-    @Column(name = "fila")
-    private Integer fila;
-    
-   
 	@Column(name = "tecnica")
     private String tecnica;
     
@@ -139,13 +135,7 @@ public class Planejamento implements Serializable{
 		this.qtde_blocos = qtde_blocos;
 	}
 
-	 public Integer getFila() {
-			return fila;
-		}
-
-		public void setFila(Integer fila) {
-			this.fila = fila;
-		}
+	
 	@Temporal(TemporalType.DATE)
 	public Date getBloco_envio() {
 		return bloco_envio;
