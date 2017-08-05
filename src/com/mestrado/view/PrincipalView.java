@@ -9,14 +9,14 @@ import java.awt.SystemColor;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -25,7 +25,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTable;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -44,7 +43,9 @@ public class PrincipalView {
 	CadPlanejamentoView cadPlan;
 	CadRegAnatomicaView cadRegiao;
 	CadSist_GerenciamentoView cadSisGer;
+	BuscaTodosPacientes todosPacientes = new BuscaTodosPacientes();
 	private JTable tabelaPlan;
+	BuscaPlanPorData buscaPorData;
 	
 	
 	public static void main(String[] args) {
@@ -89,41 +90,16 @@ public class PrincipalView {
 
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		JButton btnNewButton = new JButton("");
-		btnNewButton.setToolTipText("Alterar Planejamento!");
-		btnNewButton.setIcon(new ImageIcon(PrincipalView.class
-				.getResource("/imagens/1482302103_txt2.png")));
-
-		JButton btnSair = new JButton("");
-		btnSair.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
-			}
-		});
-		btnSair.setToolTipText("Sair do Programa!");
-		btnSair.setIcon(new ImageIcon(PrincipalView.class
-				.getResource("/imagens/1482302161_10.png")));
-		
 		JScrollPane scrollPane = new JScrollPane();
 		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(btnNewButton, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED)
-					.addComponent(btnSair, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-					.addGap(1093))
 				.addComponent(scrollPane, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 1244, Short.MAX_VALUE)
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
-				.addGroup(groupLayout.createSequentialGroup()
-					.addComponent(scrollPane, GroupLayout.PREFERRED_SIZE, 582, GroupLayout.PREFERRED_SIZE)
-					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-						.addComponent(btnSair, GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
-						.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE))
+				.addGroup(Alignment.LEADING, groupLayout.createSequentialGroup()
+					.addComponent(scrollPane, GroupLayout.DEFAULT_SIZE, 663, Short.MAX_VALUE)
 					.addContainerGap())
 		);
 		
@@ -135,7 +111,7 @@ public class PrincipalView {
 				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
 			},
 			new String[] {
-				"Paciente", "Registro", "M\u00E9dico", "Reg. Anatomica", "Data CT", "Aparelho", "T\u00E9cnica", "Contorno", "Alvo", "Plano", "Sis. Gerenciamento", "Impressao", "1 Ass.", "2 Ass.", "Campos", "Blocos", "Data Envio", "Data Chegada", "Data Inicio", "Observa\u00E7\u00F5es"
+				"Paciente", "Registro", "M\u00E9dico", "Reg. Anatomica", "Data CT", "Aparelho", "T\u00E9cnica", "Contorno", "Alvo", "Plano", "Sis. Gerenciamento", "Impressao", "1 Ass.", "2 Ass.", "Cpos", "Blocos", "Data Envio", "Data Chegada", "Data Inicio", "Observa\u00E7\u00F5es"
 			}
 		) {
 			@SuppressWarnings("rawtypes")
@@ -146,7 +122,6 @@ public class PrincipalView {
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
-			
 		}
 		
 	);
@@ -157,10 +132,11 @@ public class PrincipalView {
 		tabelaPlan.getColumnModel().getColumn(2).setMinWidth(20);
 		tabelaPlan.getColumnModel().getColumn(3).setPreferredWidth(140);
 		tabelaPlan.getColumnModel().getColumn(3).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(4).setPreferredWidth(100);
+		tabelaPlan.getColumnModel().getColumn(4).setPreferredWidth(120);
 		tabelaPlan.getColumnModel().getColumn(4).setMinWidth(20);
 		tabelaPlan.getColumnModel().getColumn(5).setPreferredWidth(150);
 		tabelaPlan.getColumnModel().getColumn(5).setMinWidth(85);
+		tabelaPlan.getColumnModel().getColumn(6).setPreferredWidth(70);
 		tabelaPlan.getColumnModel().getColumn(6).setMinWidth(20);
 		tabelaPlan.getColumnModel().getColumn(7).setMinWidth(20);
 		tabelaPlan.getColumnModel().getColumn(8).setPreferredWidth(70);
@@ -170,19 +146,19 @@ public class PrincipalView {
 		tabelaPlan.getColumnModel().getColumn(10).setMinWidth(20);
 		tabelaPlan.getColumnModel().getColumn(11).setPreferredWidth(80);
 		tabelaPlan.getColumnModel().getColumn(11).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(12).setPreferredWidth(67);
+		tabelaPlan.getColumnModel().getColumn(12).setPreferredWidth(70);
 		tabelaPlan.getColumnModel().getColumn(12).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(13).setPreferredWidth(67);
+		tabelaPlan.getColumnModel().getColumn(13).setPreferredWidth(70);
 		tabelaPlan.getColumnModel().getColumn(13).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(14).setPreferredWidth(60);
+		tabelaPlan.getColumnModel().getColumn(14).setPreferredWidth(50);
 		tabelaPlan.getColumnModel().getColumn(14).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(15).setPreferredWidth(55);
+		tabelaPlan.getColumnModel().getColumn(15).setPreferredWidth(53);
 		tabelaPlan.getColumnModel().getColumn(15).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(16).setPreferredWidth(100);
+		tabelaPlan.getColumnModel().getColumn(16).setPreferredWidth(120);
 		tabelaPlan.getColumnModel().getColumn(16).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(17).setPreferredWidth(100);
+		tabelaPlan.getColumnModel().getColumn(17).setPreferredWidth(120);
 		tabelaPlan.getColumnModel().getColumn(17).setMinWidth(20);
-		tabelaPlan.getColumnModel().getColumn(18).setPreferredWidth(100);
+		tabelaPlan.getColumnModel().getColumn(18).setPreferredWidth(120);
 		tabelaPlan.getColumnModel().getColumn(18).setMinWidth(20);
 		tabelaPlan.getColumnModel().getColumn(19).setPreferredWidth(120);
 		tabelaPlan.getColumnModel().getColumn(19).setMinWidth(20);
@@ -336,13 +312,51 @@ public class PrincipalView {
 		menuBar.add(mnRelatrios);
 		
 		JMenuItem mnBuscaPorData = new JMenuItem("Busca Planejamento por Data");
+		mnBuscaPorData.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(buscaPorData ==null){
+					buscaPorData= new BuscaPlanPorData();
+					buscaPorData.setLocationRelativeTo(null);
+					
+				}
+				buscaPorData.setVisible(true);
+			
+			}
+		});
+		mnBuscaPorData.addMouseListener(new MouseAdapter() {
+			
+			
+				
+		});
 		mnRelatrios.add(mnBuscaPorData);
 		
 		JSeparator separator_8 = new JSeparator();
 		mnRelatrios.add(separator_8);
 		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Busca por Paciente");
-		mnRelatrios.add(mntmNewMenuItem_1);
+		JMenuItem mnBuscaPlanpPorPaciente = new JMenuItem("Busca Planejamento por Paciente");
+		mnRelatrios.add(mnBuscaPlanpPorPaciente);
+		
+		JSeparator separator_9 = new JSeparator();
+		mnRelatrios.add(separator_9);
+		
+		JMenuItem mntmBuscarTodosPacientes = new JMenuItem("Buscar Todos Pacientes Cadastrados");
+		mntmBuscarTodosPacientes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(cadPaciente == null){
+					todosPacientes = new BuscaTodosPacientes();
+					todosPacientes.setLocationRelativeTo(null);
+					
+				}
+				todosPacientes.setVisible(true);
+				
+			
+			}
+		});
+		mntmBuscarTodosPacientes.addMouseListener(new MouseAdapter() {
+							
+			
+		});
+		mnRelatrios.add(mntmBuscarTodosPacientes);
 
 		JMenu mnSistema = new JMenu("Sistema");
 		menuBar.add(mnSistema);

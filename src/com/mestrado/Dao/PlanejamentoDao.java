@@ -69,15 +69,15 @@ public class PlanejamentoDao {
 	@SuppressWarnings("unchecked")
 	public List<Planejamento> buscaPorData(Date dtIni, Date dtFinal) {
 
-		StringBuilder cond = new StringBuilder();
-		this.definirCondicoes(dtIni, dtFinal, cond);
-		Query query = em.createNamedQuery(" from planejamento p "
-				+ cond.toString());
-		this.definirParametros(dtIni, dtFinal, query);
-		List<Planejamento> result = query.getResultList();
-
+	
+			StringBuilder cond = new StringBuilder();
+			this.definirCondicoes(dtIni, dtFinal, cond);
+			Query query = em.createQuery(" from Planejamento p "
+					+ cond.toString());
+			this.definirParametros(dtIni, dtFinal, query);
+			List<Planejamento> result = query.getResultList();		
+		
 		return result;
-
 	}
 
 	public void definirCondicoes(Date dtIni, Date dtFinal, StringBuilder cond) {

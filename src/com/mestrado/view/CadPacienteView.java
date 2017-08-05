@@ -254,7 +254,7 @@ public class CadPacienteView extends JFrame {
 		JButton btnListaPacientes = new JButton("Lista Pacientes");
 		btnListaPacientes.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				BuscaPaciente lista = new BuscaPaciente();
+				BuscaTodosPacientes lista = new BuscaTodosPacientes();
 				lista.setVisible(true);
 			}
 		});
