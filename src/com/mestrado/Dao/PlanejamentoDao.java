@@ -9,6 +9,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JOptionPane;
 
+import com.mestrado.model.Aparelho;
 import com.mestrado.model.Planejamento;
 
 public class PlanejamentoDao {
@@ -38,11 +39,16 @@ public class PlanejamentoDao {
 				"Planejamento alterado com sucesso!!!");
 	}
 
+	@SuppressWarnings("unchecked")
 	public Planejamento buscaPorCodigo(Long cod){
+		
 		Query query = em
-				.createQuery("a from Planejamento a where a.codigo = :cod");
+				.createQuery("from Planejamento where codigo = :cod");
 		query.setParameter("cod", cod);
-		return null;
+		
+		List <Planejamento> plan = query.getResultList();
+		
+		return !plan.isEmpty() ? plan.get(0) : new Planejamento();
 		
 	}
 	@SuppressWarnings("unchecked")

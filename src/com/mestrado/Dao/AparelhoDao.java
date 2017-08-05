@@ -72,6 +72,7 @@ public class AparelhoDao {
 
 	@SuppressWarnings({ "unused", "unchecked" })
 	public Aparelho buscaPOrCodigo(Long a){
+		
 		Long codigo =a;
 		
 		Query query = em
