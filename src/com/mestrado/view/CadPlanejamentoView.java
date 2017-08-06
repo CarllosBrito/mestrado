@@ -116,20 +116,6 @@ public class CadPlanejamentoView extends JFrame {
 	private JTextField txtCoddigo;
 
 	
-	/*public void carregaTabelaPlan(){
-		
-		PlanejamentoDao pDao = new PlanejamentoDao();
-		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-		for(Planejamento plan: pDao.buscaTodos(null, null)){
-			modelo.addRow(new Object[]{
-					plan.getPaciente().getNomePaciente(),
-					plan.getPaciente().getregistro(),
-					plan.getMedicos().getNome(),
-					df.format(plan.getData_cad().getTime())
-			
-			});
-		}
-	}*/
 	/**
 	 * Launch the application.
 	 */
@@ -286,12 +272,10 @@ public class CadPlanejamentoView extends JFrame {
 					plan.setPlano(plano);
 					plan.setAlvo(alvo);
 					plan.setTecnica(txtTecnica.getText().toUpperCase());
-					//plan.setQtdeCampos(qtdeCAmpos);
 					plan.setQtdeCampos(qtdeCAmpos != null && !qtdeCAmpos.equals("") ? Integer.parseInt(qtdeCAmpos) : null);
 					plan.setObservacoes(txtObs.getText());
 					plan.setQtde_blocos(qtBloco);
-			//		plan.setQtde_blocos(qtBloco != null && !qtBloco.equals("") ? Integer.parseInt(qtBloco) : null);
-
+			
 					// DATAS
 					plan.setCt(dtct);
 					plan.setBloco_envio(dtblocoEnvio);
@@ -315,6 +299,133 @@ public class CadPlanejamentoView extends JFrame {
 		});
 
 		JButton btnAlterar = new JButton("");
+		btnAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (txtCoddigo.getText().trim().equals("")) {
+					JOptionPane
+							.showMessageDialog(null,
+									"Necessário realizar a busca para realizar a alteração!");
+				} else {
+					PlanejamentoDao alteraDao = new PlanejamentoDao();
+					Planejamento alteraPlan = new Planejamento();
+					
+					int qtBloco = Integer.parseInt(txtQtdeBlocos.getText());
+					String dtBlocoEnvio = fmtdDataBlocos_1.getText();
+					String dtBlocoChegada = fmtdDataBlocoschegada_1.getText();
+					String dtNasc = fmtData_1Paciente.getText();
+					String dtInicio = fmtdDTInicio_1.getText();
+					String dtCT = fmtdDataCT_1.getText();
+					String qtdeCAmpos = txtQtdeCampos.getText();
+
+					SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+					Date dtnas, dtinicio = null, dtblocoEnvio = null, dtblocoChegada = null, dtct = null;
+
+					// data nascimento paciente
+
+					try {
+						dtnas = new Date(format.parse(dtNasc).getTime());
+					} catch (ParseException e) {
+						dtnas = null;
+					}
+
+					// Data cadastro
+					alteraPlan.setData_cad(new Date());
+
+					// Data inicio
+
+					try {
+						dtinicio = new Date(format.parse(dtInicio).getTime());
+					} catch (ParseException e) {
+						dtinicio = null;
+					}
+					alteraPlan.setData_inicio(dtinicio);
+
+					// Data CT
+
+					try {
+						dtct = new Date(format.parse(dtCT).getTime());
+					} catch (ParseException e1) {
+						dtct = null;
+					}
+
+					// Datas blocos
+					// envio
+					try {
+						dtblocoEnvio = dtBlocoEnvio != null
+								&& !dtBlocoEnvio.equals("  /  /    ") ? new Date(
+								format.parse(dtBlocoEnvio).getTime()) : null;
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					alteraPlan.setBloco_envio(dtblocoEnvio);
+
+					// chegada
+					try {
+						dtblocoChegada = dtBlocoChegada != null
+								&& !dtBlocoChegada.equals("  /  /    ") ? new Date(
+								format.parse(dtBlocoChegada).getTime()) : null;
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					alteraPlan.setBloco_chegada(dtblocoChegada);
+
+					// Entidades
+
+					alteraPlan.setAparelho(selectAparelho != null
+							&& selectAparelho.getCodigo() != null ? selectAparelho
+							: null);
+					alteraPlan.setPaciente(objBusca != null
+							&& objBusca.getCodPaciente() != null ? objBusca
+							: null);
+					alteraPlan.setOrigem(selectOrigem != null
+							&& selectOrigem.getCodigo() != null ? selectOrigem
+							: null);
+					alteraPlan.setMedicos(selectMedico != null
+							&& selectMedico.getCodigo() != null ? selectMedico
+							: null);
+					alteraPlan.setPrimeira_ass(selectfisico1 != null
+							&& selectfisico1.getCodigo() != null ? selectfisico1
+							: null);
+					alteraPlan.setSegunda_ass(selectfisico2 != null
+							&& selectfisico2.getCodigo() != null ? selectfisico2
+							: null);
+					alteraPlan.setSis_gerenciamento(selectSisGerencia != null
+							&& selectSisGerencia.getCodigo() != null ? selectSisGerencia
+							: null);
+					alteraPlan.setRegiao(selectRegiao != null
+							&& selectRegiao.getCodigo() != null ? selectRegiao
+							: null);
+
+					// Strings
+					alteraPlan.setContorno(contorno);
+					alteraPlan.setImpressao(impressao);
+					alteraPlan.setPlano(plano);
+					alteraPlan.setAlvo(alvo);
+					alteraPlan.setTecnica(txtTecnica.getText().toUpperCase());
+					alteraPlan.setCodigo(Long.parseLong(txtCoddigo.getText()));
+					alteraPlan.setQtdeCampos(qtdeCAmpos != null && !qtdeCAmpos.equals("") ? Integer.parseInt(qtdeCAmpos) : null);
+					alteraPlan.setObservacoes(txtObs.getText());
+					alteraPlan.setQtde_blocos(qtBloco);
+		
+
+					// DATAS
+					alteraPlan.setCt(dtct);
+					alteraPlan.setBloco_envio(dtblocoEnvio);
+					alteraPlan.setBloco_chegada(dtblocoChegada);
+
+					// Boolean
+
+					alteraPlan.setStatus_inativo(status);
+					
+					alteraDao.alterar(alteraPlan);
+
+				
+				}
+				
+			}
+		});
 		btnAlterar.setIcon(new ImageIcon(CadPlanejamentoView.class
 				.getResource("/imagens/1482302103_txt2.png")));
 
@@ -999,7 +1110,7 @@ public class CadPlanejamentoView extends JFrame {
 				DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 				PlanejamentoDao pDaoBusca = new PlanejamentoDao();
 				Planejamento p = pDaoBusca.buscaPorCodigo(cod);
-				
+								
 				txtCoddigo.setText(p.getCodigo().toString());
 				txtNomePaciente.setText(p.getPaciente().getNomePaciente());
 				txtRegistro.setText(p.getPaciente().getregistro());
@@ -1007,20 +1118,20 @@ public class CadPlanejamentoView extends JFrame {
 				txtQtdeBlocos.setText(p.getQtde_blocos().toString());
 				txtQtdeCampos.setText(p.getQtdeCampos().toString());
 				txtTecnica.setText(p.getTecnica());
-				cmbMedico.addItem( p.getMedicos() !=null ?p.getMedicos().getCRM() + "-" + p.getMedicos().getNome().toString() :null);
-				cmb1Ass.addItem(p.getPrimeira_ass() !=null ?p.getPrimeira_ass().getABFM() +"-" + p.getPrimeira_ass().getnome().toString():null);
-				cmb2Ass.addItem(p.getSegunda_ass() !=null ?p.getSegunda_ass().getABFM() +"-" + p.getSegunda_ass().getnome().toString():null);
-				cmbAlvo.addItem(p.getAlvo() !=null ? p.getAlvo().toString():null);
-				cmbAparelho.addItem(p.getAparelho() !=null ? p.getAparelho().getDescricao().toString():null);
-				cmbContorno.addItem(p.getContorno() !=null ? p.getContorno().toString():null);
-				cmbImpressao.addItem(p.getImpressao() !=null ? p.getImpressao().toString():null);
+				cmbMedico.setSelectedItem( p.getMedicos() !=null ?p.getMedicos().getCRM() + "-" + p.getMedicos().getNome().toString() :null);
+				cmb1Ass.setSelectedItem(p.getPrimeira_ass() !=null ?p.getPrimeira_ass().getABFM() +"-" + p.getPrimeira_ass().getnome().toString():null);
+				cmb2Ass.setSelectedItem(p.getSegunda_ass() !=null ?p.getSegunda_ass().getABFM() +"-" + p.getSegunda_ass().getnome().toString():null);
+				cmbAlvo.setSelectedItem(p.getAlvo() !=null ? p.getAlvo().toString():null);
+				cmbAparelho.setSelectedItem(p.getAparelho() !=null ? p.getAparelho().getDescricao().toString():null);
+				cmbContorno.setSelectedItem(p.getContorno() !=null ? p.getContorno().toString():null);
+				cmbImpressao.setSelectedItem(p.getImpressao() !=null ? p.getImpressao().toString():null);
 				cmbOrigem.addItem(p.getOrigem() !=null ? p.getOrigem().getSigla() + "-" + p.getOrigem().getDescricao().toString():null);
-				cmbPlano.addItem(p.getPlano() !=null ? p.getPlano().toString():null);
-				cmbRegiaoAnat.addItem(p.getRegiao() !=null ? p.getRegiao().getCodigo() + "-" + p.getRegiao().getDescricao().toString() :null);
-				cmbSisGerenciamento.addItem(p.getSis_gerenciamento() !=null ? p.getSis_gerenciamento().getCodigo()+"-"+  p.getSis_gerenciamento().getDescricao().toString() :null);
+				cmbPlano.setSelectedItem(p.getPlano() !=null ? p.getPlano().toString():null);
+				cmbRegiaoAnat.setSelectedItem(p.getRegiao() !=null ? p.getRegiao().getCodigo() + "-" + p.getRegiao().getDescricao().toString() :null);
+				cmbSisGerenciamento.setSelectedItem(p.getSis_gerenciamento() !=null ? p.getSis_gerenciamento().getCodigo()+"-"+  p.getSis_gerenciamento().getDescricao().toString() :null);
 				fmtdDataBlocos_1.setText(p.getBloco_envio() != null ? df.format(p.getBloco_envio().getTime()) : null);
-				fmtdDataBlocoschegada.setText(p.getBloco_chegada() !=null ? df.format(p.getBloco_chegada().getTime()) :null);
-				fmtdDTInicio.setText(p.getData_inicio() !=null ? df.format( p.getData_inicio().getTime()) :null);
+				fmtdDataBlocoschegada_1.setText(p.getBloco_chegada() !=null ? df.format(p.getBloco_chegada().getTime()) :null);
+				fmtdDTInicio_1.setText(p.getData_inicio() !=null ? df.format( p.getData_inicio().getTime()) :null);
 				fmtdDataCT_1.setText(p.getCt() !=null ? df.format(p.getCt().getTime()) :null);
 				fmtData_1Paciente.setText(p.getPaciente() != null ? df.format(p.getPaciente().getDtNascimento().getTime()) :null);
 				

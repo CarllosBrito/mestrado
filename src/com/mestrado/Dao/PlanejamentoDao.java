@@ -9,7 +9,6 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JOptionPane;
 
-import com.mestrado.model.Aparelho;
 import com.mestrado.model.Planejamento;
 
 public class PlanejamentoDao {
