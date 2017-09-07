@@ -9,6 +9,7 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.swing.JOptionPane;
 
+import com.mestrado.model.Medicos;
 import com.mestrado.model.Planejamento;
 
 public class PlanejamentoDao {
@@ -77,8 +78,7 @@ public class PlanejamentoDao {
 	
 			StringBuilder cond = new StringBuilder();
 			this.definirCondicoes(dtIni, dtFinal, cond);
-			Query query = em.createQuery(" from Planejamento p "
-					+ cond.toString());
+			Query query = em.createQuery(" from Planejamento p " + cond.toString()+ " order by p.data_cad ");
 			this.definirParametros(dtIni, dtFinal, query);
 			List<Planejamento> result = query.getResultList();		
 		
@@ -111,6 +111,60 @@ public class PlanejamentoDao {
 
 		}
 
+	}
+
+	
+	@SuppressWarnings("unchecked")
+	public List<Planejamento> buscaPorMedico(Date dtIni, Date dtFinal, Medicos md) {
+
+		
+		StringBuilder cond = new StringBuilder();
+		this.definirCondicoesMD(dtIni, dtFinal,md, cond);
+		Query query = em.createQuery(" from Planejamento a left join fetch a.medicos p " + cond.toString() + " order by a.data_cad ");
+		this.definirParametrosMD(dtIni, dtFinal, md, query);
+		List<Planejamento> result = query.getResultList();		
+	
+	return result;
+}
+	
+	public void definirCondicoesMD(Date dtIni, Date dtFinal, Medicos md, StringBuilder cond) {
+
+		if (dtIni != null) {
+			cond.append(cond.length() == 0 ? " where " : " and ").append(
+					" a.data_cad >= :dtIni ");
+
+		}
+		if (dtFinal != null) {
+			cond.append(cond.length() == 0 ? " where " : " and ").append(
+					" a.data_cad <= :dtFinal ");
+
+		}
+		if(md.getCRM() !=null && !md.getCRM().equals("0000")){
+			
+			cond.append(cond.length() == 0 ? " where " : " and ").append(
+					" p.CRM = :md ");
+			
+		}
+
+	}
+	public void definirParametrosMD(Date dtIni, Date dtFinal,Medicos md, Query query){
+		if(md == null){
+			JOptionPane.showMessageDialog(null, "Favor Selecionar O médico para realizar a busca!");
+			
+		}else{
+		if (dtIni != null) {
+			query.setParameter("dtIni", dtIni);
+
+		}
+		if (dtFinal != null) {
+			query.setParameter("dtFinal", dtFinal);
+
+		}
+		if (md.getCRM() !=null){
+			query.setParameter("md", md.getCRM());
+			
+		}
+		}
 	}
 
 }

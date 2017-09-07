@@ -30,6 +30,8 @@ import javax.swing.table.DefaultTableModel;
 import com.mestrado.Dao.PlanejamentoDao;
 import com.mestrado.model.Planejamento;
 
+import javax.swing.JButton;
+
 public class PrincipalView {
 
 	private JFrame frame;
@@ -44,7 +46,7 @@ public class PrincipalView {
 	CadSist_GerenciamentoView cadSisGer;
 	BuscaTodosPacientes todosPacientes = new BuscaTodosPacientes();
 	private JTable tabelaPlan;
-	BuscaPlanPorData buscaPorData;
+	BuscaPlanPorMedicoView buscaPorMedico;
 	
 	
 	public static void main(String[] args) {
@@ -110,14 +112,14 @@ public class PrincipalView {
 				{null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null},
 			},
 			new String[] {
-				"Paciente", "Registro", "M\u00E9dico", "Reg. Anatomica", "Data CT", "Aparelho", "T\u00E9cnica", "Contorno", "Alvo", "Plano", "Sis. Gerenciamento", "Impressao", "1 Ass.", "2 Ass.", "Cpos", "Blocos", "Data Envio", "Data Chegada", "Data Inicio", "Observa\u00E7\u00F5es"
+				"Paciente", "Registro", "M\u00E9dico", "Reg. Anat.", "Data CT", "Aparelho", "T\u00E9cnica", "Contorno", "Alvo", "Plano", "Sis. Gerenciamento", "Impressao", "1 Ass.", "2 Ass.", "Cpos", "Blocos", "Data Envio", "Data Chegada", "Data Inicio", "Observa\u00E7\u00F5es"
 			}
 		) {
 			@SuppressWarnings("rawtypes")
 			Class[] columnTypes = new Class[] {
 				Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Object.class, Integer.class, Object.class, Object.class, Object.class, Object.class
 			};
-			@SuppressWarnings({ "unchecked", "rawtypes" })
+			@SuppressWarnings({ "rawtypes", "unchecked" })
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
@@ -310,15 +312,15 @@ public class PrincipalView {
 		JMenu mnRelatrios = new JMenu("Relat\u00F3rios");
 		menuBar.add(mnRelatrios);
 		
-		JMenuItem mnBuscaPorData = new JMenuItem("Busca Planejamento por Data");
+		JMenuItem mnBuscaPorData = new JMenuItem("Busca Planejamentos");
 		mnBuscaPorData.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(buscaPorData ==null){
-					buscaPorData= new BuscaPlanPorData();
-					buscaPorData.setLocationRelativeTo(null);
+				if(buscaPorMedico ==null){
+					buscaPorMedico= new BuscaPlanPorMedicoView();
+					buscaPorMedico.setLocationRelativeTo(null);
 					
 				}
-				buscaPorData.setVisible(true);
+				buscaPorMedico.setVisible(true);
 			
 			}
 		});
@@ -328,12 +330,6 @@ public class PrincipalView {
 				
 		});
 		mnRelatrios.add(mnBuscaPorData);
-		
-		JSeparator separator_8 = new JSeparator();
-		mnRelatrios.add(separator_8);
-		
-		JMenuItem mnBuscaPlanpPorPaciente = new JMenuItem("Busca Planejamento por Paciente");
-		mnRelatrios.add(mnBuscaPlanpPorPaciente);
 		
 		JSeparator separator_9 = new JSeparator();
 		mnRelatrios.add(separator_9);
@@ -384,6 +380,14 @@ public class PrincipalView {
 		JSeparator separator_1 = new JSeparator();
 		mnSistema.add(separator_1);
 		mnSistema.add(mniSistSair);
+		
+		JButton btnAtualizaTabela = new JButton("Atualiza Tabela");
+		btnAtualizaTabela.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				readJTable();
+			}
+		});
+		menuBar.add(btnAtualizaTabela);
 		
 	
 

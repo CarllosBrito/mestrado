@@ -89,6 +89,7 @@ public class CadPlanejamentoView extends JFrame {
 	Boolean status;
 	String regiao;
 	
+	JCheckBox chbInativo;
 	@SuppressWarnings("rawtypes")
 	JComboBox cmbOrigem = new JComboBox();
 	@SuppressWarnings("rawtypes")
@@ -173,7 +174,10 @@ public class CadPlanejamentoView extends JFrame {
 					JOptionPane.showMessageDialog(null,
 							"Favor preencher os dados do Paciente!!");
 
-				} else {
+				}else if (selectMedico.getCodigo() == null){
+					JOptionPane.showMessageDialog(null,
+							"Informe um Médico valido!!");
+				}else {
 					Planejamento plan = new Planejamento();
 					PlanejamentoDao pDAO = new PlanejamentoDao();
 
@@ -539,14 +543,16 @@ public class CadPlanejamentoView extends JFrame {
 				String mdSelecionado = cmbMedico.getSelectedItem().toString();
 				String arrayMd[] = new String[2];
 				arrayMd = mdSelecionado.split("-");
-				selectMedico = mDAO.buscar(arrayMd[0], new String());
-
+				if(arrayMd.length > 0){
+					selectMedico = mDAO.buscar(arrayMd[0], new String());	
+				}
 			}
 		});
 		cmbMedico.setFont(new Font("Tahoma", Font.BOLD, 12));
 		cmbMedico.setToolTipText("Selcione o M\u00E9dico Respons\u00E1vel");
 		cmbMedico.setToolTipText("Selcione o M\u00E9dico Respons\u00E1vel");
 		List<Medicos> lista = mDAO.buscaTodos(null, null);
+		cmbMedico.addItem("0000" + "-" + "SELECIONE UM MÉDICO!");
 		for (Medicos medicos : lista) {
 			cmbMedico.addItem(medicos.getCRM() + "-" + medicos.getNome());
 
@@ -1104,6 +1110,7 @@ public class CadPlanejamentoView extends JFrame {
 		
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
+				
 				int linha = tbBuscaPlan.getSelectedRow();
 				String codigo = tbBuscaPlan.getValueAt(linha, 0).toString();
 				Long cod = Long.parseLong(codigo);
@@ -1134,6 +1141,9 @@ public class CadPlanejamentoView extends JFrame {
 				fmtdDTInicio_1.setText(p.getData_inicio() !=null ? df.format( p.getData_inicio().getTime()) :null);
 				fmtdDataCT_1.setText(p.getCt() !=null ? df.format(p.getCt().getTime()) :null);
 				fmtData_1Paciente.setText(p.getPaciente() != null ? df.format(p.getPaciente().getDtNascimento().getTime()) :null);
+				if(p.getStatus_inativo()!=null){
+				chbInativo.isSelected();
+				}
 				
 			}
 		});
@@ -1179,7 +1189,12 @@ public class CadPlanejamentoView extends JFrame {
 		cmbMedico.setSelectedIndex(0);
 		cmbPlano.setSelectedIndex(0);
 		cmbRegiaoAnat.setSelectedIndex(0);
-		cmbSisGerenciamento.setSelectedIndex(0);		
+		cmbSisGerenciamento.setSelectedIndex(0);	
+		if(chbInativo !=null){
+			chbInativo.setSelected(false);
+		}
+		
+		
 	}
 	
 	
@@ -1203,10 +1218,8 @@ public class CadPlanejamentoView extends JFrame {
 					plan.getMedicos() !=null ?plan.getMedicos().getNome().toString():null,
 					plan.getRegiao() !=null ?plan.getRegiao().getDescricao().toString():null,
 				    plan.getData_cad() !=null ? df.format(plan.getData_cad().getTime()) :null,
-					
-					
 			});
-				
+				plan.getStatus_inativo();
 		  }
 		}
 	}

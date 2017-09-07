@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -110,10 +111,15 @@ public class BuscaPlanPorData extends JFrame {
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 								
+				
 					String dtini= fmtdDtInicial.getText();
 					String dtFim = fmtdDtFinal.getText();
 					SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 					
+					if(dtini == null){
+						JOptionPane.showMessageDialog(null, "Favor Digitar a data inicial para realizar a busca!");
+						
+					}else{
 					try {
 						dataIni=  new Date(format.parse(dtini).getTime());
 					} catch (ParseException e1) {
@@ -122,7 +128,7 @@ public class BuscaPlanPorData extends JFrame {
 					}
 				
 					try {
-						dataIni= new Date(format.parse(dtFim).getTime());
+						dataFinal = new Date(format.parse(dtFim).getTime());
 					} catch (ParseException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
@@ -155,13 +161,15 @@ public class BuscaPlanPorData extends JFrame {
 								plan.getData_inicio() !=null ? df.format( plan.getData_inicio().getTime()) :null,
 								plan.getObservacoes(),
 								
+								
 						});
 							
+					
+					}
 					fmtdDtInicial.setText("");
 					fmtdDtFinal.setText("");
-					}
 				}
-			
+			}
 		});
 		btnNewButton.setBounds(384, 8, 89, 23);
 		contentPane.add(btnNewButton);
