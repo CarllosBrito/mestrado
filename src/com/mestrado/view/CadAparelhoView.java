@@ -193,8 +193,7 @@ public class CadAparelhoView extends JFrame {
 		JButton btnSair = new JButton("");
 		btnSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
-			}
+				CadAparelhoView.this.setVisible(false);			}
 		});
 		btnSair.setIcon(new ImageIcon(CadAparelhoView.class
 				.getResource("/imagens/1482302161_10.png")));

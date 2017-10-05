@@ -170,7 +170,7 @@ public class CadSist_GerenciamentoView extends JFrame {
 		btnSair.setToolTipText("Click para Sair!");
 		btnSair.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.exit(0);
+				CadSist_GerenciamentoView.this.setVisible(false);;
 			}
 		});
 		btnSair.setIcon(new ImageIcon(CadSist_GerenciamentoView.class
